@@ -2,7 +2,7 @@
   "mcpServers": {
     "admin-mcp": {
       "type": "http",
-      "url": "https://admin-api.zzzpupu.xin/mcp"
+      "url": "http://localhost:3508/mcp"
     }
   }
 }

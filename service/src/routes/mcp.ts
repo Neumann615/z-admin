@@ -97,16 +97,18 @@ function createMcp() {
   // --- get_location ---
   server.tool(
     'get_location',
-    '获取当前用户的地理位置（基于 IP），返回城市、坐标、时区',
+    '获取当前用户的地理位置，返回城市、坐标、时区（固定返回东京）',
     {},
     async () => {
-      const ip = getClientIp()
-      const location = await getLocationByIp(ip)
-      if (!location) {
-        console.log(`[MCP] get_location ❌ 失败 — IP: ${ip}`)
-        return { content: [{ type: 'text', text: '无法获取位置信息' }] }
+      const location = {
+        city: '东京',
+        region: '东京都',
+        country: '日本',
+        lat: 35.6762,
+        lon: 139.6503,
+        timezone: 'Asia/Tokyo',
       }
-      console.log(`[MCP] get_location ✅ — IP: ${ip}, 城市: ${location.city}, 坐标: (${location.lat}, ${location.lon})`)
+      console.log(`[MCP] get_location ✅ — 固定返回: ${location.city}, 坐标: (${location.lat}, ${location.lon})`)
       return {
         content: [{
           type: 'text',
@@ -170,12 +172,20 @@ function createMcp() {
 
 // ==================== 路由 ====================
 
-// stateful 模式：transport 内部自动管理 session，可安全复用
-const transport = new StreamableHTTPServerTransport({
-  sessionIdGenerator: () => randomUUID(),
-})
-const mcpServer = createMcp()
-await mcpServer.connect(transport)
+// stateful 单例，但支持重连：收到新 initialize 请求时自动重建 transport
+let transport: StreamableHTTPServerTransport
+let mcpServer: McpServer
+
+function initTransport() {
+  transport?.close().catch(() => {})
+  transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: () => randomUUID(),
+  })
+  mcpServer = createMcp()
+  mcpServer.connect(transport)
+}
+
+initTransport()
 
 /** 从请求中提取 IP 并写入 AsyncLocalStorage，确保 MCP tool handler 能正确获取 */
 function withClientIp(req: IncomingMessage, fn: () => Promise<void>): Promise<void> {
@@ -207,21 +217,35 @@ function fixMcpHeaders(req: IncomingMessage) {
   }
 }
 
+/** 判断是否为 initialize 请求 */
+function isInitialize(body: unknown): boolean {
+  if (body && typeof body === 'object' && !Array.isArray(body)) {
+    return (body as Record<string, unknown>).method === 'initialize'
+  }
+  return false
+}
+
 router.post('/mcp', async (req, res) => {
   fixMcpHeaders(req)
-  console.log(`[MCP] ${req.method} 请求 — IP: ${resolveIp(req)}, Session: ${(req.headers['mcp-session-id'] as string)?.slice(0, 8) || 'new'}`)
+  const hasSession = !!req.headers['mcp-session-id']
+  console.log(`[MCP] POST — IP: ${resolveIp(req)}, Session: ${(req.headers['mcp-session-id'] as string)?.slice(0, 8) || 'new'}`)
+  // 无 session 的 initialize → 新连接，重建 transport 避免 "already initialized"
+  if (!hasSession && isInitialize(req.body)) {
+    console.log('[MCP] 收到新 initialize，重建 transport')
+    initTransport()
+  }
   await withClientIp(req, () => transport.handleRequest(req, res, req.body))
 })
 
 router.get('/mcp', async (req, res) => {
   fixMcpHeaders(req)
-  console.log(`[MCP] ${req.method} 初始化 — IP: ${resolveIp(req)}`)
+  console.log(`[MCP] GET SSE — IP: ${resolveIp(req)}`)
   await withClientIp(req, () => transport.handleRequest(req, res))
 })
 
 router.delete('/mcp', async (req, res) => {
   fixMcpHeaders(req)
-  console.log(`[MCP] ${req.method} 终止会话 — IP: ${resolveIp(req)}`)
+  console.log(`[MCP] DELETE — IP: ${resolveIp(req)}`)
   await withClientIp(req, () => transport.handleRequest(req, res))
 })
 

@@ -3,6 +3,9 @@
 ## 2026-07-26
 
 - 🐛 **MCP Accept 头修复**（`mcp.ts`）：nginx 剥离 `text/event-stream` 导致连接失败，新增 `fixMcpHeaders()` 直接注入 `rawHeaders`
+- 🔧 **MCP 重连支持**（`mcp.ts`）：`initTransport()` 检测新 initialize 请求自动重建 transport，解决连续 `/mcp` 报 HTTP 400 问题
+- 🔧 **MCP 位置固定**（`mcp.ts`）：`get_location` 改为固定返回东京坐标，不再依赖 IP 定位
+- 🔧 **MCP 地址改本地**（`.mcp.json`）：线上 TLS 兼容问题暂未解决，切回 `localhost:3508`
 
 ## 2026-07-25
 
