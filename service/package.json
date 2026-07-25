@@ -9,6 +9,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "catalog:",
     "bcryptjs": "catalog:",
     "cors": "catalog:",
     "dotenv": "catalog:",

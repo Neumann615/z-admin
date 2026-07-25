@@ -6,6 +6,8 @@
 - 🐛 **selectIcon DOM 泄露**（`Menu.tsx`）：`generatorMenuData` 用完后 `delete v[i].selectIcon`，避免残留在 items 中被 AntdMenu 透传到 DOM
 - 🔧 **废弃 API 迁移**（`Search.tsx`、`ReLoginModal.tsx`）：`maskClosable` → `mask={{ closable }}`，`destroyOnClose` → `destroyOnHidden`
 - 🔧 **插画主题补全**（`illustrationTheme.ts`）：新增 Notification/Layout/Menu/Progress 等 token，补全未定义但需要的空组件 token，修正 deps 数组
+- ✨ **MCP StreamableHTTP 服务**（`mcp.ts`、`.mcp.json`）：新增 `get_location` 和 `get_weather` 两个 tool，基于 IP 自动定位 + wttr.in 天气查询，支持 stateful session 管理和请求级日志
+- 🔧 **auth 中间件范围限制**（`admin.ts`、`app.ts`）：`router.use(authMiddleware)` → `router.use('/admin', authMiddleware)`，MCP 路由前置避免被 401 拦截
 
 ## 2026-07-24
 

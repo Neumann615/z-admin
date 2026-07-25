@@ -40,7 +40,7 @@ router.post('/admin/login', async (req, res) => {
   }
 })
 
-router.use(authMiddleware)
+router.use('/admin', authMiddleware)
 
 router.post('/admin/register', async (req, res) => {
   try {

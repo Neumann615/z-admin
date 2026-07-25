@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "admin-mcp": {
+      "type": "http",
+      "url": "https://admin-api.zzzpupu.xin/mcp"
+    }
+  }
+}

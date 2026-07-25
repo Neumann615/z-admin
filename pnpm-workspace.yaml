@@ -20,6 +20,7 @@ catalog:
   '@codemirror/lang-javascript': ^6.2.1
   '@hello-pangea/dnd': ^18.0.1
   '@icon-park/react': ^1.4.2
+  '@modelcontextprotocol/sdk': ^1.29.0
   '@tanem/react-nprogress': ^5.0.51
   '@types/bcryptjs': ^2.4.6
   '@types/cors': ^2.8.17

@@ -2,6 +2,7 @@ import cors from 'cors'
 import express from 'express'
 import adminRoutes from './routes/admin'
 import dictRoutes from './routes/dict'
+import mcpRoutes from './routes/mcp'
 import menuRoutes from './routes/menu'
 import roleRoutes from './routes/role'
 
@@ -14,6 +15,7 @@ app.use(cors({
 }))
 app.use(express.json())
 
+app.use('/', mcpRoutes)
 app.use('/', adminRoutes)
 app.use('/', roleRoutes)
 app.use('/', menuRoutes)
