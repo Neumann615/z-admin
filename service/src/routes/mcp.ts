@@ -182,17 +182,45 @@ function withClientIp(req: IncomingMessage, fn: () => Promise<void>): Promise<vo
   return clientIpStore.run(resolveIp(req), fn)
 }
 
+/** 确保 Accept 头包含 MCP StreamableHTTP 要求的 MIME 类型（nginx/代理可能剥离）。
+ *  @hono/node-server 从 rawHeaders 读取，所以必须同时修改 rawHeaders 和 headers */
+function fixMcpHeaders(req: IncomingMessage) {
+  const required = req.method === 'GET'
+    ? 'text/event-stream'
+    : 'application/json, text/event-stream'
+
+  // 修改 headers 对象
+  req.headers.accept = required
+
+  // 修改 rawHeaders（@hono/node-server 实际读取的数据源）
+  const raw = req.rawHeaders
+  let found = false
+  for (let i = 0; i < raw.length; i += 2) {
+    if (raw[i].toLowerCase() === 'accept') {
+      raw[i + 1] = required
+      found = true
+      break
+    }
+  }
+  if (!found) {
+    raw.push('Accept', required)
+  }
+}
+
 router.post('/mcp', async (req, res) => {
+  fixMcpHeaders(req)
   console.log(`[MCP] ${req.method} 请求 — IP: ${resolveIp(req)}, Session: ${(req.headers['mcp-session-id'] as string)?.slice(0, 8) || 'new'}`)
   await withClientIp(req, () => transport.handleRequest(req, res, req.body))
 })
 
 router.get('/mcp', async (req, res) => {
+  fixMcpHeaders(req)
   console.log(`[MCP] ${req.method} 初始化 — IP: ${resolveIp(req)}`)
   await withClientIp(req, () => transport.handleRequest(req, res))
 })
 
 router.delete('/mcp', async (req, res) => {
+  fixMcpHeaders(req)
   console.log(`[MCP] ${req.method} 终止会话 — IP: ${resolveIp(req)}`)
   await withClientIp(req, () => transport.handleRequest(req, res))
 })

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-07-26
+
+- 🐛 **MCP Accept 头修复**（`mcp.ts`）：nginx 剥离 `text/event-stream` 导致连接失败，新增 `fixMcpHeaders()` 直接注入 `rawHeaders`
+
 ## 2026-07-25
 
 - ✨ **Ant Design 全组件展示页**（`src/pages/index/ui/index.tsx`，~1655 行）：覆盖 76 个 antd 6.x 组件，按通用/布局/导航/数据录入/数据展示/反馈/其他 7 类分区，全部颜色接入主题系统
