@@ -116,10 +116,11 @@ export function Menu() {
   }
 
   const rootSubmenuKeys = useMemo(() => {
-    return menuData
-      .filter((item: any) => {
-        return item.children?.length
-      })
+    if (!menuData?.length)
+      return []
+    return menuData?.filter((item: any) => {
+      return item.children?.length
+    })
       .map((item1: MenuItem) => item1.key)
   }, [menuData])
 
@@ -142,6 +143,8 @@ export function Menu() {
             </MenuIcon>
           )
         : null
+      // 删除 selectIcon，避免泄露到 antd Menu items 成为 DOM 属性
+      delete v[i].selectIcon
       if (v[i].children?.length) {
         generatorMenuData(v[i].children)
       }
@@ -149,8 +152,11 @@ export function Menu() {
   }
 
   const renderMenuData = useMemo(() => {
+    const source = menuType === 'simple' ? mainNavData : menuData
+    if (!source?.length)
+      return []
     const a = JSON.parse(
-      JSON.stringify(menuType === 'simple' ? mainNavData : menuData),
+      JSON.stringify(source),
     )
     generatorMenuData(a)
     return a

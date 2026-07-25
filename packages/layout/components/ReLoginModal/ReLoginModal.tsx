@@ -50,7 +50,7 @@ export function ReLoginModal() {
       onCancel={handleCancel}
       confirmLoading={loading}
       closable={false}
-      maskClosable={false}
+      mask={{ closable: false }}
     >
       <div className={styles.tip}>你的登录凭证已失效，请重新输入用户名和密码</div>
       <Form form={form} autoComplete="off">

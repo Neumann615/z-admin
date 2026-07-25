@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-25
+
+- ✨ **Ant Design 全组件展示页**（`src/pages/index/ui/index.tsx`，~1655 行）：覆盖 76 个 antd 6.x 组件，按通用/布局/导航/数据录入/数据展示/反馈/其他 7 类分区，全部颜色接入主题系统
+- 🐛 **selectIcon DOM 泄露**（`Menu.tsx`）：`generatorMenuData` 用完后 `delete v[i].selectIcon`，避免残留在 items 中被 AntdMenu 透传到 DOM
+- 🔧 **废弃 API 迁移**（`Search.tsx`、`ReLoginModal.tsx`）：`maskClosable` → `mask={{ closable }}`，`destroyOnClose` → `destroyOnHidden`
+- 🔧 **插画主题补全**（`illustrationTheme.ts`）：新增 Notification/Layout/Menu/Progress 等 token，补全未定义但需要的空组件 token，修正 deps 数组
+
 ## 2026-07-24
 
 - ✨ **页面 KeepAlive 缓存**（`Content.tsx`、`page.ts`）：双层渲染架构（cachedLayer + transitionLayer），缓存页保持组件状态不丢失，非缓存页保留过渡动画

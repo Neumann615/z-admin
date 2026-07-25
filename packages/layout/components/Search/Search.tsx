@@ -244,8 +244,8 @@ export function Search() {
         width={560}
         style={{ top: '8%' }}
         closable={false}
-        maskClosable
-        destroyOnClose
+        mask={{ closable: true }}
+        destroyOnHidden
         className={styles.modal}
         styles={{
           header: { display: 'none' },
