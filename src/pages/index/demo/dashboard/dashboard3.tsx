@@ -216,8 +216,7 @@ const useStyles = createStyles(({ token, css }) => ({
     position: relative;
   `,
   container: css`
-    padding: 16px 24px;
-    max-width: 1920px;
+    padding: ${token.paddingMD}px;
     margin: 0 auto;
     box-sizing: border-box;
   `,

@@ -17,7 +17,7 @@ const useStyles = createStyles(({ css }) => ({
   `,
   text: css`
     display: inline-block;
-    font-weight: 600;
+    font-weight: bold;
     background-size: 200% auto;
     background-clip: text;
     -webkit-background-clip: text;

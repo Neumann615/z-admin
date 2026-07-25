@@ -428,7 +428,7 @@ export default function UI() {
       <div className={`${styles.pageHeader} page-header`}>
         <h1 className={styles.pageTitle}>Ant Design 组件全景展示</h1>
         <p className={styles.pageDesc}>
-          涵盖 Ant Design 6.x 全部组件，切换主题类型即可直观对比各风格效果
+          涵盖 Ant Design 6.x 全部组件，在配置面板中切换主题类型即可直观对比各风格效果
         </p>
       </div>
 
