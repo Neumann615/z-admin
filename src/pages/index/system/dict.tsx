@@ -4,6 +4,7 @@ import { useAppMessage } from '@zealous-admin/layout/index'
 import {
   Button,
   Card,
+  Flex,
   Form,
   Input,
   InputNumber,
@@ -139,32 +140,21 @@ function DictTypePane() {
 
   return (
     <>
-      <Card
-        className="filter-container"
-        title="筛选搜索"
-        extra={(
-          <>
-            <Button onClick={() => setListQuery({ ...listQuery, pageNum: 1, keyword: '' })} style={{ marginRight: 15 }}>重置</Button>
-            <Button type="primary" onClick={() => setListQuery({ ...listQuery, pageNum: 1 })}>查询搜索</Button>
-          </>
-        )}
-      >
-        <Form layout="inline">
-          <Form.Item label="输入搜索：">
+      <Card>
+        <Flex justify="space-between" align="center" style={{ marginBottom: 16 }}>
+          <Space>
             <Input
               value={listQuery.keyword}
               onChange={e => setListQuery({ ...listQuery, keyword: e.target.value })}
               placeholder="字典名称/类型编码"
-              style={{ width: 200 }}
+              style={{ width: 220 }}
               allowClear
             />
-          </Form.Item>
-        </Form>
-      </Card>
-      <Card
-        title="数据列表"
-        extra={<Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>添加</Button>}
-      >
+            <Button type="primary" onClick={() => setListQuery({ ...listQuery, pageNum: 1 })}>查询</Button>
+            <Button onClick={() => setListQuery({ ...listQuery, pageNum: 1, keyword: '' })}>重置</Button>
+          </Space>
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>添加</Button>
+        </Flex>
         <Table
           columns={columns}
           dataSource={list}
@@ -336,27 +326,21 @@ function DictDataPane() {
 
   return (
     <>
-      <Card className="filter-container" title="筛选搜索">
-        <Form layout="inline">
-          <Form.Item label="字典类型：">
-            <Select
-              value={selectedType}
-              onChange={handleTypeChange}
-              placeholder="请选择字典类型"
-              style={{ width: 200 }}
-              allowClear
-            >
-              {typeList.map(t => (
-                <Select.Option key={t.dictType} value={t.dictType}>{t.name}</Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Form>
-      </Card>
-      <Card
-        title="数据列表"
-        extra={<Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>添加</Button>}
-      >
+      <Card>
+        <Flex justify="space-between" align="center" style={{ marginBottom: 16 }}>
+          <Select
+            value={selectedType}
+            onChange={handleTypeChange}
+            placeholder="请选择字典类型"
+            style={{ width: 220 }}
+            allowClear
+          >
+            {typeList.map(t => (
+              <Select.Option key={t.dictType} value={t.dictType}>{t.name}</Select.Option>
+            ))}
+          </Select>
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>添加</Button>
+        </Flex>
         <Table
           columns={columns}
           dataSource={list}

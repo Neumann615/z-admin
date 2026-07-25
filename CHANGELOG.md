@@ -2,6 +2,7 @@
 
 ## 2026-07-26
 
+- 🔧 **系统管理页面布局精简**（`admin.tsx`、`role.tsx`、`dict.tsx`）：搜索与数据列表合并到单 Card，Flex space-between 布局将添加按钮移至右侧，移除冗余 Card 标题和独立搜索卡片
 - 🐛 **MCP Accept 头修复**（`mcp.ts`）：nginx 剥离 `text/event-stream` 导致连接失败，新增 `fixMcpHeaders()` 直接注入 `rawHeaders`
 - 🔧 **MCP 重连支持**（`mcp.ts`）：`initTransport()` 检测新 initialize 请求自动重建 transport，解决连续 `/mcp` 报 HTTP 400 问题
 - 🔧 **MCP 位置固定**（`mcp.ts`）：`get_location` 改为固定返回东京坐标，不再依赖 IP 定位
