@@ -1,11 +1,11 @@
 import {
   EyeInvisibleOutlined,
-  EyeTwoTone,
+  EyeOutlined,
   LockOutlined,
   UserOutlined,
 } from '@ant-design/icons'
 import { useAppMessage, useAppStore, useLogin, useUserStore } from '@zealous-admin/layout/index'
-import { Button, Checkbox, Form, Input, Typography } from 'antd'
+import { Button, Checkbox, Form, Input, Tooltip, Typography } from 'antd'
 import { createStyles, keyframes } from 'antd-style'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -50,6 +50,10 @@ const useStyles = createStyles(({ token, css }) => {
           linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%),
           linear-gradient(to right,  transparent 0%, black 12%, black 88%, transparent 100%);
         mask-composite: intersect;
+
+        @media (prefers-reduced-motion: reduce) {
+          animation: none;
+        }
       }
     `,
 
@@ -57,52 +61,53 @@ const useStyles = createStyles(({ token, css }) => {
       position: relative;
       z-index: 1;
       width: 400px;
-      padding: 40px 36px 32px;
-      border-radius: 12px;
+      max-width: calc(100vw - ${token.paddingLG * 2}px);
+      padding: ${token.paddingXL}px ${token.paddingXL - 4}px ${token.paddingLG + 8}px;
+      border-radius: ${token.borderRadiusLG * 2}px;
       background: ${token.colorBgContainer};
       border: 1px solid ${token.colorBorder};
       box-shadow: ${token.boxShadowSecondary};
 
-      .ant-form-item { margin-bottom: 20px; }
+      .ant-form-item { margin-bottom: ${token.marginMD}px; }
 
       /* 输入框覆写 */
       .ant-input-affix-wrapper {
-        border-radius: 8px;
-        padding: 8px 12px;
+        border-radius: ${token.borderRadiusLG}px;
+        padding: ${token.paddingSM}px ${token.paddingMD}px;
       }
     `,
 
     logo: css`
       position: absolute;
-      top: 18px;
-      left: 18px;
-      width: 32px;
-      height: 32px;
+      top: ${token.marginLG}px;
+      left: ${token.marginLG}px;
+      width: ${token.controlHeight}px;
+      height: ${token.controlHeight}px;
     `,
 
     header: css`
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: ${token.marginXXL}px;
       h1 {
         margin: 0;
-        font-size: 30px;
-        font-weight: 700;
+        font-size: ${token.fontSizeXL * 1.5}px;
+        font-weight: ${token.fontWeightStrong};
         color: ${token.colorTextHeading};
       }
       p {
-        margin: 6px 0 0;
+        margin: ${token.marginXS}px 0 0;
         color: ${token.colorTextDescription};
-        font-size: 14px;
+        font-size: ${token.fontSize}px;
       }
     `,
 
     submitBtn: css`
       width: 100%;
-      height: 44px;
-      margin-top: 8px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
+      height: ${token.controlHeightLG}px;
+      margin-top: ${token.marginSM}px;
+      border-radius: ${token.borderRadiusLG}px;
+      font-size: ${token.fontSizeLG}px;
+      font-weight: ${token.fontWeightStrong};
       letter-spacing: 1px;
     `,
 
@@ -111,16 +116,19 @@ const useStyles = createStyles(({ token, css }) => {
       justify-content: space-between;
       align-items: center;
       .ant-form-item { margin-bottom: 0 !important; }
-      a { font-size: 13px; }
+      a {
+        font-size: ${token.fontSizeSM}px;
+        line-height: ${token.controlHeightLG}px;
+      }
     `,
 
     demoSection: css`
       text-align: center;
-      margin-top: 20px;
+      margin-top: ${token.marginMD}px;
       p {
         color: ${token.colorTextDescription};
-        font-size: 13px;
-        margin-bottom: 10px;
+        font-size: ${token.fontSizeSM}px;
+        margin-bottom: ${token.marginSM}px;
         &::before, &::after {
           content: '';
           display: inline-block;
@@ -128,20 +136,20 @@ const useStyles = createStyles(({ token, css }) => {
           height: 1px;
           background: ${token.colorBorder};
           vertical-align: middle;
-          margin: 0 10px;
+          margin: 0 ${token.marginSM}px;
         }
       }
     `,
 
     demoBtns: css`
       display: flex;
-      gap: 12px;
+      gap: ${token.marginMD}px;
     `,
 
     demoBtn: css`
       flex: 1;
-      height: 36px;
-      border-radius: 6px;
+      height: ${token.controlHeight}px;
+      border-radius: ${token.borderRadius}px;
     `,
   }
 })
@@ -180,7 +188,10 @@ export default function Login() {
         password: values.password,
       })
 
-      if (!success) return
+      if (!success) {
+        message.error('用户名或密码错误，请重试')
+        return
+      }
 
       if (values.autoLogin) {
         window.localStorage.setItem(
@@ -195,18 +206,22 @@ export default function Login() {
       message.success('登录成功')
       setTimeout(() => {
         navigate('/', { replace: true })
-      }, 1500)
+      }, 800)
     }
     catch (err) {
       console.error('登录失败:', err)
+      message.error('登录失败，请检查网络连接后重试')
     }
   }
 
-  const onFinishFailed = () => {}
+  const onFinishFailed = () => {
+    const firstError = document.querySelector('.ant-form-item-has-error input') as HTMLInputElement | null
+    firstError?.focus()
+  }
 
   const demoAccounts = [
-    { label: '管理员', userName: 'admin', password: 'admin123' },
-    { label: '测试用户', userName: 'test', password: 'test123' },
+    { label: '管理员', userName: 'admin', password: 'admin123', hint: '拥有全部权限' },
+    { label: '测试用户', userName: 'test', password: 'test123', hint: '受限制的只读权限' },
   ]
 
   const fillDemo = (userName: string, password: string) => {
@@ -226,7 +241,11 @@ export default function Login() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.card}>
-        <img className={styles.logo} src={appStore.logo || '/logo.svg'} alt="logo" />
+        <img
+          className={styles.logo}
+          src={appStore.logo || '/logo.svg'}
+          alt={`${appStore.name} logo`}
+        />
         <div className={styles.header}>
           <h1>{appStore.name}</h1>
           <p>欢迎回来，请登录你的账号</p>
@@ -243,6 +262,7 @@ export default function Login() {
           <Form.Item name="userName" rules={[{ validator: validateUsername }]}>
             <Input
               placeholder="用户名"
+              aria-label="用户名"
               allowClear
               prefix={<UserOutlined />}
             />
@@ -251,9 +271,10 @@ export default function Login() {
           <Form.Item name="password" rules={[{ validator: validatePassword }]}>
             <Input.Password
               placeholder="密码"
+              aria-label="密码"
               prefix={<LockOutlined />}
               iconRender={visible =>
-                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />}
+                visible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
             />
           </Form.Item>
 
@@ -261,7 +282,7 @@ export default function Login() {
             <Form.Item name="autoLogin" valuePropName="checked">
               <Checkbox>记住我</Checkbox>
             </Form.Item>
-            <Link style={{ lineHeight: '40px' }}>忘记密码?</Link>
+            <Link onClick={() => message.info('请联系管理员重置密码')}>忘记密码?</Link>
           </div>
 
           <Form.Item>
@@ -280,13 +301,14 @@ export default function Login() {
             <p>演示账号</p>
             <div className={styles.demoBtns}>
               {demoAccounts.map(acc => (
-                <Button
-                  key={acc.userName}
-                  className={styles.demoBtn}
-                  onClick={() => fillDemo(acc.userName, acc.password)}
-                >
-                  {acc.label}
-                </Button>
+                <Tooltip key={acc.userName} title={acc.hint}>
+                  <Button
+                    className={styles.demoBtn}
+                    onClick={() => fillDemo(acc.userName, acc.password)}
+                  >
+                    {acc.label}
+                  </Button>
+                </Tooltip>
               ))}
             </div>
           </div>

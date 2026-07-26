@@ -4,7 +4,6 @@ import { useAppMessage } from '@zealous-admin/layout/index'
 import {
   Button,
   Card,
-  Flex,
   Form,
   Input,
   Modal,
@@ -14,6 +13,7 @@ import {
   Switch,
   Table,
 } from 'antd'
+import { createStyles } from 'antd-style'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import {
@@ -27,10 +27,54 @@ import {
 } from '@/apis/admin'
 import { getRoleListAllAPI } from '@/apis/role'
 
-const { TextArea } = Input
+// ============================================================
+// 样式
+// ============================================================
+const useStyles = createStyles(({ token, css }) => ({
+  toolbar: css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: ${token.marginMD}px;
+    flex-wrap: wrap;
+    gap: ${token.marginSM}px;
+  `,
+  tableWrapper: css`
+    .ant-table-thead > tr > th {
+      background: ${token.colorFillAlter};
+      font-weight: 600;
+    }
+  `,
+}))
 
+// ============================================================
+// 表单校验规则
+// ============================================================
+const FORM_RULES = {
+  username: [
+    { required: true, message: '请输入帐号' },
+    { min: 2, max: 50, message: '帐号长度为 2-50 个字符' },
+  ],
+  nickName: [
+    { required: true, message: '请输入姓名' },
+    { max: 50, message: '姓名不能超过 50 个字符' },
+  ],
+  email: [
+    { type: 'email' as const, message: '请输入有效的邮箱地址' },
+  ],
+  password: [
+    { required: true, message: '请输入密码' },
+    { min: 6, max: 50, message: '密码长度为 6-50 个字符' },
+  ],
+}
+
+// ============================================================
+// 组件
+// ============================================================
 export default function SystemAdmin() {
   const { message, modal } = useAppMessage()
+  const { styles } = useStyles()
+  const [form] = Form.useForm()
 
   const [listQuery, setListQuery] = useState<PageParam>({
     pageNum: 1,
@@ -42,13 +86,9 @@ export default function SystemAdmin() {
   const [listLoading, setListLoading] = useState(true)
   const [total, setTotal] = useState(0)
 
-  const [admin, setAdmin] = useState<Admin>({
-    username: '',
-    password: '',
-    status: 1,
-  })
   const [dialogOpen, setDialogOpen] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
+  const [editId, setEditId] = useState<number>()
 
   const [allocDialogVisible, setAllocDialogVisible] = useState(false)
   const [allocAdminId, setAllocAdminId] = useState<number>()
@@ -58,13 +98,11 @@ export default function SystemAdmin() {
     setListLoading(true)
     try {
       const res = await getAdminListAPI(listQuery)
-      setListLoading(false)
       setList(res.data.list)
       setTotal(res.data.total)
     }
-    catch {
-      setListLoading(false)
-    }
+    catch { /* ignore */ }
+    finally { setListLoading(false) }
   }
 
   const getAllRoleList = async () => {
@@ -117,28 +155,32 @@ export default function SystemAdmin() {
   }
 
   const handleAdd = () => {
-    setDialogOpen(true)
     setIsEdit(false)
-    setAdmin({ username: '', password: '', status: 1 })
+    setEditId(undefined)
+    form.resetFields()
+    form.setFieldsValue({ status: 1 })
+    setDialogOpen(true)
   }
 
   const handleUpdate = (row: Admin) => {
-    setDialogOpen(true)
     setIsEdit(true)
-    setAdmin({ ...row })
+    setEditId(row.id)
+    form.setFieldsValue(row)
+    setDialogOpen(true)
   }
 
   const handleDialogConfirm = async () => {
+    const values = await form.validateFields()
     modal.confirm({
       title: '提示',
       content: '是否要确认?',
       onOk: async () => {
         if (isEdit) {
-          await adminUpdateByIdAPI(admin.id!, admin)
+          await adminUpdateByIdAPI(editId!, values)
           message.success('修改成功！')
         }
         else {
-          await adminRegisterAPI(admin)
+          await adminRegisterAPI(values)
           message.success('添加成功！')
         }
         setDialogOpen(false)
@@ -163,6 +205,14 @@ export default function SystemAdmin() {
         setAllocDialogVisible(false)
       },
     })
+  }
+
+  const handleSearch = () => {
+    setListQuery(prev => ({ ...prev, pageNum: 1 }))
+  }
+
+  const handleReset = () => {
+    setListQuery({ pageNum: 1, pageSize: 10, keyword: '' })
   }
 
   const columns = [
@@ -190,7 +240,7 @@ export default function SystemAdmin() {
       title: '是否启用',
       dataIndex: 'status',
       key: 'status',
-      width: 120,
+      width: 100,
       align: 'center' as const,
       render: (status: number, row: Admin) => (
         <Switch checked={status === 1} onChange={checked => handleStatusChange(row, checked)} />
@@ -202,7 +252,7 @@ export default function SystemAdmin() {
       width: 240,
       align: 'center' as const,
       render: (_: any, row: Admin) => (
-        <Space>
+        <Space size="small">
           <Button type="link" onClick={() => handleSelectRole(row)}>分配角色</Button>
           <Button type="link" onClick={() => handleUpdate(row)}>编辑</Button>
           <Button type="link" danger onClick={() => handleDelete(row)}>删除</Button>
@@ -214,37 +264,40 @@ export default function SystemAdmin() {
   return (
     <div className="app-container">
       <Card>
-        <Flex justify="space-between" align="center" style={{ marginBottom: 16 }}>
-          <Space>
+        <div className={styles.toolbar}>
+          <Space wrap>
             <Input
               value={listQuery.keyword}
               onChange={e => setListQuery({ ...listQuery, keyword: e.target.value })}
+              onPressEnter={handleSearch}
               placeholder="帐号/姓名"
               style={{ width: 220 }}
               allowClear
+              onClear={() => setListQuery({ ...listQuery, keyword: '', pageNum: 1 })}
             />
-            <Button type="primary" onClick={() => setListQuery({ ...listQuery, pageNum: 1 })}>查询</Button>
-            <Button onClick={() => setListQuery({ ...listQuery, pageNum: 1, keyword: '' })}>重置</Button>
+            <Button type="primary" onClick={handleSearch}>查询</Button>
+            <Button onClick={handleReset}>重置</Button>
           </Space>
           <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>添加</Button>
-        </Flex>
-        <Table
-          columns={columns}
-          dataSource={list}
-          loading={listLoading}
-          bordered
-          pagination={{
-            current: listQuery.pageNum,
-            pageSize: listQuery.pageSize,
-            total,
-            pageSizeOptions: ['5', '10', '15'],
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: total => `共 ${total} 条记录`,
-          }}
-          onChange={pagi => setListQuery({ ...listQuery, pageNum: pagi.current || 1, pageSize: pagi.pageSize || 10 })}
-          rowKey="id"
-        />
+        </div>
+        <div className={styles.tableWrapper}>
+          <Table
+            columns={columns}
+            dataSource={list}
+            loading={listLoading}
+            pagination={{
+              current: listQuery.pageNum,
+              pageSize: listQuery.pageSize,
+              total,
+              pageSizeOptions: ['5', '10', '15'],
+              showSizeChanger: true,
+              showQuickJumper: true,
+              showTotal: total => `共 ${total} 条记录`,
+            }}
+            onChange={pagi => setListQuery({ ...listQuery, pageNum: pagi.current || 1, pageSize: pagi.pageSize || 10 })}
+            rowKey="id"
+          />
+        </div>
       </Card>
 
       <Modal
@@ -252,28 +305,34 @@ export default function SystemAdmin() {
         open={dialogOpen}
         onCancel={() => setDialogOpen(false)}
         onOk={handleDialogConfirm}
-        width={500}
+        width={560}
+        destroyOnClose
       >
-        <Form labelCol={{ span: 6 }}>
-          <Form.Item label="帐号：">
-            <Input value={admin.username} onChange={e => setAdmin({ ...admin, username: e.target.value })} style={{ width: 250 }} />
+        <Form
+          form={form}
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 16 }}
+          preserve={false}
+        >
+          <Form.Item label="帐号" name="username" rules={FORM_RULES.username}>
+            <Input allowClear />
           </Form.Item>
-          <Form.Item label="姓名：">
-            <Input value={admin.nickName} onChange={e => setAdmin({ ...admin, nickName: e.target.value })} style={{ width: 250 }} />
+          <Form.Item label="姓名" name="nickName" rules={FORM_RULES.nickName}>
+            <Input allowClear />
           </Form.Item>
-          <Form.Item label="邮箱：">
-            <Input value={admin.email} onChange={e => setAdmin({ ...admin, email: e.target.value })} style={{ width: 250 }} />
+          <Form.Item label="邮箱" name="email" rules={FORM_RULES.email}>
+            <Input allowClear />
           </Form.Item>
           {!isEdit && (
-            <Form.Item label="密码：">
-              <Input.Password value={admin.password} onChange={e => setAdmin({ ...admin, password: e.target.value })} style={{ width: 250 }} />
+            <Form.Item label="密码" name="password" rules={FORM_RULES.password}>
+              <Input.Password allowClear />
             </Form.Item>
           )}
-          <Form.Item label="备注：">
-            <TextArea value={admin.note} onChange={e => setAdmin({ ...admin, note: e.target.value })} rows={4} style={{ width: 250 }} />
+          <Form.Item label="备注" name="note">
+            <Input.TextArea rows={4} />
           </Form.Item>
-          <Form.Item label="是否启用：">
-            <Radio.Group value={admin.status} onChange={e => setAdmin({ ...admin, status: e.target.value })}>
+          <Form.Item label="是否启用" name="status">
+            <Radio.Group>
               <Radio value={1}>是</Radio>
               <Radio value={0}>否</Radio>
             </Radio.Group>
@@ -292,8 +351,8 @@ export default function SystemAdmin() {
           mode="multiple"
           value={allocRoleIds}
           onChange={values => setAllocRoleIds(values)}
-          placeholder="请选择"
-          style={{ width: '80%' }}
+          placeholder="请选择角色"
+          style={{ width: '100%' }}
         >
           {allRoleList.map(item => (
             <Select.Option key={item.id} value={item.id!}>{item.name}</Select.Option>

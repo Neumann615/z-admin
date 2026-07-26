@@ -8,6 +8,7 @@ import {
   Card,
   Form,
   Input,
+  InputNumber,
   Modal,
   Radio,
   Space,
@@ -15,6 +16,7 @@ import {
   Table,
   TreeSelect,
 } from 'antd'
+import { createStyles } from 'antd-style'
 import { useEffect, useState } from 'react'
 import {
   deleteMenuByIdAPI,
@@ -24,8 +26,44 @@ import {
   updateMenu,
 } from '@/apis/menu'
 
+// ============================================================
+// 样式
+// ============================================================
+const useStyles = createStyles(({ token, css }) => ({
+  toolbar: css`
+    margin-bottom: ${token.marginSM}px;
+  `,
+  tableWrapper: css`
+    .ant-table-thead > tr > th {
+      background: ${token.colorFillAlter};
+      font-weight: 600;
+    }
+  `,
+}))
+
+// ============================================================
+// 表单校验规则
+// ============================================================
+const FORM_RULES = {
+  title: [
+    { required: true, message: '请输入菜单名称' },
+    { min: 2, max: 140, message: '长度在 2 到 140 个字符' },
+  ],
+  name: [
+    { required: true, message: '请输入前端名称' },
+    { min: 2, max: 140, message: '长度在 2 到 140 个字符' },
+  ],
+  icon: [
+    { required: true, message: '请选择前端图标' },
+  ],
+}
+
+// ============================================================
+// 组件
+// ============================================================
 export default function SystemMenu() {
   const { message, modal } = useAppMessage()
+  const { styles } = useStyles()
   const [form] = Form.useForm()
 
   const [treeData, setTreeData] = useState<MenuNode[]>([])
@@ -35,16 +73,6 @@ export default function SystemMenu() {
   const [isEdit, setIsEdit] = useState(false)
   const [editMenuId, setEditMenuId] = useState<number>()
   const [selectMenuList, setSelectMenuList] = useState<Menu[]>([])
-
-  const defaultMenu: Menu = {
-    title: '',
-    parentId: 0,
-    name: '',
-    icon: '',
-    hidden: 0,
-    sort: 0,
-    activeIcon: '',
-  }
 
   const fetchTree = async () => {
     setListLoading(true)
@@ -79,7 +107,7 @@ export default function SystemMenu() {
     setEditMenuId(undefined)
     getSelectMenuList()
     form.resetFields()
-    form.setFieldsValue(defaultMenu)
+    form.setFieldsValue({ parentId: 0, hidden: 0, sort: 0 })
   }
 
   const handleUpdate = async (row: Menu) => {
@@ -111,23 +139,21 @@ export default function SystemMenu() {
 
   const findNodeLevel = (td: any[], targetId: number, currentLevel = 0): number => {
     for (const node of td) {
-      if (node.value === targetId)
-        return currentLevel
+      if (node.value === targetId) return currentLevel
       if (node.children?.length) {
         const found = findNodeLevel(node.children, targetId, currentLevel + 1)
-        if (found !== -1)
-          return found
+        if (found !== -1) return found
       }
     }
     return -1
   }
 
   const handleDialogConfirm = async () => {
+    const values = await form.validateFields()
     modal.confirm({
       title: '提示',
       content: '是否要确认?',
       onOk: async () => {
-        const values = form.getFieldsValue()
         const level = values.parentId === 0 ? 0 : findNodeLevel(selectMenuList, values.parentId, 0) + 1
         const submitData = { ...values, level }
         if (isEdit) {
@@ -164,8 +190,7 @@ export default function SystemMenu() {
       key: 'path',
       width: 200,
       render: (path: string, row: MenuNode) => {
-        if (row.children?.length)
-          return '-'
+        if (row.children?.length) return '-'
         return path || '-'
       },
     },
@@ -213,7 +238,7 @@ export default function SystemMenu() {
       width: 140,
       align: 'center' as const,
       render: (_: any, row: Menu) => (
-        <Space>
+        <Space size="small">
           <Button type="link" size="small" onClick={() => handleUpdate(row)}>编辑</Button>
           <Button type="link" size="small" danger onClick={() => handleDelete(row)}>删除</Button>
         </Space>
@@ -224,18 +249,21 @@ export default function SystemMenu() {
   return (
     <div className="app-container">
       <Card>
-        <Button style={{ marginBottom: 8 }} type="primary" icon={<PlusOutlined />} onClick={handleAdd}>添加导航</Button>
-        <Table
-          columns={columns}
-          dataSource={treeData}
-          loading={listLoading}
-          bordered
-          pagination={false}
-          rowKey="id"
-          expandable={{
-            defaultExpandedRowKeys: [1, 23],
-          }}
-        />
+        <div className={styles.toolbar}>
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>添加导航</Button>
+        </div>
+        <div className={styles.tableWrapper}>
+          <Table
+            columns={columns}
+            dataSource={treeData}
+            loading={listLoading}
+            pagination={false}
+            rowKey="id"
+            expandable={{
+              defaultExpandedRowKeys: [1, 23],
+            }}
+          />
+        </div>
       </Card>
 
       <Modal
@@ -244,50 +272,37 @@ export default function SystemMenu() {
         onCancel={() => setDialogOpen(false)}
         onOk={handleDialogConfirm}
         width={600}
+        destroyOnClose
       >
         <Form
           form={form}
           labelCol={{ span: 6 }}
-          wrapperCol={{ span: 14 }}
-          initialValues={defaultMenu}
+          wrapperCol={{ span: 16 }}
+          preserve={false}
         >
-          <Form.Item
-            label="菜单名称："
-            name="title"
-            rules={[
-              { required: true, message: '请输入菜单名称' },
-              { min: 2, max: 140, message: '长度在 2 到 140 个字符' },
-            ]}
-          >
-            <Input />
+          <Form.Item label="菜单名称" name="title" rules={FORM_RULES.title}>
+            <Input allowClear />
           </Form.Item>
-          <Form.Item label="上级菜单：" name="parentId">
+          <Form.Item label="上级菜单" name="parentId">
             <TreeSelect treeData={selectMenuList} placeholder="请选择上级菜单" treeDefaultExpandAll allowClear />
           </Form.Item>
-          <Form.Item
-            label="前端名称："
-            name="name"
-            rules={[
-              { required: true, message: '请输入前端名称' },
-              { min: 2, max: 140, message: '长度在 2 到 140 个字符' },
-            ]}
-          >
-            <Input />
+          <Form.Item label="前端名称" name="name" rules={FORM_RULES.name}>
+            <Input allowClear />
           </Form.Item>
-          <Form.Item label="前端图标：" name="icon" rules={[{ required: true, message: '请选择前端图标' }]}>
+          <Form.Item label="前端图标" name="icon" rules={FORM_RULES.icon}>
             <ZaIconPicker placeholder="请选择图标" />
           </Form.Item>
-          <Form.Item label="激活图标：" name="activeIcon">
+          <Form.Item label="激活图标" name="activeIcon">
             <ZaIconPicker placeholder="选填，点击时切换的图标" />
           </Form.Item>
-          <Form.Item label="是否显示：" name="hidden">
+          <Form.Item label="是否显示" name="hidden">
             <Radio.Group>
               <Radio value={0}>是</Radio>
               <Radio value={1}>否</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item label="排序：" name="sort">
-            <Input type="number" />
+          <Form.Item label="排序" name="sort">
+            <InputNumber style={{ width: '100%' }} />
           </Form.Item>
         </Form>
       </Modal>

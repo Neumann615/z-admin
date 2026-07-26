@@ -20,6 +20,7 @@ export default defineConfig({
     }),
     Pages({
       importMode: 'sync',
+      exclude: ['**/shared/**'],
       extendRoute(route) {
         if (route.path === 'login' || route.path === '*') {
           // Index is unauthenticated.

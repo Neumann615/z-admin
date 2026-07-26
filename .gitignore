@@ -23,6 +23,7 @@ stats.html
 .DS_Store
 .claude/*
 !.claude/skills/
+.impeccable/*
 .playwright-mcp
 *.suo
 *.ntvs*

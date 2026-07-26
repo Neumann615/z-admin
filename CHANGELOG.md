@@ -2,7 +2,12 @@
 
 ## 2026-07-26
 
-- 🔧 **系统管理页面布局精简**（`admin.tsx`、`role.tsx`、`dict.tsx`）：搜索与数据列表合并到单 Card，Flex space-between 布局将添加按钮移至右侧，移除冗余 Card 标题和独立搜索卡片
+- 🔧 **系统管理页面标准化**（`admin.tsx`、`role.tsx`、`menu.tsx`、`dict.tsx`）：Form.useForm + rules 验证、createStyles 主题化、工具栏对齐、Modal 宽度统一 560px
+- 🔧 **Dashboard 代码重构**（`dashboard1.tsx`、`dashboard3.tsx`）：提取 shared hooks/data/styles/mapUtils，代码量 791→190、1419→370 行，消除 ~80% 重复
+- 🔧 **登录页全面重写**（`login.tsx`）：token 化 border-radius/font-weight/spacing、新增错误反馈 message.error、800ms 导航延迟、aria-label、响应式卡片
+- 🔧 **系统管理页面布局精简**（`admin.tsx`、`role.tsx`、`dict.tsx`）：搜索与数据列表合并到单 Card，Flex space-between 布局将添加按钮移至右侧
+- 📝 **设计系统文档**（`DESIGN.md`、`PRODUCT.md`、`.impeccable/`）：建立 token-only 规则、三档字重体系、8 主题骨架契约、10 组件 snippet
+- 🔧 **Vite 排除 shared 目录**（`vite.config.ts`）：防止 `vite-plugin-pages` 将 shared/ 内文件解析为路由页面
 - 🐛 **MCP Accept 头修复**（`mcp.ts`）：nginx 剥离 `text/event-stream` 导致连接失败，新增 `fixMcpHeaders()` 直接注入 `rawHeaders`
 - 🔧 **MCP 重连支持**（`mcp.ts`）：`initTransport()` 检测新 initialize 请求自动重建 transport，解决连续 `/mcp` 报 HTTP 400 问题
 - 🔧 **MCP 位置固定**（`mcp.ts`）：`get_location` 改为固定返回东京坐标，不再依赖 IP 定位
