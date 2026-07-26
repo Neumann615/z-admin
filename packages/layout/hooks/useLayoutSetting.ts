@@ -1,20 +1,16 @@
-import type { DarkMode, LayoutConfig, LayoutScope, TabBarDblClickEventType, TabBarWidthType, ThemeType } from '../types/config'
+import type { DarkMode, LayoutConfig, LayoutScope, ThemeType } from '../types/config'
 import _defaultSetting from '../defaultSetting'
 import { useAppStore, useMenuStore, usePageStore, useThemeStore, useTopBarStore } from '../store/index'
 import {
-  breadcrumbStyleList,
   layoutScopeList,
   menuActiveStyleList,
   menuFillStyleList,
   menuTypeList,
   mergeAttribute,
-  tabBarDblClickEventTypeList,
   tabBarStyleList,
-  tabBarWidthTypeList,
   themeColorList,
   themeTypeList,
   topBarPositionList,
-  transitionTypeList,
 } from '../utils/index'
 
 type DeepPartial<T> = {
@@ -82,13 +78,8 @@ export function useLayoutSetting() {
     const randomMenuType = pickRandomValue(menuTypeList)
     const randomMenuFillStyle = pickRandom(menuFillStyleList)
     const randomMenuActiveStyle = pickRandom(menuActiveStyleList)
-    const randomSubMenuUniqueOpened = Math.random() > 0.5
-    const randomSubMenuCollapse = Math.random() > 0.8
-    const randomIsEnableSubMenuCollapse = Math.random() > 0.3
 
     // ===== page 页面 =====
-    const randomTransitionType = pickRandomValue(transitionTypeList)
-    const randomIsEnablePageLoadProgress = Math.random() > 0.5
 
     // ===== topBar 顶栏 =====
     const randomTopBarPosition = pickRandomValue(topBarPositionList)
@@ -97,21 +88,9 @@ export function useLayoutSetting() {
       : ['Toolbar', 'TabBar'] as const
 
     // ===== topBar.tabBar 标签栏 =====
-    const randomIsEnableTabBar = Math.random() > 0.15
     const randomTabBarStyle = pickRandomValue(tabBarStyleList)
-    const randomShowIcon = Math.random() > 0.3
-    const randomTabBarWidthType = pickRandom(tabBarWidthTypeList).value as TabBarWidthType
-    const randomDblClickEvent = pickRandom(tabBarDblClickEventTypeList).value as TabBarDblClickEventType
 
     // ===== topBar.toolbar 工具栏 =====
-    const randomBreadcrumbStyle = pickRandomValue(breadcrumbStyleList)
-    const randomIsEnableBreadcrumb = Math.random() > 0.15
-    const randomIsEnableMainNav = Math.random() > 0.5
-    const randomIsEnableSearch = Math.random() > 0.5
-    const randomIsEnableI18n = Math.random() > 0.5
-    const randomIsEnablePageReload = Math.random() > 0.5
-    const randomIsEnableFullscreen = Math.random() > 0.5
-    const randomIsEnableTheme = Math.random() > 0.5
 
     // ===== app.layout 布局居中 =====
     const randomIsCenter = Math.random() > 0.6
@@ -135,25 +114,25 @@ export function useLayoutSetting() {
         menuType: randomMenuType as any,
         menuFillStyle: randomMenuFillStyle as any,
         menuActiveStyle: randomMenuActiveStyle as any,
-        subMenuUniqueOpened: randomSubMenuUniqueOpened,
-        subMenuCollapse: randomSubMenuCollapse,
-        isEnableSubMenuCollapse: randomIsEnableSubMenuCollapse,
+        // subMenuUniqueOpened: randomSubMenuUniqueOpened,
+        // subMenuCollapse: randomSubMenuCollapse,
+        // isEnableSubMenuCollapse: randomIsEnableSubMenuCollapse,
       },
       page: {
-        transitionType: randomTransitionType as any,
-        isEnablePageLoadProgress: randomIsEnablePageLoadProgress,
+        // transitionType: randomTransitionType as any,
+        // isEnablePageLoadProgress: randomIsEnablePageLoadProgress,
       },
       topBar: {
         position: randomTopBarPosition as any,
         order: randomOrder as any,
         tabBar: {
-          isEnableTabBar: randomIsEnableTabBar,
+          // isEnableTabBar: randomIsEnableTabBar,
           style: randomTabBarStyle as any,
-          showIcon: randomShowIcon,
-          widthType: randomTabBarWidthType,
-          dblClickEvent: randomDblClickEvent,
+          // showIcon: randomShowIcon,
+          // widthType: randomTabBarWidthType,
+          // dblClickEvent: randomDblClickEvent,
         },
-        toolbar: {
+        /*  toolbar: {
           breadcrumb: {
             style: randomBreadcrumbStyle as any,
             isEnableBreadcrumb: randomIsEnableBreadcrumb,
@@ -164,7 +143,7 @@ export function useLayoutSetting() {
           isEnablePageReload: randomIsEnablePageReload,
           isEnableFullscreen: randomIsEnableFullscreen,
           isEnableTheme: randomIsEnableTheme,
-        },
+        }, */
       },
     })
   }

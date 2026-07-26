@@ -8,16 +8,18 @@ const directionOptions = [
   { label: '竖向', value: 'vertical' },
 ]
 
-const useStyles = createStyles(({ token, css }) => ({
+const useStyles = createStyles(({ token }) => ({
   wrapper: {
     width: '100%',
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: token.colorBgLayout,
+    backgroundColor: token.colorBgBase,
+    border: `1px solid ${token.colorBorderSecondary}`,
   },
   header: {
-    'backgroundColor': token.colorBgContainer,
+    'backgroundColor': token.colorBgBase,
+    'borderBottom': `1px solid ${token.colorBorderSecondary}`,
     'padding': `${token.paddingLG}px`,
     '& h2': {
       margin: 0,
@@ -88,12 +90,12 @@ const useStyles = createStyles(({ token, css }) => ({
     borderRadius: `${token.borderRadiusLG}px`,
     position: 'relative',
   },
-  gradientOverlayVertical: css`
-        pointer-events: none;
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to bottom, transparent 0%, transparent 30%, ${token.colorBgContainer} 100%);
-    `,
+  gradientOverlayVertical: {
+    pointerEvents: 'none',
+    position: 'absolute',
+    inset: 0,
+    background: `linear-gradient(to bottom, transparent 0%, transparent 30%, ${token.colorBgContainer} 100%)`,
+  },
 }))
 
 const reviews = [

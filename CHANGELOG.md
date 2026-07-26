@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-27
+
+- 🔧 **背景色全站统一**（`login.tsx`、`ui/index.tsx`、`dashboard1/2`、`PatternBg`、8 个 `*Demo.tsx`）：`colorBgLayout` → `colorBgBase` + `colorBorderSecondary` 边框，层次由边框表达
+- 🔧 **Demo 布局标准化**（7 个 `*Demo.tsx`）：header 改 `colorBgBase` + `borderBottom`，content 补 flex + gap，css 模板改对象语法
+- 🔧 **首页重设计**（`index.tsx`）：BorderBeam 欢迎卡片、功能特性 2×2 卡片、应用场景 4 列卡片，全 token 化
+- ✨ **驼峰转换工具**（`camel.ts`）：snake_case → camelCase 键名转换，字典接口全量接入
+- 🔧 **字典接口优化**（`dict.ts`）：全量驼峰转换，新增 `/type/all` 路由
+- 🔧 **随机风格精简**（`useLayoutSetting.ts`）：注释子菜单折叠/进度条/标签栏等低频随机配置
+- 🐛 **字典空状态修复**（`dict.tsx`）：未选类型时清空列表，`listLoading` 初始值修正
+- 🔧 **菜单滚动条隐藏**（`Menu.tsx`）：`asideMenuContent` 加 `scrollbar-width: none` + webkit 伪元素隐藏，内容可滚动但不显示滚动条
+
 ## 2026-07-26
 
 - 🔧 **系统管理页面标准化**（`admin.tsx`、`role.tsx`、`menu.tsx`、`dict.tsx`）：Form.useForm + rules 验证、createStyles 主题化、工具栏对齐、Modal 宽度统一 560px

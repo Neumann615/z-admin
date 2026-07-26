@@ -3,16 +3,18 @@ import { createStyles } from 'antd-style'
 import { useState } from 'react'
 import { Markdown } from './Markdown'
 
-const useStyles = createStyles(({ token, css }) => ({
+const useStyles = createStyles(({ token }) => ({
   wrapper: {
     width: '100%',
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: token.colorBgLayout,
+    backgroundColor: token.colorBgBase,
+    border: `1px solid ${token.colorBorderSecondary}`,
   },
   header: {
-    'backgroundColor': token.colorBgContainer,
+    'backgroundColor': token.colorBgBase,
+    'borderBottom': `1px solid ${token.colorBorderSecondary}`,
     'padding': `${token.paddingLG}px`,
     '& h2': {
       margin: 0,
@@ -34,41 +36,41 @@ const useStyles = createStyles(({ token, css }) => ({
     flexDirection: 'column',
     gap: `${token.paddingLG}px`,
   },
-  editorSection: css`
-    display: flex;
-    gap: 16px;
-    min-height: 480px;
-  `,
-  editorPanel: css`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  `,
-  panelHeader: css`
-    font-size: 13px;
-    font-weight: 500;
-    color: ${token.colorTextSecondary};
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  `,
-  previewPanel: css`
-    flex: 1;
-    border: 1px solid ${token.colorBorderSecondary};
-    border-radius: ${token.borderRadius}px;
-    overflow: auto;
-    background-color: ${token.colorBgContainer};
-  `,
-  specialDemo: css`
-    width: 100%;
-    max-height: 600px;
-    overflow-y: auto;
-    border: 1px solid ${token.colorBorderSecondary};
-    border-radius: ${token.borderRadiusLG}px;
-    background-color: ${token.colorBgContainer};
-    padding: ${token.paddingSM}px;
-  `,
+  editorSection: {
+    display: 'flex',
+    gap: 16,
+    minHeight: 480,
+  },
+  editorPanel: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  panelHeader: {
+    fontSize: 13,
+    fontWeight: 500,
+    color: token.colorTextSecondary,
+    marginBottom: 8,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  previewPanel: {
+    flex: 1,
+    border: `1px solid ${token.colorBorderSecondary}`,
+    borderRadius: token.borderRadius,
+    overflow: 'auto',
+    backgroundColor: token.colorBgContainer,
+  },
+  specialDemo: {
+    width: '100%',
+    maxHeight: 600,
+    overflowY: 'auto',
+    border: `1px solid ${token.colorBorderSecondary}`,
+    borderRadius: token.borderRadiusLG,
+    backgroundColor: token.colorBgContainer,
+    padding: token.paddingSM,
+  },
 }))
 
 const sampleMarkdown = `# 欢迎使用 Markdown 编辑器

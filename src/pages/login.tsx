@@ -27,7 +27,7 @@ const useStyles = createStyles(({ token, css }) => {
       height: 100vh;
       width: 100%;
       overflow: hidden;
-      background: ${token.colorBgLayout};
+      background: ${token.colorBgBase};
 
       /* 网格背景 — 向上移动 + 四边渐变消失 */
       &::before {

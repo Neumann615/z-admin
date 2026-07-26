@@ -24,7 +24,7 @@ const useStyles = createStyles(({ css, token }) => ({
   `,
   wrapper: css`
     width: 100%; height: 100%; position: relative; overflow: hidden;
-    background: ${token.colorBgLayout}; cursor: grab; flex-shrink: 0;
+    background: ${token.colorBgBase}; cursor: grab; flex-shrink: 0;
     &:active { cursor: grabbing; }
   `,
   tooltip: css`
@@ -112,7 +112,7 @@ export default function Dashboard2() {
     let cleanup = false
 
     // ---- 颜色 ----
-    const bgColor = new THREE.Color(theme.colorBgLayout)
+    const bgColor = new THREE.Color(theme.colorBgBase)
     const borderColor = new THREE.Color(theme.colorBorderSecondary).getHex()
     const hoverColor = new THREE.Color(theme.colorPrimary).getHex()
     const baseColor = new THREE.Color(theme.colorPrimary)

@@ -1,88 +1,258 @@
+import {
+  ApartmentOutlined,
+  BgColorsOutlined,
+  BlockOutlined,
+  BookOutlined,
+  GithubOutlined,
+  SafetyCertificateOutlined,
+} from '@ant-design/icons'
 import { ZaSparklesText } from '@zealous-admin/components/index'
-import { Logo } from '@zealous-admin/layout/index'
+import { Logo, useAppStore } from '@zealous-admin/layout/index'
 import { BorderBeam, Button, Card, Col, Row, Space, Typography } from 'antd'
-import { createStyles } from 'antd-style'
+import { createStyles, useTheme } from 'antd-style'
 
 const { Title, Paragraph, Text } = Typography
 
 const useStyles = createStyles(({ token, css }) => ({
+  container: css`
+    max-width: 960px;
+    margin: 0 auto;
+    padding: ${token.paddingSM}px ${token.paddingLG}px;
+  `,
+
   hero: css`
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 32px 0;
+    gap: 10px;
+    padding: 8px 0 0;
   `,
-  name: css`
-    font-size: 22px;
-    font-weight: 700;
-    margin: 0;
+
+  heroText: css`
+    display: flex;
+    flex-direction: column;
+  `,
+
+  appName: css`
+    font-size: ${token.fontSizeXL}px;
+    font-weight: ${token.fontWeightStrong};
     color: ${token.colorTextHeading};
+    margin: 0;
+    line-height: 1.3;
+  `,
+
+  tagline: css`
+    font-size: ${token.fontSizeSM}px;
+    color: ${token.colorTextTertiary};
+    margin: 0;
+  `,
+
+  welcomeCard: css`
+    margin-top: ${token.marginSM}px;
+    position: relative;
+  `,
+
+  techStack: css`
+    display: block;
+    font-size: ${token.fontSizeSM}px;
+    font-weight: ${token.fontWeightStrong};
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: ${token.marginSM}px;
+  `,
+
+  desc: css`
+    color: ${token.colorTextSecondary};
+    font-size: ${token.fontSize}px;
+    line-height: 1.6;
+  `,
+
+  section: css`
+    margin-top: ${token.marginLG}px;
+  `,
+
+  sectionHeader: css`
+    display: flex;
+    align-items: center;
+    gap: ${token.marginXS}px;
+    margin-bottom: ${token.marginSM}px;
+  `,
+
+  sectionBar: css`
+    width: 3px;
+    height: 16px;
+    background: ${token.colorPrimary};
+    border-radius: 2px;
+  `,
+
+  sectionTitle: css`
+    font-size: ${token.fontSize}px;
+    font-weight: ${token.fontWeightStrong};
+    color: ${token.colorText};
+  `,
+
+  featureCard: css`
+    display: flex;
+    align-items: flex-start;
+    gap: ${token.marginSM}px;
+    height: 100%;
+  `,
+
+  featureIconBox: css`
+    width: 36px;
+    height: 36px;
+    border-radius: ${token.borderRadius}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: ${token.fontSizeXL}px;
+    color: ${token.colorPrimary};
+    background: ${token.colorPrimaryBg};
+    flex-shrink: 0;
+  `,
+
+  featureContent: css`
+    flex: 1;
+    min-width: 0;
+  `,
+
+  featureTitle: css`
+    font-size: ${token.fontSizeSM}px;
+    font-weight: ${token.fontWeightStrong};
+    color: ${token.colorText};
+    display: block;
+    margin-bottom: 2px;
+  `,
+
+  featureDesc: css`
+    font-size: ${token.fontSizeSM}px;
+    color: ${token.colorTextSecondary};
+    line-height: 1.5;
+  `,
+
+  scenarioTitle: css`
+    font-size: ${token.fontSizeSM}px;
+    font-weight: ${token.fontWeightStrong};
+    color: ${token.colorText};
+    display: block;
+    margin-bottom: 2px;
+  `,
+
+  scenarioDesc: css`
+    font-size: ${token.fontSizeSM}px;
+    color: ${token.colorTextSecondary};
+    line-height: 1.5;
+    margin: 0;
   `,
 }))
 
-const featureScenarios = [
+const FEATURES = [
   {
-    title: '小型公司',
-    desc: '让后端开发人员能在短时间内转型成为全栈开发',
+    icon: <BgColorsOutlined />,
+    title: '8 种主题',
+    desc: 'Default / MUI / Shadcn / Bootstrap 等，一键切换视觉风格',
   },
   {
-    title: '中小型公司',
-    desc: '提高项目开发效率，减轻前端开发人员工作压力',
+    icon: <ApartmentOutlined />,
+    title: '5 种布局',
+    desc: 'Side / Only-Side / Head / Only-Head / Simple，灵活适配',
   },
   {
-    title: '项目型公司',
-    desc: '应对绝大部分甲方需求，实现高度定制化',
+    icon: <BlockOutlined />,
+    title: '丰富组件',
+    desc: '图标选择器、流光文字、滑块验证、Markdown 等 10+ 组件',
   },
   {
-    title: '产品型公司',
-    desc: '完善的开发文档和代码注释，为产品保驾护航',
+    icon: <SafetyCertificateOutlined />,
+    title: 'RBAC 权限',
+    desc: '用户 / 角色 / 菜单三合一，路由与 API 双重控制',
   },
 ]
 
+const SCENARIOS = [
+  { title: '小型公司', desc: '后端人员快速转型全栈，一套框架覆盖常见管理需求' },
+  { title: '中小型公司', desc: '提高交付效率，减轻前端团队重复造轮子压力' },
+  { title: '项目型公司', desc: '灵活适配甲方定制化需求，布局 / 主题 / 权限可深度配置' },
+  { title: '产品型公司', desc: '完善的文档和类型定义，为长期迭代提供可靠基础设施' },
+]
+
 export default function HomePage() {
-  const { styles, theme } = useStyles()
+  const { styles } = useStyles()
+  const appStore = useAppStore()
+
+  const githubUrl = appStore.copyright?.website || 'https://github.com/Neumann615/zealous-admin'
 
   return (
-    <div className="w-full sm:w-[100%] md:w-[100%] lg:w-[80%] xl:w-[70%] mx-auto px-6 py-6">
+    <div className={styles.container}>
+      {/* Hero */}
       <div className={styles.hero}>
-        <Logo size={32} />
-        <h1 className={styles.name}>Zealous-admin</h1>
+        <Logo size={28} />
+        <div className={styles.heroText}>
+          <h1 className={styles.appName}>{appStore.name || 'Zealous-admin'}</h1>
+          <p className={styles.tagline}>开箱即用的 React 中后台管理系统框架</p>
+        </div>
       </div>
 
-      <BorderBeam lineWidth={2} style={{ borderRadius: theme.borderRadiusLG }}>
-        <Card>
-          <Text type="secondary" className="font-mono" style={{ fontSize: 14, fontWeight: 500, textTransform: 'uppercase', letterSpacing: 1 }}>
-            TypeScript · React 19.2 · Vite 8 · Antd 6 · Tailwindcss
+      {/* Welcome Card */}
+      <BorderBeam lineWidth={3}>
+        <Card className={styles.welcomeCard}>
+          <Text type="secondary" className={styles.techStack}>
+            TypeScript · React 19 · Vite 8 · Ant Design 6 · antd-style · Zustand
           </Text>
-          <Title level={2} style={{ marginTop: 8, marginBottom: 0, lineHeight: 1.3 }}>
+          <Title level={2} style={{ marginBottom: 8 }}>
             欢迎使用
+            {' '}
+            <ZaSparklesText text="Zealous-admin" fontSize={36} />
           </Title>
-          <ZaSparklesText text="Zealous-admin" fontSize={60}></ZaSparklesText>
-          <Paragraph style={{ marginBottom: 16 }}>
-            这是一款开箱即用的 React 管理系统框架，为中后台项目开发提供完整解决方案。
+          <Paragraph className={styles.desc} style={{ marginBottom: 16 }}>
+            提供 8 种主题、5 种布局、KeepAlive 缓存、RBAC 权限、MCP 集成等核心能力，
+            帮助团队快速交付高质量的管理后台应用。
           </Paragraph>
           <Space size="middle">
-            <Button type="primary">
+            <Button type="primary" icon={<BookOutlined />} onClick={() => window.open('/docs/', '_blank')}>
               开发文档
             </Button>
-            <Button>
+            <Button icon={<GithubOutlined />} onClick={() => window.open(githubUrl, '_blank')}>
               代码仓库
             </Button>
           </Space>
         </Card>
       </BorderBeam>
 
-      <div style={{ marginTop: 32, marginBottom: 32 }}>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
-          <div style={{ width: 4, height: 16, background: '#1677ff', borderRadius: 2, marginRight: 8 }} />
-          <Text style={{ fontSize: 16, fontWeight: 600 }}>应用场景</Text>
+      {/* 功能特性 */}
+      <div className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <div className={styles.sectionBar} />
+          <Text className={styles.sectionTitle}>功能特性</Text>
         </div>
-        <Row gutter={[16, 16]} align="stretch">
-          {featureScenarios.map((scenario, index) => (
-            <Col key={index} xs={24} sm={12} lg={6}>
-              <Card style={{ height: '100%' }}>
-                <Text style={{ fontSize: 14, fontWeight: 600, display: 'block', marginBottom: 4 }}>{scenario.title}</Text>
-                <Text type="secondary" style={{ fontSize: 12 }}>{scenario.desc}</Text>
+        <Row gutter={[16, 12]}>
+          {FEATURES.map(f => (
+            <Col key={f.title} xs={24} sm={12} lg={12}>
+              <Card hoverable style={{ height: '100%' }} styles={{ body: { padding: 16 } }}>
+                <div className={styles.featureCard}>
+                  <div className={styles.featureIconBox}>{f.icon}</div>
+                  <div className={styles.featureContent}>
+                    <Text className={styles.featureTitle}>{f.title}</Text>
+                    <Text className={styles.featureDesc}>{f.desc}</Text>
+                  </div>
+                </div>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </div>
+
+      {/* 应用场景 */}
+      <div className={styles.section} style={{ marginBottom: 16 }}>
+        <div className={styles.sectionHeader}>
+          <div className={styles.sectionBar} />
+          <Text className={styles.sectionTitle}>应用场景</Text>
+        </div>
+        <Row gutter={[12, 8]}>
+          {SCENARIOS.map(s => (
+            <Col key={s.title} xs={24} sm={12} lg={6}>
+              <Card style={{ height: '100%' }} styles={{ body: { padding: 16 } }}>
+                <Text className={styles.scenarioTitle}>{s.title}</Text>
+                <Text className={styles.scenarioDesc}>{s.desc}</Text>
               </Card>
             </Col>
           ))}

@@ -283,7 +283,7 @@ function DictDataPane() {
   const [listQuery, setListQuery] = useState<PageParam>({ pageNum: 1, pageSize: 10 })
   const [list, setList] = useState<DictData[]>([])
   const [total, setTotal] = useState(0)
-  const [listLoading, setListLoading] = useState(true)
+  const [listLoading, setListLoading] = useState(false)
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
@@ -294,7 +294,11 @@ function DictDataPane() {
   }, [])
 
   const getList = async () => {
-    if (!selectedType) return
+    if (!selectedType) {
+      setList([])
+      setTotal(0)
+      return
+    }
     setListLoading(true)
     try {
       const res = await getDictDataListAPI({ ...listQuery, dictType: selectedType })

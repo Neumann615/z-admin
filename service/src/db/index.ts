@@ -197,6 +197,8 @@ export function initDb() {
             ],
           },
           { title: '页面保活', name: 'keepalive', icon: 'ai:AiOutlineDesktop' },
+          { title: '结果状态', name: 'result', icon: 'ai:AiOutlineCheckCircle' },
+          { title: '主题预览', name: 'theme-preview', icon: 'ai:AiOutlineSkin' },
         ],
       },
       {

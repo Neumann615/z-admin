@@ -33,10 +33,12 @@ const useStyles = createStyles(({ token }) => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: token.colorBgLayout,
+    backgroundColor: token.colorBgBase,
+    border: `1px solid ${token.colorBorderSecondary}`,
   },
   header: {
-    'backgroundColor': token.colorBgContainer,
+    'backgroundColor': token.colorBgBase,
+    'borderBottom': `1px solid ${token.colorBorderSecondary}`,
     'padding': `${token.paddingLG}px`,
     '& h2': {
       margin: 0,
@@ -54,6 +56,9 @@ const useStyles = createStyles(({ token }) => ({
     flex: 1,
     padding: `${token.paddingLG}px`,
     overflow: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: token.paddingLG,
   },
   demoArea: {
     flex: 1,
@@ -62,7 +67,6 @@ const useStyles = createStyles(({ token }) => ({
     alignItems: 'center',
     backgroundColor: token.colorBgLayout,
     borderRadius: token.borderRadiusLG,
-    marginTop: token.marginLG,
     padding: token.paddingLG,
     minHeight: 200,
   },

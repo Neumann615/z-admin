@@ -43,13 +43,18 @@ const useStyles = createStyles(({ token, css }) => ({
     textAlign: 'center',
     flex: 1,
   },
-  asideMenuContent: {
-    flex: 1,
-    height: '1px',
-    width: '100%',
-    overflowX: 'hidden',
-    overflowY: 'auto',
-  },
+  asideMenuContent: css`
+    flex: 1;
+    height: 1px;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  `,
   asideMenuFooter: {
     padding: `${token.paddingSM}px`,
     boxSizing: 'border-box',

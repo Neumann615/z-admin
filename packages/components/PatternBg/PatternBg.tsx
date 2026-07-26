@@ -132,7 +132,8 @@ const useStyles = createStyles(({ token, css }) => {
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: ${token.colorBgLayout};
+      background: ${token.colorBgBase};
+      border: 1px solid ${token.colorBorderSecondary};
     `,
 
     pattern: css`

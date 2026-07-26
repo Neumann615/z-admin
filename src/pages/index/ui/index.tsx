@@ -107,7 +107,7 @@ const useStyles = createStyles(({ token, css }) => ({
     display: flex;
     flex-direction: column;
     gap: 24px;
-    background: ${token.colorBgLayout};
+    background: ${token.colorBgBase};
     min-height: 100%;
   `,
   pageHeader: css`
@@ -126,6 +126,7 @@ const useStyles = createStyles(({ token, css }) => ({
     margin: 0;
   `,
   sectionCard: css`
+    border: 1px solid ${token.colorBorderSecondary};
     .section-title {
       display: flex;
       align-items: center;
@@ -433,7 +434,7 @@ export default function UI() {
       </div>
 
       {/* ==================== 一、通用组件 General ==================== */}
-      <Card className={styles.sectionCard} title={<span className="section-title">🔘 通用 General</span>}>
+      <Card className={styles.sectionCard} title={<span>🔘 通用 General</span>}>
         {/* Buttons */}
         <div className={`${styles.demoBlock} buttons-section`}>
           <div className={styles.demoTitle}>Button 按钮</div>
@@ -503,7 +504,7 @@ export default function UI() {
       </Card>
 
       {/* ==================== 二、布局组件 Layout ==================== */}
-      <Card className={styles.sectionCard} title={<span className="section-title">📐 布局 Layout</span>}>
+      <Card className={styles.sectionCard} title={<span>📐 布局 Layout</span>}>
         {/* Divider */}
         <div className={styles.demoBlock}>
           <div className={styles.demoTitle}>Divider 分割线</div>
@@ -595,7 +596,10 @@ export default function UI() {
             <Space wrap>
               {Array.from({ length: 12 }, (_, i) => <Tag key={i}>
                 标签
-                {i + 1} </Tag>)}
+                {i + 1}
+                {' '}
+
+              </Tag>)}
             </Space>
           </Space>
         </div>
@@ -716,7 +720,7 @@ export default function UI() {
       </Card>
 
       {/* ==================== 三、导航组件 Navigation ==================== */}
-      <Card className={styles.sectionCard} title={<span className="section-title">🧭 导航 Navigation</span>}>
+      <Card className={styles.sectionCard} title={<span>🧭 导航 Navigation</span>}>
         {/* Anchor */}
         <div className={styles.demoBlock}>
           <div className={styles.demoTitle}>Anchor 锚点</div>
@@ -838,7 +842,7 @@ export default function UI() {
       </Card>
 
       {/* ==================== 四、数据录入 Data Entry ==================== */}
-      <Card className={styles.sectionCard} title={<span className="section-title">⌨️ 数据录入 Data Entry</span>}>
+      <Card className={styles.sectionCard} title={<span>⌨️ 数据录入 Data Entry</span>}>
         <Form layout="vertical" initialValues={{ remember: true }}>
           {/* Input 系列 */}
           <div className={styles.demoBlock}>
@@ -1104,7 +1108,7 @@ export default function UI() {
       </Card>
 
       {/* ==================== 五、数据展示 Data Display ==================== */}
-      <Card className={styles.sectionCard} title={<span className="section-title">📊 数据展示 Data Display</span>}>
+      <Card className={styles.sectionCard} title={<span>📊 数据展示 Data Display</span>}>
         {/* Avatar + Badge */}
         <div className={styles.demoBlock}>
           <div className={styles.demoTitle}>Avatar 头像 & Badge 徽标</div>
@@ -1393,7 +1397,7 @@ export default function UI() {
       </Card>
 
       {/* ==================== 六、反馈组件 Feedback ==================== */}
-      <Card className={styles.sectionCard} title={<span className="section-title">💬 反馈 Feedback</span>}>
+      <Card className={styles.sectionCard} title={<span>💬 反馈 Feedback</span>}>
         {/* Alert */}
         <div className={styles.demoBlock}>
           <div className={styles.demoTitle}>Alert 警告提示</div>
@@ -1618,7 +1622,7 @@ export default function UI() {
       </Card>
 
       {/* ==================== 七、其他组件 Other ==================== */}
-      <Card className={styles.sectionCard} title={<span className="section-title">🔧 其他 Other</span>}>
+      <Card className={styles.sectionCard} title={<span>🔧 其他 Other</span>}>
         {/* Affix */}
         <div className={styles.demoBlock}>
           <div className={styles.demoTitle}>Affix 固钉</div>

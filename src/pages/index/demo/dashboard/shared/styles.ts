@@ -23,7 +23,7 @@ export const useDashboardStyles = createStyles(({ token, css }) => {
     wrapper: css`
       width: 100%;
       height: 100%;
-      background: ${token.colorBgLayout};
+      background: ${token.colorBgBase};
       overflow: auto;
       color: ${token.colorText};
       position: relative;

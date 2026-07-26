@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { getDb } from '../db'
+import { toCamelCase, toCamelCaseList } from '../lib/camel'
 import { now } from '../lib/date'
 import { failed, success } from '../lib/response'
 import { authMiddleware } from '../middleware/auth'
@@ -25,13 +26,13 @@ router.get('/dict/type/list', (req, res) => {
         'SELECT COUNT(*) AS count FROM za_dict_type WHERE name LIKE ? OR dict_type LIKE ?',
       ).get(like, like) as any).count
 
-      types = db.prepare(
+      types = toCamelCaseList(db.prepare(
         'SELECT * FROM za_dict_type WHERE name LIKE ? OR dict_type LIKE ? LIMIT ? OFFSET ?',
-      ).all(like, like, pageSize, offset)
+      ).all(like, like, pageSize, offset) as any[])
     }
     else {
       total = (db.prepare('SELECT COUNT(*) AS count FROM za_dict_type').get() as any).count
-      types = db.prepare('SELECT * FROM za_dict_type LIMIT ? OFFSET ?').all(pageSize, offset)
+      types = toCamelCaseList(db.prepare('SELECT * FROM za_dict_type LIMIT ? OFFSET ?').all(pageSize, offset) as any[])
     }
 
     res.json(success({ list: types, total, pageSize, pageNum }))
@@ -60,7 +61,7 @@ router.post('/dict/type/create', (req, res) => {
       'INSERT INTO za_dict_type (name, dict_type, status, remark, create_time) VALUES (?, ?, ?, ?, ?)',
     ).run(name, dictType, status || 1, remark || null, now())
 
-    const type = db.prepare('SELECT * FROM za_dict_type WHERE id = ?').get(result.lastInsertRowid)
+    const type = toCamelCase(db.prepare('SELECT * FROM za_dict_type WHERE id = ?').get(result.lastInsertRowid) as any)
     res.json(success(type))
   }
   catch (e: any) {
@@ -68,10 +69,20 @@ router.post('/dict/type/create', (req, res) => {
   }
 })
 
+router.get('/dict/type/all', (_req, res) => {
+  try {
+    const types = toCamelCaseList(db.prepare('SELECT * FROM za_dict_type ORDER BY id').all() as any[])
+    res.json(success(types))
+  }
+  catch (e: any) {
+    res.json(failed(e.message || '获取所有字典类型失败'))
+  }
+})
+
 router.get('/dict/type/:id', (req, res) => {
   try {
     const id = Number(req.params.id)
-    const type = db.prepare('SELECT * FROM za_dict_type WHERE id = ?').get(id)
+    const type = toCamelCase(db.prepare('SELECT * FROM za_dict_type WHERE id = ?').get(id) as any)
 
     if (!type) {
       res.json(failed('字典类型不存在'))
@@ -119,7 +130,7 @@ router.post('/dict/type/update/:id', (req, res) => {
     values.push(id)
     db.prepare(`UPDATE za_dict_type SET ${sets.join(', ')} WHERE id = ?`).run(...values)
 
-    const updated = db.prepare('SELECT * FROM za_dict_type WHERE id = ?').get(id)
+    const updated = toCamelCase(db.prepare('SELECT * FROM za_dict_type WHERE id = ?').get(id) as any)
     res.json(success(updated))
   }
   catch (e: any) {
@@ -162,11 +173,11 @@ router.get('/dict/data/list', (req, res) => {
 
     if (dictType) {
       total = (db.prepare('SELECT COUNT(*) AS count FROM za_dict_data WHERE dict_type = ?').get(dictType) as any).count
-      datas = db.prepare('SELECT * FROM za_dict_data WHERE dict_type = ? ORDER BY dict_sort LIMIT ? OFFSET ?').all(dictType, pageSize, offset)
+      datas = toCamelCaseList(db.prepare('SELECT * FROM za_dict_data WHERE dict_type = ? ORDER BY dict_sort LIMIT ? OFFSET ?').all(dictType, pageSize, offset) as any[])
     }
     else {
       total = (db.prepare('SELECT COUNT(*) AS count FROM za_dict_data').get() as any).count
-      datas = db.prepare('SELECT * FROM za_dict_data ORDER BY dict_sort LIMIT ? OFFSET ?').all(pageSize, offset)
+      datas = toCamelCaseList(db.prepare('SELECT * FROM za_dict_data ORDER BY dict_sort LIMIT ? OFFSET ?').all(pageSize, offset) as any[])
     }
 
     res.json(success({ list: datas, total, pageSize, pageNum }))
@@ -189,7 +200,7 @@ router.post('/dict/data/create', (req, res) => {
       'INSERT INTO za_dict_data (dict_type, dict_label, dict_value, dict_sort, status, remark, css_class, list_class, create_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
     ).run(dictType, dictLabel, dictValue, dictSort || 0, status || 1, remark || null, cssClass || null, listClass || null, now())
 
-    const data = db.prepare('SELECT * FROM za_dict_data WHERE id = ?').get(result.lastInsertRowid)
+    const data = toCamelCase(db.prepare('SELECT * FROM za_dict_data WHERE id = ?').get(result.lastInsertRowid) as any)
     res.json(success(data))
   }
   catch (e: any) {
@@ -200,7 +211,7 @@ router.post('/dict/data/create', (req, res) => {
 router.get('/dict/data/:id', (req, res) => {
   try {
     const id = Number(req.params.id)
-    const data = db.prepare('SELECT * FROM za_dict_data WHERE id = ?').get(id)
+    const data = toCamelCase(db.prepare('SELECT * FROM za_dict_data WHERE id = ?').get(id) as any)
 
     if (!data) {
       res.json(failed('字典数据不存在'))
@@ -244,7 +255,7 @@ router.post('/dict/data/update/:id', (req, res) => {
     values.push(id)
     db.prepare(`UPDATE za_dict_data SET ${sets.join(', ')} WHERE id = ?`).run(...values)
 
-    const updated = db.prepare('SELECT * FROM za_dict_data WHERE id = ?').get(id)
+    const updated = toCamelCase(db.prepare('SELECT * FROM za_dict_data WHERE id = ?').get(id) as any)
     res.json(success(updated))
   }
   catch (e: any) {
@@ -269,20 +280,10 @@ router.post('/dict/data/delete/:id', (req, res) => {
   }
 })
 
-router.get('/dict/type/all', (_req, res) => {
-  try {
-    const types = db.prepare('SELECT * FROM za_dict_type ORDER BY id').all()
-    res.json(success(types))
-  }
-  catch (e: any) {
-    res.json(failed(e.message || '获取所有字典类型失败'))
-  }
-})
-
 router.get('/dict/data/type/:dictType', (req, res) => {
   try {
     const dictType = req.params.dictType
-    const datas = db.prepare('SELECT * FROM za_dict_data WHERE dict_type = ? ORDER BY dict_sort').all(dictType)
+    const datas = toCamelCaseList(db.prepare('SELECT * FROM za_dict_data WHERE dict_type = ? ORDER BY dict_sort').all(dictType) as any[])
     res.json(success(datas))
   }
   catch (e: any) {
