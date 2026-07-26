@@ -10,6 +10,9 @@
 - 🔧 **随机风格精简**（`useLayoutSetting.ts`）：注释子菜单折叠/进度条/标签栏等低频随机配置
 - 🐛 **字典空状态修复**（`dict.tsx`）：未选类型时清空列表，`listLoading` 初始值修正
 - 🔧 **菜单滚动条隐藏**（`Menu.tsx`）：`asideMenuContent` 加 `scrollbar-width: none` + webkit 伪元素隐藏，内容可滚动但不显示滚动条
+- 🔧 **彩带庆祝效果重构**（`useFireworks.ts`、`fireworks.tsx`）：分阶段空气阻力物理模型（上升大阻力快速到顶、下落小阻力缓慢飘散）、粒子属性随机化均匀散开，修复内存泄漏和重复动画
+- 🔧 **数据库种子数据扩充**（`db/index.ts`）：新增 test 测试用户、演示测试员角色、大屏/导航图标激活/UI 演示菜单，角色菜单双分配
+- ✨ **useReLoginStore 导出**（`layout/index.ts`）：重新登录状态 store 对外暴露
 
 ## 2026-07-26
 

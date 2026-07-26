@@ -98,17 +98,26 @@ export function initDb() {
   const row = db.prepare('SELECT id FROM za_admin WHERE username = ?').get('admin')
   if (!row) {
     const nowStr = now()
-    const hashedPassword = bcrypt.hashSync('admin123', 10)
+    const adminHash = bcrypt.hashSync('admin123', 10)
+    const testHash = bcrypt.hashSync('test123', 10)
 
-    // 1. 创建默认管理员
+    // 1. 创建默认管理员 + 测试用户
     db.prepare(
-      'INSERT INTO za_admin (username, password, nick_name, status, create_time) VALUES (?, ?, ?, ?, ?)',
-    ).run('admin', hashedPassword, '管理员', 1, nowStr)
+      'INSERT INTO za_admin (username, password, nick_name, email, status, create_time) VALUES (?, ?, ?, ?, ?, ?)',
+    ).run('admin', adminHash, '管理员', 'admin@qq.com', 1, nowStr)
+
+    db.prepare(
+      'INSERT INTO za_admin (username, password, nick_name, email, status, create_time) VALUES (?, ?, ?, ?, ?, ?)',
+    ).run('test', testHash, '测试员', 'test@qq.com', 1, nowStr)
 
     // 2. 创建默认角色
     db.prepare(
       'INSERT INTO za_role (name, description, admin_count, create_time, status, sort) VALUES (?, ?, ?, ?, ?, ?)',
     ).run('超级管理员', '拥有所有权限', 1, nowStr, 1, 0)
+
+    db.prepare(
+      'INSERT INTO za_role (name, description, admin_count, create_time, status, sort) VALUES (?, ?, ?, ?, ?, ?)',
+    ).run('演示测试员', '仅提供演示功能', 1, nowStr, 1, 0)
 
     // 3. 创建菜单树
     const insertMenu = db.prepare(
@@ -141,7 +150,7 @@ export function initDb() {
       })
     }
 
-    // 演示（在系统管理前面）
+    // 演示
     insertMenuTree(0, 0, '', [
       {
         title: '演示',
@@ -193,39 +202,73 @@ export function initDb() {
             icon: 'ai:AiOutlineFunction',
             children: [
               { title: '页面最大化', name: 'maximize-page', icon: 'ai:AiOutlineFullscreen' },
+              { title: '登陆过期', name: 'logout', icon: 'ai:AiOutlineLogout' },
               { title: '庆祝效果', name: 'fireworks', icon: 'ai:AiOutlineCoffee' },
             ],
           },
           { title: '页面保活', name: 'keepalive', icon: 'ai:AiOutlineDesktop' },
-          { title: '结果状态', name: 'result', icon: 'ai:AiOutlineCheckCircle' },
-          { title: '主题预览', name: 'theme-preview', icon: 'ai:AiOutlineSkin' },
+          {
+            title: '导航图标激活',
+            name: 'menu-active',
+            icon: 'ai:AiOutlineSend',
+            children: [
+              { title: '子级图标激活', name: 'menu-active-children', icon: 'ai:AiOutlineFrown', activeIcon: 'ai:AiOutlineSmile' },
+              {
+                title: '父级图标激活',
+                name: 'menu-active-parent',
+                icon: 'ai:AiFillFrown',
+                activeIcon: 'ai:AiFillSmile',
+                children: [
+                  { title: '测试页面', name: 'menu-active-parent-test' },
+                ],
+              },
+            ],
+          },
+          {
+            title: '大屏',
+            name: 'dashboard',
+            icon: 'ai:AiOutlineDesktop',
+            children: [
+              { title: '大屏演示1', name: 'dashboard1', icon: 'ai:AiOutlineLineChart' },
+              { title: '大屏演示2', name: 'dashboard2', icon: 'ai:AiOutlineDotChart' },
+              { title: '大屏演示3', name: 'dashboard3', icon: 'ai:AiOutlineAreaChart' },
+            ],
+          },
         ],
       },
       {
         title: '通用',
         name: 'system',
-        icon: 'ai:AiOutlineSetting',
+        icon: 'ai:AiOutlineAppstore',
         children: [
-          { title: '用户管理', name: 'system-admin', icon: 'ai:AiOutlineUser' },
-          { title: '角色管理', name: 'system-role', icon: 'ai:AiOutlineTeam' },
-          { title: '导航管理', name: 'system-menu', icon: 'ai:AiOutlineMenu' },
-          { title: '字典管理', name: 'system-dict', icon: 'ai:AiOutlineBook' },
+          { title: '用户管理', name: 'admin', icon: 'ai:AiOutlineUser' },
+          { title: '角色管理', name: 'role', icon: 'ai:AiOutlineTeam' },
+          { title: '导航管理', name: 'menu', icon: 'ai:AiOutlineMenu' },
+          { title: '字典管理', name: 'dict', icon: 'ai:AiOutlineBook' },
         ],
+      },
+      {
+        title: 'UI',
+        name: 'ui',
+        icon: 'ai:AiOutlineAntDesign',
       },
     ])
 
-    // 4. 分配所有菜单给超级管理员角色
+    // 4. 分配所有菜单给两个角色
     const insertRoleMenu = db.prepare(
       'INSERT INTO za_role_menu_relation (role_id, menu_id) VALUES (?, ?)',
     )
     for (const menuId of allMenuIds) {
       insertRoleMenu.run(1, menuId)
+      insertRoleMenu.run(2, menuId)
     }
 
-    // 5. 分配超级管理员角色给 admin 用户
-    db.prepare(
+    // 5. 分配角色给用户
+    const insertAdminRole = db.prepare(
       'INSERT INTO za_admin_role_relation (admin_id, role_id) VALUES (?, ?)',
-    ).run(1, 1)
+    )
+    insertAdminRole.run(1, 1) // admin → 超级管理员
+    insertAdminRole.run(2, 2) // test → 演示测试员
   }
 }
 
