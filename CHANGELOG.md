@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-28
+
+- ✨ **新增 utils 工具包**（`packages/utils/`、`package.json`）：data/env/time/file/parse 五大模块通用工具函数（深拷贝、防抖节流、日期格式化、环境检测、文件处理、身份证解析等），添加独立构建脚本
+- ✨ **新增 Iframe 外链嵌入组件**（`Iframe.tsx`、`link/`）：`ZaIframe` 通用 iframe 组件（自动撑满+加载状态），新增 5 个官网嵌入演示页面（antd/react/vue/typescript/vite）
+- 🔧 **菜单图标取消必填校验**（`menu.tsx`、`sqlite.db`）：表单 icon 字段改为非必填，新增外链演示菜单种子数据
+
 ## 2026-07-27
 
 - 🔧 **背景色全站统一**（`login.tsx`、`ui/index.tsx`、`dashboard1/2`、`PatternBg`、8 个 `*Demo.tsx`）：`colorBgLayout` → `colorBgBase` + `colorBorderSecondary` 边框，层次由边框表达

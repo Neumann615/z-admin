@@ -53,9 +53,7 @@ const FORM_RULES = {
     { required: true, message: '请输入前端名称' },
     { min: 2, max: 140, message: '长度在 2 到 140 个字符' },
   ],
-  icon: [
-    { required: true, message: '请选择前端图标' },
-  ],
+  // icon 不做必填校验
 }
 
 // ============================================================
@@ -289,7 +287,7 @@ export default function SystemMenu() {
           <Form.Item label="前端名称" name="name" rules={FORM_RULES.name}>
             <Input allowClear />
           </Form.Item>
-          <Form.Item label="前端图标" name="icon" rules={FORM_RULES.icon}>
+          <Form.Item label="前端图标" name="icon">
             <ZaIconPicker placeholder="请选择图标" />
           </Form.Item>
           <Form.Item label="激活图标" name="activeIcon">
