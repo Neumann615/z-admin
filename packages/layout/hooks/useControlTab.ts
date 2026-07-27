@@ -1,3 +1,4 @@
+import { deepClone, sortBy } from '@zealous-admin/utils/index'
 import { useNavigate } from 'react-router'
 import { useShallow } from 'zustand/react/shallow'
 import { useAppStore, useMenuStore, useTopBarStore } from '../store/index'
@@ -25,7 +26,7 @@ export function useControlTab() {
       for (const item of data) {
         path.push(item)
         if (item.key === curKey) {
-          result = JSON.parse(JSON.stringify(path))
+          result = deepClone(path)
           return
         }
         const children = Array.isArray(item.children) ? item.children : []
@@ -221,7 +222,7 @@ export function useControlTab() {
 
   // 切换页面顺序
   function swapTab(index1: number, index2: number) {
-    const arr = JSON.parse(JSON.stringify(tabs))
+    const arr = deepClone(tabs)
     const temp = arr[index1]
     arr[index1] = arr[index2]
     arr[index2] = temp
@@ -230,19 +231,13 @@ export function useControlTab() {
 
   // 固定tab页面
   function fixedTab(tabId: string) {
-    const _tabs = JSON.parse(JSON.stringify(tabs))
+    const _tabs = deepClone(tabs)
     _tabs.forEach((tabItem: any) => {
       if (tabItem.tabId === tabId) {
         tabItem.isFixed = !tabItem.isFixed
       }
     })
-    _tabs.sort((a: any, b: any) => {
-      if (a.isFixed === b.isFixed) {
-        return 0
-      }
-      return a.isFixed ? -1 : 1
-    })
-    setTabs(_tabs)
+    setTabs(sortBy(_tabs, 'isFixed', 'desc'))
   }
 
   // 浏览器后退/前进时同步 tab 与面包屑状态

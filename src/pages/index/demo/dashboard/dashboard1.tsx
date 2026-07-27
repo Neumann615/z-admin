@@ -3,6 +3,7 @@ import {
   CaretUpOutlined,
 } from '@ant-design/icons'
 import { useMaximize } from '@zealous-admin/layout/index'
+import { sortBy } from '@zealous-admin/utils/index'
 import {
   Badge,
   Col,
@@ -55,7 +56,8 @@ export default function Dashboard1() {
   // ---- ECharts: 指数走势 ----
   useEffect(() => {
     const chart = useChart(trendEl.current)
-    if (!chart) return
+    if (!chart)
+      return
     const tr = trendRef.current
     const base = tr.data[0]
     chart.setOption({
@@ -63,7 +65,9 @@ export default function Dashboard1() {
       tooltip: { trigger: 'axis', valueFormatter: (v: number) => `${v.toFixed(2)}%` },
       legend: { data: INDEX_NAMES, bottom: 0, textStyle: { color: theme.colorTextSecondary, fontSize: 11 } },
       xAxis: {
-        type: 'category', data: tr.times, boundaryGap: false,
+        type: 'category',
+        data: tr.times,
+        boundaryGap: false,
         axisLine: { lineStyle: { color: theme.colorBorderSecondary } },
         axisLabel: { color: theme.colorTextTertiary, fontSize: 10 },
       },
@@ -73,9 +77,12 @@ export default function Dashboard1() {
         splitLine: { lineStyle: { color: theme.colorBorderSecondary } },
       },
       series: INDEX_NAMES.map((name, i) => ({
-        name, type: 'line',
+        name,
+        type: 'line',
         data: tr.data.map(d => +((d[i] - base[i]) / base[i] * 100).toFixed(2)),
-        smooth: true, symbol: 'none', lineStyle: { width: 2 },
+        smooth: true,
+        symbol: 'none',
+        lineStyle: { width: 2 },
         areaStyle: i === 0 ? { opacity: 0.06 } : undefined,
       })),
       color: [theme.colorPrimary, theme.colorWarning, theme.colorSuccess],
@@ -85,7 +92,8 @@ export default function Dashboard1() {
   // ---- ECharts: 板块资金流向 ----
   useEffect(() => {
     const chart = useChart(pieEl.current)
-    if (!chart) return
+    if (!chart)
+      return
     const inflow = sectors.filter(d => d.value > 0)
     const outflow = sectors.filter(d => d.value < 0).map(d => ({ ...d, value: Math.abs(d.value) }))
     chart.setOption({
@@ -102,12 +110,16 @@ export default function Dashboard1() {
   // ---- ECharts: 恐慌贪婪指数 ----
   useEffect(() => {
     const chart = useChart(gaugeEl.current)
-    if (!chart) return
+    if (!chart)
+      return
     const v = Math.round(sentiment)
     const label = v >= 75 ? '极度贪婪' : v >= 55 ? '贪婪' : v >= 45 ? '中性' : v >= 25 ? '恐慌' : '极度恐慌'
     chart.setOption({
       series: [{
-        type: 'gauge', min: 0, max: 100, radius: '92%',
+        type: 'gauge',
+        min: 0,
+        max: 100,
+        radius: '92%',
         progress: { show: true, width: 12 },
         axisLine: { lineStyle: { width: 12, color: [[0.25, theme.colorSuccess], [0.5, theme.colorWarning], [0.75, '#FF9966'], [1, theme.colorError]] } },
         pointer: { width: 4, length: '58%', itemStyle: { color: theme.colorTextHeading } },
@@ -124,15 +136,17 @@ export default function Dashboard1() {
   // ---- ECharts: 行业涨跌幅 ----
   useEffect(() => {
     const chart = useChart(barEl.current)
-    if (!chart) return
-    const sorted = [...industries].sort((a, b) => a.change - b.change)
+    if (!chart)
+      return
+    const sorted = sortBy(industries, 'change', 'asc')
     chart.setOption({
       grid: { left: 55, right: 45, top: 10, bottom: 24 },
       tooltip: { formatter: '{b}: {c}%' },
       xAxis: { type: 'value', axisLabel: { formatter: '{value}%', color: theme.colorTextTertiary, fontSize: 10 }, splitLine: { lineStyle: { color: theme.colorBorderSecondary } } },
       yAxis: { type: 'category', data: sorted.map(i => i.name), axisLine: { lineStyle: { color: theme.colorBorderSecondary } }, axisLabel: { color: theme.colorTextSecondary, fontSize: 11 } },
       series: [{
-        type: 'bar', barWidth: '55%',
+        type: 'bar',
+        barWidth: '55%',
         data: sorted.map(i => ({ value: +i.change.toFixed(2), itemStyle: { color: i.change >= 0 ? upColor : downColor, borderRadius: [0, 3, 3, 0] } })),
         label: { show: true, position: 'right', formatter: (p: any) => `${p.value}%`, fontSize: 10, color: theme.colorTextSecondary },
       }],
@@ -142,7 +156,8 @@ export default function Dashboard1() {
   // ---- ECharts: 个股分布散点图 ----
   useEffect(() => {
     const chart = useChart(scatterEl.current)
-    if (!chart) return
+    if (!chart)
+      return
     chart.setOption({
       grid: { left: 48, right: 20, top: 20, bottom: 38 },
       tooltip: { formatter: (p: any) => `${p.data[3]} (${p.data[4]})<br/>价格: ¥${p.data[1].toFixed(2)}<br/>涨跌: ${p.data[0].toFixed(2)}%<br/>成交: ${p.data[2].toFixed(1)}万手` },
@@ -175,13 +190,20 @@ export default function Dashboard1() {
         {r.lastTickUp === true && <span style={{ color: upColor, fontSize: 9 }}>▲</span>}
         {r.lastTickUp === false && <span style={{ color: downColor, fontSize: 9 }}>▼</span>}
       </Space>
-    )},
+    ) },
     { title: '涨跌额', dataIndex: 'change', key: 'change', width: 90, render: (v: number, r: any) => (
-      <span className={r.up ? styles.textUp : styles.textDown}>{v > 0 ? '+' : ''}{v.toFixed(2)}</span>
-    )},
+      <span className={r.up ? styles.textUp : styles.textDown}>
+        {v > 0 ? '+' : ''}
+        {v.toFixed(2)}
+      </span>
+    ) },
     { title: '涨跌幅', dataIndex: 'changePercent', key: 'changePercent', width: 90, render: (v: number, r: any) => (
-      <span className={r.up ? styles.textUp : styles.textDown}>{v > 0 ? '+' : ''}{v.toFixed(2)}%</span>
-    )},
+      <span className={r.up ? styles.textUp : styles.textDown}>
+        {v > 0 ? '+' : ''}
+        {v.toFixed(2)}
+        %
+      </span>
+    ) },
     { title: '成交量(万手)', dataIndex: 'volume', key: 'volume', width: 110, render: (v: number) => <span style={{ fontVariantNumeric: 'tabular-nums' }}>{v.toFixed(1)}</span> },
     { title: '方向', dataIndex: 'up', key: 'up', width: 60, render: (up: boolean) => up ? <Tag color="red" style={{ margin: 0 }}>涨</Tag> : <Tag color="green" style={{ margin: 0 }}>跌</Tag> },
   ]
@@ -225,8 +247,15 @@ export default function Dashboard1() {
                   <Statistic value={item.value} precision={2} valueStyle={{ color: theme.colorTextHeading, fontSize: 26, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }} />
                   <Space size={4}>
                     {item.up ? <CaretUpOutlined style={{ color: upColor }} /> : <CaretDownOutlined style={{ color: downColor }} />}
-                    <span style={{ color: item.up ? upColor : downColor, fontSize: 14, fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{item.change > 0 ? '+' : ''}{item.change.toFixed(2)}</span>
-                    <span style={{ color: item.up ? upColor : downColor, fontSize: 13, marginLeft: 2, fontVariantNumeric: 'tabular-nums' }}>{item.changePercent > 0 ? '+' : ''}{item.changePercent.toFixed(2)}%</span>
+                    <span style={{ color: item.up ? upColor : downColor, fontSize: 14, fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
+                      {item.change > 0 ? '+' : ''}
+                      {item.change.toFixed(2)}
+                    </span>
+                    <span style={{ color: item.up ? upColor : downColor, fontSize: 13, marginLeft: 2, fontVariantNumeric: 'tabular-nums' }}>
+                      {item.changePercent > 0 ? '+' : ''}
+                      {item.changePercent.toFixed(2)}
+                      %
+                    </span>
                   </Space>
                 </div>
               </div>

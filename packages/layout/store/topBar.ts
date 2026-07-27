@@ -1,3 +1,4 @@
+import { sortBy } from '@zealous-admin/utils/index'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import defaultSetting from '../defaultSetting'
@@ -92,6 +93,5 @@ function setFixedTabHandler(tabs: any[], tabId: string) {
       console.log('更新固定', tabItem)
     }
   })
-  tabs.sort((a, b) => b.isFixed - a.isFixed)
-  return tabs
+  return sortBy(tabs, 'isFixed', 'desc')
 }

@@ -41,7 +41,7 @@ function getZodiac(month: number, day: number): string {
 
   // 查找第一个起始日期大于当前日期的星座，则当前日期属于前一个星座
   for (let i = 0; i < zodiacStart.length; i++) {
-    const [m, d, name] = zodiacStart[i]
+    const [m, d] = zodiacStart[i]
     if (month < m || (month === m && day < d)) {
       // 返回前一个星座的名称（i=0 时前一个是摩羯座）
       return i === 0 ? '摩羯座' : zodiacStart[i - 1][2]

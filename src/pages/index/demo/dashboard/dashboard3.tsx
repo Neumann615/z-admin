@@ -1,8 +1,10 @@
+import type { FeatureData } from './shared/mapUtils'
 import {
   CaretDownOutlined,
   CaretUpOutlined,
 } from '@ant-design/icons'
 import { useMaximize } from '@zealous-admin/layout/index'
+import { sortBy } from '@zealous-admin/utils/index'
 import {
   Badge,
   Button,
@@ -30,12 +32,12 @@ import {
 } from './shared/hooks'
 import {
   buildLambertProjector,
+
+  fmtVal,
   heatColor,
   heatColorHex,
-  type FeatureData,
   PROVINCE_GDP,
   shortName,
-  fmtVal,
 } from './shared/mapUtils'
 import { getUpDownColors, useDashboardStyles } from './shared/styles'
 
@@ -87,7 +89,8 @@ export default function Dashboard3() {
   // ---- ECharts: 指数走势 ----
   useEffect(() => {
     const chart = useChart(trendEl.current)
-    if (!chart) return
+    if (!chart)
+      return
     const tr = trendRef.current
     const base = tr.data[0]
     chart.setOption({
@@ -104,7 +107,8 @@ export default function Dashboard3() {
   // ---- ECharts: 板块资金流向 ----
   useEffect(() => {
     const chart = useChart(pieEl.current)
-    if (!chart) return
+    if (!chart)
+      return
     const inflow = sectors.filter(d => d.value > 0)
     const outflow = sectors.filter(d => d.value < 0).map(d => ({ ...d, value: Math.abs(d.value) }))
     chart.setOption({
@@ -121,16 +125,21 @@ export default function Dashboard3() {
   // ---- ECharts: 恐慌贪婪指数 ----
   useEffect(() => {
     const chart = useChart(gaugeEl.current)
-    if (!chart) return
+    if (!chart)
+      return
     const v = Math.round(sentiment)
     const label = v >= 75 ? '极度贪婪' : v >= 55 ? '贪婪' : v >= 45 ? '中性' : v >= 25 ? '恐慌' : '极度恐慌'
     chart.setOption({
       series: [{
-        type: 'gauge', min: 0, max: 100, radius: '92%',
+        type: 'gauge',
+        min: 0,
+        max: 100,
+        radius: '92%',
         progress: { show: true, width: 12 },
         axisLine: { lineStyle: { width: 12, color: [[0.25, theme.colorSuccess], [0.5, theme.colorWarning], [0.75, '#FF9966'], [1, theme.colorError]] } },
         pointer: { width: 4, length: '58%', itemStyle: { color: theme.colorTextHeading } },
-        axisTick: { show: false }, splitLine: { length: 8, lineStyle: { color: theme.colorBorderSecondary } },
+        axisTick: { show: false },
+        splitLine: { length: 8, lineStyle: { color: theme.colorBorderSecondary } },
         axisLabel: { distance: 14, color: theme.colorTextTertiary, fontSize: 9 },
         detail: { valueAnimation: true, formatter: '{value}', fontSize: 28, fontWeight: 700, color: theme.colorTextHeading, offsetCenter: [0, '28%'] },
         title: { offsetCenter: [0, '52%'], fontSize: 12, color: theme.colorTextSecondary },
@@ -142,8 +151,9 @@ export default function Dashboard3() {
   // ---- ECharts: 行业涨跌幅 ----
   useEffect(() => {
     const chart = useChart(barEl.current)
-    if (!chart) return
-    const sorted = [...industries].sort((a, b) => a.change - b.change)
+    if (!chart)
+      return
+    const sorted = sortBy(industries, 'change', 'asc')
     chart.setOption({
       grid: { left: 55, right: 45, top: 10, bottom: 24 },
       tooltip: { formatter: '{b}: {c}%' },
@@ -156,14 +166,19 @@ export default function Dashboard3() {
   // ---- ECharts: 各股分布 ----
   useEffect(() => {
     const chart = useChart(stockDistEl.current)
-    if (!chart) return
-    const categoryMap: Record<string, number> = { '强势上涨': 0, '温和上涨': 0, '震荡整理': 0, '温和下跌': 0, '强势下跌': 0 }
+    if (!chart)
+      return
+    const categoryMap: Record<string, number> = { 强势上涨: 0, 温和上涨: 0, 震荡整理: 0, 温和下跌: 0, 强势下跌: 0 }
     stocks.forEach((stock) => {
       const changePercent = ((stock.price - stock.prevClose) / stock.prevClose) * 100
-      if (changePercent >= 3) categoryMap['强势上涨']++
-      else if (changePercent >= 1) categoryMap['温和上涨']++
-      else if (changePercent >= -1) categoryMap['震荡整理']++
-      else if (changePercent >= -3) categoryMap['温和下跌']++
+      if (changePercent >= 3)
+        categoryMap['强势上涨']++
+      else if (changePercent >= 1)
+        categoryMap['温和上涨']++
+      else if (changePercent >= -1)
+        categoryMap['震荡整理']++
+      else if (changePercent >= -3)
+        categoryMap['温和下跌']++
       else categoryMap['强势下跌']++
     })
     const data = Object.entries(categoryMap).filter(([, value]) => value > 0).map(([name, value]) => ({ name, value }))
@@ -171,7 +186,11 @@ export default function Dashboard3() {
       tooltip: { trigger: 'item', formatter: '{b}: {c}只 ({d}%)' },
       legend: { orient: 'horizontal', bottom: 0, left: 'center', textStyle: { color: theme.colorTextSecondary, fontSize: 11 } },
       series: [{
-        name: '各股分布', type: 'pie', radius: ['35%', '60%'], center: ['50%', '45%'], avoidLabelOverlap: false,
+        name: '各股分布',
+        type: 'pie',
+        radius: ['35%', '60%'],
+        center: ['50%', '45%'],
+        avoidLabelOverlap: false,
         itemStyle: { borderRadius: 6, borderColor: theme.colorBgElevated, borderWidth: 2 },
         label: { show: true, position: 'outer', formatter: '{b}\n{c}只', fontSize: 11, color: theme.colorTextSecondary },
         emphasis: { label: { show: true, fontSize: 13, fontWeight: 'bold', color: theme.colorTextHeading } },
@@ -184,7 +203,8 @@ export default function Dashboard3() {
   // ---- Three.js: 3D 中国地图 ----
   useEffect(() => {
     const container = mapContainerRef.current
-    if (!container) return
+    if (!container)
+      return
     const W = container.clientWidth
     const H = container.clientHeight
     let cleanup = false
@@ -223,8 +243,10 @@ export default function Dashboard3() {
         if (child instanceof THREE.Mesh || child instanceof THREE.LineSegments) {
           child.geometry?.dispose()
           const mat = child.material
-          if (mat instanceof THREE.Material) mat.dispose()
-          else if (Array.isArray(mat)) mat.forEach(m => m.dispose())
+          if (mat instanceof THREE.Material)
+            mat.dispose()
+          else if (Array.isArray(mat))
+            mat.forEach(m => m.dispose())
         }
       }
     }
@@ -235,21 +257,27 @@ export default function Dashboard3() {
       const url = `/geo/${adcode}_full.json`
 
       fetch(url).then(r => r.json()).then((geo: any) => {
-        if (cleanup) return
+        if (cleanup)
+          return
         const features: FeatureData[] = geo.features
           .filter((f: any) => f.properties?.name)
           .map((f: any) => {
             const geoms = f.geometry.type === 'Polygon' ? [f.geometry.coordinates] : f.geometry.coordinates
             return { name: f.properties.name, adcode: f.properties.adcode?.toString() || '', polygons: geoms.map((rg: any[]) => ({ outer: rg[0], holes: rg.slice(1) })) }
           })
-        if (features.length === 0) return
+        if (features.length === 0)
+          return
 
         const project = buildLambertProjector()
-        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+        let minX = Infinity; let maxX = -Infinity; let minY = Infinity; let maxY = -Infinity
         features.forEach(f => f.polygons.forEach(poly => poly.outer.forEach(([lng, lat]) => {
           const [x, y] = project(lng, lat)
-          if (x < minX) minX = x; if (x > maxX) maxX = x
-          if (y < minY) minY = y; if (y > maxY) maxY = y
+          if (x < minX)
+            minX = x; if (x > maxX)
+            maxX = x
+          if (y < minY)
+            minY = y; if (y > maxY)
+            maxY = y
         })))
         const dw = maxX - minX || 1; const dh = maxY - minY || 1
         const scale = 7.0 / Math.max(dw, dh)
@@ -260,11 +288,20 @@ export default function Dashboard3() {
 
         const isNational = adcode === '100000'
         const dataMap: Record<string, number> = {}
-        let minVal = Infinity, maxVal = -Infinity
+        let minVal = Infinity; let maxVal = -Infinity
         if (isNational) {
-          features.forEach((f) => { const v = PROVINCE_GDP[f.name] ?? 0; dataMap[f.name] = v; if (v < minVal) minVal = v; if (v > maxVal) maxVal = v })
-        } else {
-          features.forEach((f) => { const v = Math.round(Math.random() * 9000 + 500); dataMap[f.name] = v; if (v < minVal) minVal = v; if (v > maxVal) maxVal = v })
+          features.forEach((f) => {
+            const v = PROVINCE_GDP[f.name] ?? 0; dataMap[f.name] = v; if (v < minVal)
+              minVal = v; if (v > maxVal)
+              maxVal = v
+          })
+        }
+        else {
+          features.forEach((f) => {
+            const v = Math.round(Math.random() * 9000 + 500); dataMap[f.name] = v; if (v < minVal)
+              minVal = v; if (v > maxVal)
+              maxVal = v
+          })
         }
 
         clearGroup(root); allMeshes.length = 0
@@ -277,7 +314,8 @@ export default function Dashboard3() {
           const color = heatColor(t, baseColor)
           feat.polygons.forEach((polyData) => {
             const outer = polyData.outer
-            if (outer.length < 3) return
+            if (outer.length < 3)
+              return
             try {
               const shape = new THREE.Shape()
               const [sx, sy] = toXY(outer[0][0], outer[0][1])
@@ -285,7 +323,8 @@ export default function Dashboard3() {
               for (let i = 1; i < outer.length; i++) { const [x, y] = toXY(outer[i][0], outer[i][1]); shape.lineTo(x, y) }
               shape.closePath()
               polyData.holes.forEach((hole) => {
-                if (hole.length < 3) return
+                if (hole.length < 3)
+                  return
                 const hp = new THREE.Path()
                 const [hx, hy] = toXY(hole[0][0], hole[0][1]); hp.moveTo(hx, hy)
                 for (let i = 1; i < hole.length; i++) { const [x, y] = toXY(hole[i][0], hole[i][1]); hp.lineTo(x, y) }
@@ -299,7 +338,8 @@ export default function Dashboard3() {
               root.add(mesh); allMeshes.push(mesh)
               const edges = new THREE.EdgesGeometry(geom, 15)
               root.add(new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: borderColor, transparent: true, opacity: 0.5, depthTest: true })))
-            } catch { /* skip */ }
+            }
+            catch { /* skip */ }
           })
         })
 
@@ -340,11 +380,14 @@ export default function Dashboard3() {
     let mouseDownPos: { x: number, y: number } | null = null
     const onMouseDown = (e: MouseEvent) => { mouseDownPos = { x: e.clientX, y: e.clientY } }
     const onMouseUp = (e: MouseEvent) => {
-      if (!mouseDownPos) return
-      const dx = e.clientX - mouseDownPos.x, dy = e.clientY - mouseDownPos.y
+      if (!mouseDownPos)
+        return
+      const dx = e.clientX - mouseDownPos.x; const dy = e.clientY - mouseDownPos.y
       mouseDownPos = null
-      if (Math.sqrt(dx * dx + dy * dy) > 5) return
-      if (levelRef.current !== 'national') return
+      if (Math.sqrt(dx * dx + dy * dy) > 5)
+        return
+      if (levelRef.current !== 'national')
+        return
       const rect = container.getBoundingClientRect()
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1; mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
       raycaster.setFromCamera(mouse, cam)
@@ -352,13 +395,17 @@ export default function Dashboard3() {
       if (intersects.length > 0) {
         const obj = intersects[0].object as THREE.Mesh
         const adcode = obj.userData.adcode
-        if (adcode && adcode !== '100000') renderGeo(adcode, obj.userData.name)
+        if (adcode && adcode !== '100000')
+          renderGeo(adcode, obj.userData.name)
       }
     }
     container.addEventListener('mousedown', onMouseDown)
     container.addEventListener('mouseup', onMouseUp)
 
-    function anim() { if (cleanup) return; requestAnimationFrame(anim); controls.update(); rdr.render(scene, cam) }
+    function anim() {
+      if (cleanup)
+        return; requestAnimationFrame(anim); controls.update(); rdr.render(scene, cam)
+    }
     anim()
     renderGeo(currentAdcodeRef.current, currentNameRef.current)
 
@@ -371,7 +418,8 @@ export default function Dashboard3() {
       container.removeEventListener('mousedown', onMouseDown)
       container.removeEventListener('mouseup', onMouseUp)
       clearGroup(root); rdr.dispose()
-      if (container.contains(rdr.domElement)) container.removeChild(rdr.domElement)
+      if (container.contains(rdr.domElement))
+        container.removeChild(rdr.domElement)
     }
   }, [theme])
 
@@ -391,13 +439,20 @@ export default function Dashboard3() {
         {r.lastTickUp === true && <span style={{ color: upColor, fontSize: 9 }}>▲</span>}
         {r.lastTickUp === false && <span style={{ color: downColor, fontSize: 9 }}>▼</span>}
       </Space>
-    )},
+    ) },
     { title: '涨跌额', dataIndex: 'change', key: 'change', width: 90, render: (v: number, r: any) => (
-      <span className={r.up ? styles.textUp : styles.textDown}>{v > 0 ? '+' : ''}{v.toFixed(2)}</span>
-    )},
+      <span className={r.up ? styles.textUp : styles.textDown}>
+        {v > 0 ? '+' : ''}
+        {v.toFixed(2)}
+      </span>
+    ) },
     { title: '涨跌幅', dataIndex: 'changePercent', key: 'changePercent', width: 90, render: (v: number, r: any) => (
-      <span className={r.up ? styles.textUp : styles.textDown}>{v > 0 ? '+' : ''}{v.toFixed(2)}%</span>
-    )},
+      <span className={r.up ? styles.textUp : styles.textDown}>
+        {v > 0 ? '+' : ''}
+        {v.toFixed(2)}
+        %
+      </span>
+    ) },
     { title: '成交量(万手)', dataIndex: 'volume', key: 'volume', width: 110, render: (v: number) => <span style={{ fontVariantNumeric: 'tabular-nums' }}>{v.toFixed(1)}</span> },
     { title: '方向', dataIndex: 'up', key: 'up', width: 60, render: (up: boolean) => up ? <Tag color="red" style={{ margin: 0 }}>涨</Tag> : <Tag color="green" style={{ margin: 0 }}>跌</Tag> },
   ]
@@ -441,8 +496,15 @@ export default function Dashboard3() {
                   <Statistic value={item.value} precision={2} valueStyle={{ color: theme.colorTextHeading, fontSize: 26, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }} />
                   <Space size={4}>
                     {item.up ? <CaretUpOutlined style={{ color: upColor }} /> : <CaretDownOutlined style={{ color: downColor }} />}
-                    <span style={{ color: item.up ? upColor : downColor, fontSize: 14, fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{item.change > 0 ? '+' : ''}{item.change.toFixed(2)}</span>
-                    <span style={{ color: item.up ? upColor : downColor, fontSize: 13, marginLeft: 2, fontVariantNumeric: 'tabular-nums' }}>{item.changePercent > 0 ? '+' : ''}{item.changePercent.toFixed(2)}%</span>
+                    <span style={{ color: item.up ? upColor : downColor, fontSize: 14, fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
+                      {item.change > 0 ? '+' : ''}
+                      {item.change.toFixed(2)}
+                    </span>
+                    <span style={{ color: item.up ? upColor : downColor, fontSize: 13, marginLeft: 2, fontVariantNumeric: 'tabular-nums' }}>
+                      {item.changePercent > 0 ? '+' : ''}
+                      {item.changePercent.toFixed(2)}
+                      %
+                    </span>
                   </Space>
                 </div>
               </div>

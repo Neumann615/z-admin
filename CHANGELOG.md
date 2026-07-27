@@ -5,6 +5,8 @@
 - ✨ **新增 utils 工具包**（`packages/utils/`、`package.json`）：data/env/time/file/parse 五大模块通用工具函数（深拷贝、防抖节流、日期格式化、环境检测、文件处理、身份证解析等），添加独立构建脚本
 - ✨ **新增 Iframe 外链嵌入组件**（`Iframe.tsx`、`link/`）：`ZaIframe` 通用 iframe 组件（自动撑满+加载状态），新增 5 个官网嵌入演示页面（antd/react/vue/typescript/vite）
 - 🔧 **菜单图标取消必填校验**（`menu.tsx`、`sqlite.db`）：表单 icon 字段改为非必填，新增外链演示菜单种子数据
+- ♻️ **代码重构使用utils工具函数**（`useControlTab.ts`、`topBar.ts`、`App.tsx`、`dashboard1/3.tsx`）：替换手写深拷贝/分组/排序逻辑为 `deepClone`/`groupBy`/`sortBy`，dashboard 页面代码格式规范化
+- 🔧 **utils包配置优化**（`utils/index.ts`、`utils/package.json`、`utils/parse/index.ts`、`utils/tsconfig.lib.json`）：导出按字母排序、添加 `./index` 导出入口、修复未使用变量、编译目标升级 ES2022
 
 ## 2026-07-27
 

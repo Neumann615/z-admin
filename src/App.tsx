@@ -1,4 +1,5 @@
 import { LayoutProvider, useUserStore } from '@zealous-admin/layout/index'
+import { groupBy, sortBy } from '@zealous-admin/utils/index'
 import { useEffect, useMemo } from 'react'
 import { Navigate, useRoutes } from 'react-router'
 import routes from '~react-pages'
@@ -63,23 +64,16 @@ function convertMenus(menus: any[]) {
     return []
 
   // 根据 parentId 分组菜单
-  const menuMap = new Map<number, any[]>()
-  menus.forEach((menu) => {
-    const parentId = Number(menu.parentId) || 0
-    if (!menuMap.has(parentId)) {
-      menuMap.set(parentId, [])
-    }
-    menuMap.get(parentId)!.push(menu)
-  })
+  const menuMap = groupBy(menus, (menu: any) => String(Number(menu.parentId) || 0))
 
   // 递归构建树结构
   const buildTree = (parentId: number, parentKey: string = ''): any[] => {
-    const children = menuMap.get(parentId) || []
+    const children = menuMap[String(parentId)] || []
 
     // 根据 sort 字段排序
-    children.sort((a, b) => (Number(a.sort) || 0) - (Number(b.sort) || 0))
+    const sortedChildren = sortBy(children, 'sort', 'asc')
 
-    return children
+    return sortedChildren
       .map((menu) => {
         // path 已含完整路径时直接使用，否则按层级拼接 name
         const currentKey = menu.path
