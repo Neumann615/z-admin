@@ -78,7 +78,7 @@ export function useControlTab() {
     }
     else {
       // 页面不在菜单树中（隐藏页面/子页面）
-      // 面包屑：从当前状态累积追加，保留完整导航上下文
+      // 面包屑：根据路径前缀关系决定是追加还是替换末项
       const { breadcrumbList: currentBreadcrumb } = useTopBarStore.getState()
       const keyWithoutQuery = v.key.split('?')[0]
 
@@ -92,14 +92,26 @@ export function useControlTab() {
         pathList = currentBreadcrumb.slice(0, existIndex + 1)
       }
       else {
-        // 不存在，在当前面包屑基础上追加
+        // 不存在，根据路径前缀关系决定追加或替换
+        const lastBreadcrumb = currentBreadcrumb[currentBreadcrumb.length - 1]
+        const lastKey = (lastBreadcrumb?.key || '').split('?')[0]
+        const isSubPath = keyWithoutQuery.startsWith(`${lastKey}/`)
+
         const newItem = {
           icon: v.icon || '',
           id: v.key,
           key: v.key,
           label: v.label || deriveTitleFromKey(v.key),
         }
-        pathList = [...currentBreadcrumb, newItem]
+
+        if (isSubPath) {
+          // 子路径：追加到面包屑
+          pathList = [...currentBreadcrumb, newItem]
+        }
+        else {
+          // 平级路径：替换最后一项
+          pathList = [...currentBreadcrumb.slice(0, -1), newItem]
+        }
       }
 
       // 确保首页在最前面
@@ -286,11 +298,49 @@ export function useControlTab() {
     }
   }
 
+  // 根据路径查找图标（支持向上查找父节点图标）
+  function findIconByPath(path: string, menuTree: any[] = mainNavData): string {
+    if (path === '/') {
+      return 'ai:AiOutlineHome'
+    }
+
+    // 先在菜单树中查找当前路径
+    const pathList = getPathByKey(path, menuTree)
+
+    if (pathList.length > 0) {
+      // 路径在菜单树中，从当前节点向上查找有图标的节点
+      for (let i = pathList.length - 1; i >= 0; i--) {
+        if (pathList[i].icon) {
+          return pathList[i].icon
+        }
+      }
+    }
+
+    // 路径不在菜单树中（如详情页），根据路径前缀查找父菜单
+    const segments = path.split('/').filter(Boolean)
+    for (let i = segments.length - 1; i > 0; i--) {
+      const parentPath = `/${segments.slice(0, i).join('/')}`
+      const parentPathList = getPathByKey(parentPath, menuTree)
+
+      if (parentPathList.length > 0) {
+        // 找到父菜单，从父菜单节点向上查找图标
+        for (let j = parentPathList.length - 1; j >= 0; j--) {
+          if (parentPathList[j].icon) {
+            return parentPathList[j].icon
+          }
+        }
+      }
+    }
+
+    return ''
+  }
+
   return {
     openTab,
     closeTab,
     swapTab,
     fixedTab,
     syncTabFromUrl,
+    findIconByPath,
   }
 }

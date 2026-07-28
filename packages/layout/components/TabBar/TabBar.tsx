@@ -187,7 +187,7 @@ const useStyles = createStyles(({ token, css }) => ({
 }))
 
 export function TabBar() {
-  const { openTab, closeTab, swapTab, fixedTab } = useControlTab()
+  const { openTab, closeTab, swapTab, fixedTab, findIconByPath } = useControlTab()
   const { styles, theme } = useStyles()
   const { changeIsMaximize } = usePageStore()
   const { tabs, nowTab, tabBar, order } = useTopBarStore()
@@ -393,6 +393,22 @@ export function TabBar() {
     }
   })
 
+  function renderTabIcon(tabId: string, size: number = 15) {
+    const icon = findIconByPath(tabId)
+    if (!icon)
+      return null
+    return (
+      <MenuIcon
+        size={size}
+        style={{ marginRight: theme.marginXS }}
+        icon={icon}
+        selectIcon=""
+        isActive={nowTab.tabId === tabId}
+      >
+      </MenuIcon>
+    )
+  }
+
   return tabBar.isEnableTabBar
     ? (
         <div className={styles.headerTabs}>
@@ -470,18 +486,7 @@ export function TabBar() {
                                     style={{ width: '100%', height: '100%' }}
                                   >
                                     <div className="flex-start">
-                                      {tabItem.icon || tabItem.menuData?.selectIcon
-                                        ? (
-                                            <MenuIcon
-                                              size={15}
-                                              style={{ marginRight: theme.marginXS }}
-                                              icon={tabItem.icon}
-                                              selectIcon={tabItem.menuData?.selectIcon}
-                                              isActive={nowTab.tabId === tabItem.tabId}
-                                            >
-                                            </MenuIcon>
-                                          )
-                                        : null}
+                                      {renderTabIcon(tabItem.tabId, 15)}
                                       <div className={styles.tabTitle}>
                                         {tabItem.title}
                                       </div>
@@ -568,18 +573,7 @@ export function TabBar() {
                                 style={{ width: '100%', height: '100%' }}
                               >
                                 <div className="flex-start">
-                                  {tabItem.icon || tabItem.menuData?.selectIcon
-                                    ? (
-                                        <MenuIcon
-                                          size={14}
-                                          style={{ marginRight: theme.marginXS }}
-                                          icon={tabItem.icon}
-                                          selectIcon={tabItem.menuData?.selectIcon}
-                                          isActive={nowTab.tabId === tabItem.tabId}
-                                        >
-                                        </MenuIcon>
-                                      )
-                                    : null}
+                                  {renderTabIcon(tabItem.tabId, 14)}
                                   <div className={styles.tabTitle}>
                                     {tabItem.title}
                                   </div>
