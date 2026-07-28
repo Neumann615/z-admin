@@ -16,7 +16,6 @@ catalog:
   '@ant-design/colors': ^8.0.1
   '@ant-design/happy-work-theme': ^1.0.0
   '@ant-design/icons': ^6.2.5
-  '@antv/g6': ^5.1.1
   '@codemirror/lang-javascript': ^6.2.1
   '@hello-pangea/dnd': ^18.0.1
   '@icon-park/react': ^1.4.2

@@ -39,6 +39,7 @@ export default defineConfig({
       { text: '组件', link: '/components/' },
       { text: '布局', link: '/layout/' },
       { text: '主题', link: '/theme/' },
+      { text: '工具函数', link: '/utils/' },
       { text: '🔗 在线演示', link: 'https://admin.zzzpupu.xin/' },
       {
         text: 'v1.0.0',
@@ -56,7 +57,6 @@ export default defineConfig({
           items: [
             { text: '介绍', link: '/guide/' },
             { text: '快速开始', link: '/guide/getting-started' },
-            { text: '安装', link: '/guide/installation' },
           ],
         },
       ],
@@ -71,6 +71,7 @@ export default defineConfig({
           items: [
             { text: 'ZaIcon 图标', link: '/components/z-icon' },
             { text: 'ZaIconPicker 图标选择器', link: '/components/z-icon' },
+            { text: 'ZaIframe 外链嵌入', link: '/components/z-iframe' },
             { text: 'ZaLinkPreview 链接预览', link: '/components/z-link-preview' },
             { text: 'ZaMarkdown Markdown 渲染', link: '/components/z-markdown' },
             { text: 'ZaMarquee 跑马灯', link: '/components/z-marquee' },
@@ -135,6 +136,23 @@ export default defineConfig({
             { text: 'useIllustrationTheme', link: '/theme/use-illustration-theme' },
             { text: 'useMuiTheme', link: '/theme/use-mui-theme' },
             { text: 'useShadcnTheme', link: '/theme/use-shadcn-theme' },
+          ],
+        },
+      ],
+      '/utils/': [
+        {
+          text: '工具函数',
+          link: '/utils/',
+        },
+        {
+          text: '模块文档',
+          collapsed: false,
+          items: [
+            { text: 'data 数据操作', link: '/utils/data' },
+            { text: 'env 环境检测', link: '/utils/env' },
+            { text: 'file 文件处理', link: '/utils/file' },
+            { text: 'parse 解析工具', link: '/utils/parse' },
+            { text: 'time 日期时间', link: '/utils/time' },
           ],
         },
       ],

@@ -1,6 +1,6 @@
 # Zustand 状态管理
 
-`@zealous-admin/layout` 使用 [Zustand](https://github.com/pmndrs/zustand) 进行状态管理，共 7 个 Store，均支持 `persist` 中间件持久化。
+`@zealous-admin/layout` 使用 [Zustand](https://github.com/pmndrs/zustand) 进行状态管理，共 8 个 Store，均支持 `persist` 中间件持久化。
 
 ## Store 概览
 

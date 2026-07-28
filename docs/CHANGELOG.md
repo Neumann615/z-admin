@@ -1,5 +1,54 @@
 # 更新日志
 
+## 2026-07-29
+
+- 🔧 面包屑导航优化：根据路径前缀关系自动判断追加或替换模式
+- 🔧 TabBar 图标动态查找：根据路径查找菜单图标，支持父节点继承
+- 📝 文档站完善：新增 utils 工具函数文档（5 个模块），新增 ZaIframe 组件文档
+
+## 2026-07-28
+
+- ✨ 新增 utils 工具包：data/env/time/file/parse 五大模块通用工具函数
+- ✨ 新增 Iframe 外链嵌入组件：`ZaIframe` 通用 iframe 组件（自动撑满+加载状态）
+- 🔧 菜单图标取消必填校验
+- ♻️ 代码重构使用 utils 工具函数：替换手写深拷贝/分组/排序逻辑
+
+## 2026-07-27
+
+- 🔧 背景色全站统一：`colorBgLayout` → `colorBgBase` + 边框
+- 🔧 首页重设计：BorderBeam 欢迎卡片、功能特性卡片、应用场景卡片
+- ✨ 驼峰转换工具：snake_case → camelCase 键名转换
+- 🔧 彩带庆祝效果重构：分阶段空气阻力物理模型
+- 🔧 菜单滚动条隐藏：内容可滚动但不显示滚动条
+
+## 2026-07-26
+
+- 🔧 系统管理页面标准化：Form.useForm + rules 验证、主题化样式
+- 🔧 Dashboard 代码重构：提取 shared hooks/data/styles，消除 ~80% 重复
+- 🔧 登录页全面重写：token 化样式、错误反馈、响应式卡片
+- ✨ MCP StreamableHTTP 服务：地理位置和天气查询工具
+
+## 2026-07-25
+
+- ✨ Ant Design 全组件展示页：覆盖 76 个 antd 6.x 组件
+- ✨ 多主题类型系统：支持 8 种主题一键切换
+- ✨ 主题类型选择器与权限控制
+- 🔧 废弃 API 迁移：`maskClosable` → `mask={{ closable }}`
+
+## 2026-07-24
+
+- ✨ 页面 KeepAlive 缓存：双层渲染架构，缓存页保持状态
+- ✨ 缓存配置外部化：新增 `cachedPages` prop
+- 🔧 HTTP/用户/权限基础设施集成至 layout
+- ✨ 401 过期模式分流与重新登录弹窗
+- ✨ 新增 3 套主题：cartoon/hacker/shadcn
+
+## 2026-07-23
+
+- ✨ 金融可视化大屏 dashboard3：Three.js 3D 中国地图、ECharts 图表
+- ✨ 大屏演示2 3D 中国地图：Three.js 实现 GDP 热力图、省份下钻
+- 🔧 大屏图表优化：数据刷新间隔调整、饼图重构
+
 ## 2026-07-22
 
 - ✨ 菜单激活图标：选中时切换 activeIcon，父节点链路级联

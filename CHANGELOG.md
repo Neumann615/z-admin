@@ -4,6 +4,7 @@
 
 - 🔧 **面包屑导航优化**（`useControlTab.ts`）：根据路径前缀关系自动判断面包屑追加或替换模式
 - 🔧 **TabBar 图标动态查找**（`TabBar.tsx`、`useControlTab.ts`）：新增 `findIconByPath` 函数支持根据路径查找菜单图标，提取 `renderTabIcon` 渲染函数
+- 📝 **文档站完善**（`docs/`）：新增 utils 工具函数文档（data/env/file/parse/time 五大模块），新增 ZaIframe 组件文档，精简 README 和指南文档，删除冗余 installation 页面
 
 ## 2026-07-28
 
