@@ -13,11 +13,11 @@ import { ZaIframe } from '@zealous-admin/components'
 ## Props
 
 | 属性 | 类型 | 必填 | 说明 |
-|------|------|:----:|------|
+|------|------|------|------|
 | `name` | `string` | ✅ | 显示名称 |
 | `url` | `string` | ✅ | 嵌入地址 |
 
 ## 注意事项
 
-- 组件会自动撑满父容器，建议外层包裹 `<div className="app-container" style={{ height: '100%' }}>`
+- 组件会自动撑满父容器，建议外层包裹容器并设置 `height: 100%`
 - 部分网站设置了 `X-Frame-Options` 禁止 iframe 嵌入（如 GitHub、Google），这是网站安全策略限制
