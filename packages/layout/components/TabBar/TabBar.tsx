@@ -394,7 +394,9 @@ export function TabBar() {
   })
 
   function renderTabIcon(tabId: string, size: number = 15) {
-    const icon = findIconByPath(tabId)
+    if (!tabBar.showIcon)
+      return null
+    const { icon, selectIcon } = findIconByPath(tabId)
     if (!icon)
       return null
     return (
@@ -402,7 +404,7 @@ export function TabBar() {
         size={size}
         style={{ marginRight: theme.marginXS }}
         icon={icon}
-        selectIcon=""
+        selectIcon={selectIcon}
         isActive={nowTab.tabId === tabId}
       >
       </MenuIcon>

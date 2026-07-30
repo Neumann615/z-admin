@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-07-30
+- 🔧 **TabBar 图标显示配置化**（`TabBar.tsx`）：根据 `tabBar.showIcon` 配置控制图标显示
+- 🔧 **TabBar 图标激活态支持**（`useControlTab.ts`、`TabBar.tsx`）：`findIconByPath` 同时返回 `selectIcon`，标签页激活时显示对应图标
+
 ## 2026-07-29 
 
 - 🔧 **面包屑导航优化**（`useControlTab.ts`）：根据路径前缀关系自动判断面包屑追加或替换模式

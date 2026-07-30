@@ -298,10 +298,10 @@ export function useControlTab() {
     }
   }
 
-  // 根据路径查找图标（支持向上查找父节点图标）
-  function findIconByPath(path: string, menuTree: any[] = mainNavData): string {
+  // 根据路径查找图标（支持向上查找父节点图标），同时返回 selectIcon
+  function findIconByPath(path: string, menuTree: any[] = mainNavData): { icon: string, selectIcon: string } {
     if (path === '/') {
-      return 'ai:AiOutlineHome'
+      return { icon: 'ai:AiOutlineHome', selectIcon: '' }
     }
 
     // 先在菜单树中查找当前路径
@@ -311,7 +311,7 @@ export function useControlTab() {
       // 路径在菜单树中，从当前节点向上查找有图标的节点
       for (let i = pathList.length - 1; i >= 0; i--) {
         if (pathList[i].icon) {
-          return pathList[i].icon
+          return { icon: pathList[i].icon, selectIcon: pathList[i].selectIcon || '' }
         }
       }
     }
@@ -326,13 +326,13 @@ export function useControlTab() {
         // 找到父菜单，从父菜单节点向上查找图标
         for (let j = parentPathList.length - 1; j >= 0; j--) {
           if (parentPathList[j].icon) {
-            return parentPathList[j].icon
+            return { icon: parentPathList[j].icon, selectIcon: parentPathList[j].selectIcon || '' }
           }
         }
       }
     }
 
-    return ''
+    return { icon: '', selectIcon: '' }
   }
 
   return {
