@@ -3,6 +3,7 @@
 ## 2026-07-30
 - 🔧 **TabBar 图标显示配置化**（`TabBar.tsx`）：根据 `tabBar.showIcon` 配置控制图标显示
 - 🔧 **TabBar 图标激活态支持**（`useControlTab.ts`、`TabBar.tsx`）：`findIconByPath` 同时返回 `selectIcon`，标签页激活时显示对应图标
+- 🔧 **仓库统计排除 AI 辅助文件**（`.gitattributes`）：`.claude/` 目录标记为 `linguist-vendored`，不参与语言统计
 
 ## 2026-07-29 
 

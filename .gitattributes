@@ -1,0 +1,2 @@
+# Exclude .claude directory from repository language statistics
+.claude/** linguist-vendored
