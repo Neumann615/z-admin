@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-08-01
+- 🔧 **TabBar 多风格适配**（`TabBar.tsx`）：支持 `default` / `card` / `block` 三种标签样式，根据 `tabBar.style` 配置动态切换
+
 ## 2026-07-30
 - 🔧 **TabBar 图标显示配置化**（`TabBar.tsx`）：根据 `tabBar.showIcon` 配置控制图标显示
 - 🔧 **TabBar 图标激活态支持**（`useControlTab.ts`、`TabBar.tsx`）：`findIconByPath` 同时返回 `selectIcon`，标签页激活时显示对应图标

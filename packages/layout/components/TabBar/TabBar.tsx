@@ -83,6 +83,68 @@ const useStyles = createStyles(({ token, css }) => ({
     padding: 0 ${token.paddingXS}px;
     background-color: ${token.colorBgContainerDisabled};
   `,
+  /* card 风格 - 卡片式：四周圆角 + 边框，激活时主题色描边 */
+  cardTabItem: css`
+    width: 144px;
+    height: 36px;
+    text-align: center;
+    font-size: ${token.fontSize}px;
+    border-radius: ${token.borderRadiusLG}px;
+    color: ${token.colorTextTertiary};
+    cursor: pointer;
+    transition: all 0.4s;
+    margin: 6px 0 0 ${token.marginXXS}px;
+    padding: 0 ${token.paddingXS}px;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+
+    :hover {
+      background-color: ${token.colorBgContainerDisabled};
+    }
+  `,
+  cardNowTabItem: css`
+    width: 144px;
+    height: 36px;
+    text-align: center;
+    font-size: ${token.fontSize}px;
+    border-radius: ${token.borderRadiusLG}px;
+    color: ${token.colorTextTertiary};
+    cursor: pointer;
+    transition: all 0.4s;
+    margin: 6px 0 0 ${token.marginXXS}px;
+    padding: 0 ${token.paddingXS}px;
+    background-color: ${token.colorBgContainerDisabled};
+    border: 1px solid ${token.colorBorderSecondary};
+    box-sizing: border-box;
+  `,
+  /* block 风格 - 方块：无圆角，选中效果与默认一致，宽高填满容器 */
+  blockTabItem: css`
+    width: 144px;
+    height: 100%;
+    text-align: center;
+    font-size: ${token.fontSize}px;
+    color: ${token.colorTextTertiary};
+    cursor: pointer;
+    transition: all 0.4s;
+    margin-left: ${token.marginXXS}px;
+    padding: 0 ${token.paddingXS}px;
+
+    :hover {
+      background-color: ${token.colorBgContainerDisabled};
+    }
+  `,
+  blockNowTabItem: css`
+    width: 144px;
+    height: 100%;
+    text-align: center;
+    font-size: ${token.fontSize}px;
+    color: ${token.colorTextTertiary};
+    cursor: pointer;
+    transition: all 0.4s;
+    margin-left: ${token.marginXXS}px;
+    padding: 0 ${token.paddingXS}px;
+    background-color: ${token.colorBgContainerDisabled};
+  `,
   tabTitle: css`
     width: 84px;
     text-align: left;
@@ -193,6 +255,16 @@ export function TabBar() {
   const { tabs, nowTab, tabBar, order } = useTopBarStore()
 
   const isTabBarOnTop = order.indexOf('TabBar') < order.indexOf('Toolbar')
+
+  // 根据配置的标签页样式选择对应的 className
+  const getTabItemClass = (isActive: boolean) => {
+    const styleMap = {
+      default: isActive ? 'nowTabItem' : 'headerTabItem',
+      card: isActive ? 'cardNowTabItem' : 'cardTabItem',
+      block: isActive ? 'blockNowTabItem' : 'blockTabItem',
+    }
+    return styles[styleMap[tabBar.style] || styleMap.default]
+  }
 
   const [nowOpenTab, setNowOpenTab] = useState({ tabId: '', isFixed: false })
   const [isOpenTab, setIsOpenTab] = useState(false)
@@ -453,6 +525,7 @@ export function TabBar() {
                               style={{
                                 ...provided.draggableProps.style,
                                 opacity: snapshot.isDragging ? 0.7 : 1,
+                                height: tabBar.style === 'default' ? 'auto' : '100%',
                               }}
                             >
                               <Dropdown
@@ -471,16 +544,16 @@ export function TabBar() {
                                   onClick={() => {
                                     openTab(tabItem.menuData)
                                   }}
-                                  className={
-                                    nowTab.tabId === tabItem.tabId
-                                      ? styles.nowTabItem
-                                      : styles.headerTabItem
-                                  }
+                                  className={getTabItemClass(nowTab.tabId === tabItem.tabId)}
                                   key={tabItem.tabId}
                                   style={{
-                                    borderRadius: isTabBarOnTop
-                                      ? `${theme.borderRadiusLG}px ${theme.borderRadiusLG}px 0 0`
-                                      : `0 0 ${theme.borderRadiusLG}px ${theme.borderRadiusLG}px`,
+                                    borderRadius: tabBar.style === 'card'
+                                      ? `${theme.borderRadiusLG}px`
+                                      : tabBar.style === 'block'
+                                        ? '0px'
+                                        : isTabBarOnTop
+                                          ? `${theme.borderRadiusLG}px ${theme.borderRadiusLG}px 0 0`
+                                          : `0 0 ${theme.borderRadiusLG}px ${theme.borderRadiusLG}px`,
                                   }}
                                 >
                                   <div
