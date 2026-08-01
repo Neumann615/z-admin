@@ -36,6 +36,7 @@ const useStyles = createStyles(({ token, css }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    userSelect: 'none',
   },
   ToolbarItem: css`
     cursor: pointer;

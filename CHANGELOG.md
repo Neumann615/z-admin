@@ -2,6 +2,9 @@
 
 ## 2026-08-01
 - 🔧 **TabBar 多风格适配**（`TabBar.tsx`）：支持 `default` / `card` / `block` 三种标签样式，根据 `tabBar.style` 配置动态切换
+- 🐛 **KeepAlive 刷新修复**（`Content.tsx`）：缓存页按路径记录刷新版本号，刷新时仅重建当前页缓存节点，普通切换不再影响缓存状态；非缓存页过渡层 key 拼接 `refreshKey` 强制重挂载
+- 🔧 **TabBar 宽度模式适配**（`TabBar.tsx`、`defaultSetting.ts`、`config.d.ts`）：支持 `fixed`/`auto`/`auto-min`/`auto-max` 四种宽度模式，`width` 改为数字（默认 150px），标题宽度随标签自适应
+- 🔧 **配置面板与交互细节**（`ConfigPanel.tsx`、`Toolbar.tsx`、`data.ts`）：标签宽度 Slider 范围调整、工具栏文字防选中、双击事件"新窗口打开"文案
 
 ## 2026-07-30
 - 🔧 **TabBar 图标显示配置化**（`TabBar.tsx`）：根据 `tabBar.showIcon` 配置控制图标显示

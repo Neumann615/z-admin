@@ -115,7 +115,7 @@ export interface LayoutConfig {
       /* 标签栏宽度模式 */
       widthType: TabBarWidthType
       /* 标签栏宽度 */
-      width: string
+      width: number
       /* 显示图标 */
       showIcon: boolean
       /* 双击标签栏事件类型 */
@@ -190,7 +190,7 @@ export type TopBarOrder = ['TabBar', 'Toolbar'] | ['Toolbar', 'TabBar']
 /* 标签页样式 */
 export type TabBarStyle = 'default' | 'card' | 'block'
 
-/* 标签栏点击事件 */
+/* 标签栏双击事件类型 */
 export type TabBarDblClickEventType
   = | 'refresh'
     | 'close'

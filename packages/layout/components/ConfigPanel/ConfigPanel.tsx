@@ -1078,8 +1078,8 @@ export default defaultSetting`
             </Select>
             {defaultSetting.topBar.tabBar.widthType !== 'auto' && (
               <Slider
-                min={100}
-                max={250}
+                min={125}
+                max={200}
                 defaultValue={defaultSetting.topBar.tabBar.width}
                 onChange={(v: number) => {
                   setDefaultSetting({

@@ -1,6 +1,6 @@
 import { FullscreenExitOutlined } from '@ant-design/icons'
 import { createStyles } from 'antd-style'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation, useOutlet } from 'react-router'
 // @ts-ignore
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
@@ -89,13 +89,22 @@ export function Content() {
 
   const lastPathRef = useRef(location.pathname)
   const refreshKeyRef = useRef(refreshKey)
+  // 每个缓存页的刷新版本号：仅刷新当前页时递增，用于强制重建对应缓存节点
+  // 与"是否当前页"解耦，保证普通切换时 key 稳定、缓存状态不丢失
+  const [pageVersions, setPageVersions] = useState<Record<string, number>>({})
 
-  // refreshKey 变化时清除所有缓存
-  if (refreshKeyRef.current !== refreshKey) {
-    refreshKeyRef.current = refreshKey
-    setOutletCache({})
-    outletCacheRef.current = {}
-  }
+  // refreshKey 变化时递增当前缓存页的版本号
+  useEffect(() => {
+    if (refreshKeyRef.current !== refreshKey) {
+      refreshKeyRef.current = refreshKey
+      if (shouldCache) {
+        setPageVersions(prev => ({
+          ...prev,
+          [location.pathname]: (prev[location.pathname] || 0) + 1,
+        }))
+      }
+    }
+  }, [refreshKey, shouldCache, location.pathname])
 
   // pathname 变化时，如果是缓存页且未缓存，加入缓存
   if (lastPathRef.current !== location.pathname) {
@@ -117,10 +126,11 @@ export function Content() {
       display: shouldCache && Object.keys(outletCache).length > 0 ? 'block' : 'none',
       width: '100%',
       height: '100%',
-    }}>
+    }}
+    >
       {Object.entries(outletCache).map(([pathname, outlet]) => (
         <div
-          key={pathname}
+          key={`${pathname}-${pageVersions[pathname] || 0}`}
           style={{
             display: pathname === location.pathname ? 'block' : 'none',
             width: '100%',
@@ -140,14 +150,15 @@ export function Content() {
       display: !shouldCache ? 'block' : 'none',
       width: '100%',
       height: '100%',
-    }}>
+    }}
+    >
       <SwitchTransition mode="out-in">
         <CSSTransition
           nodeRef={nodeRef}
           unmountOnExit
           onEntered={stopGlobalProgressLoading}
           onExit={startGlobalProgressLoading}
-          key={shouldCache ? '__keepalive__' : location.pathname}
+          key={shouldCache ? '__keepalive__' : `${location.pathname}-${refreshKey}`}
           timeout={500}
           classNames={transitionTypeSet[transitionType]}
         >

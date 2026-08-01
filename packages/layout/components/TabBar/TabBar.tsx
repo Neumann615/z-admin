@@ -146,7 +146,7 @@ const useStyles = createStyles(({ token, css }) => ({
     background-color: ${token.colorBgContainerDisabled};
   `,
   tabTitle: css`
-    width: 84px;
+    width: 100%;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
@@ -251,7 +251,7 @@ const useStyles = createStyles(({ token, css }) => ({
 export function TabBar() {
   const { openTab, closeTab, swapTab, fixedTab, findIconByPath } = useControlTab()
   const { styles, theme } = useStyles()
-  const { changeIsMaximize } = usePageStore()
+  const { changeIsMaximize, refreshPage } = usePageStore()
   const { tabs, nowTab, tabBar, order } = useTopBarStore()
 
   const isTabBarOnTop = order.indexOf('TabBar') < order.indexOf('Toolbar')
@@ -264,6 +264,37 @@ export function TabBar() {
       block: isActive ? 'blockNowTabItem' : 'blockTabItem',
     }
     return styles[styleMap[tabBar.style] || styleMap.default]
+  }
+
+  // 根据 tabBar.widthType 计算标签宽度样式
+  // fixed：固定宽度（取 tabBar.width）；auto：内容自适应
+  // auto-min / auto-max：内容自适应并受 tabBar.width 的最小/最大宽度约束
+  const getTabWidthStyle = () => {
+    const width = tabBar.width
+    switch (tabBar.widthType) {
+      case 'fixed':
+        return { width: `${width}px` }
+      case 'auto':
+        return { width: 'auto' }
+      case 'auto-min':
+        return { width: 'auto', minWidth: `${width}px` }
+      case 'auto-max':
+        return { width: 'auto', maxWidth: `${width}px` }
+      default:
+        return {}
+    }
+  }
+
+  // 双击标签事件：根据 tabBar.dblClickEvent 配置执行对应操作
+  const handleTabDblClick = (tabItem: any) => {
+    const eventMap: Record<string, () => void> = {
+      refresh: () => refreshPage(),
+      close: () => closeTab(tabItem.tabId),
+      fixed: () => fixedTab(tabItem.tabId),
+      max: () => changeIsMaximize(),
+      open: () => window.open(tabItem.tabId, '_blank'),
+    }
+    eventMap[tabBar.dblClickEvent]?.()
   }
 
   const [nowOpenTab, setNowOpenTab] = useState({ tabId: '', isFixed: false })
@@ -544,9 +575,14 @@ export function TabBar() {
                                   onClick={() => {
                                     openTab(tabItem.menuData)
                                   }}
+                                  onDoubleClick={(e) => {
+                                    e.stopPropagation()
+                                    handleTabDblClick(tabItem)
+                                  }}
                                   className={getTabItemClass(nowTab.tabId === tabItem.tabId)}
                                   key={tabItem.tabId}
                                   style={{
+                                    ...getTabWidthStyle(),
                                     borderRadius: tabBar.style === 'card'
                                       ? `${theme.borderRadiusLG}px`
                                       : tabBar.style === 'block'
@@ -560,7 +596,7 @@ export function TabBar() {
                                     className="flex-sb"
                                     style={{ width: '100%', height: '100%' }}
                                   >
-                                    <div className="flex-start">
+                                    <div className="flex-start" style={{ flex: 1 }}>
                                       {renderTabIcon(tabItem.tabId, 15)}
                                       <div className={styles.tabTitle}>
                                         {tabItem.title}
@@ -647,7 +683,7 @@ export function TabBar() {
                                 className="flex-sb"
                                 style={{ width: '100%', height: '100%' }}
                               >
-                                <div className="flex-start">
+                                <div className="flex-start" style={{ flex: 1 }}>
                                   {renderTabIcon(tabItem.tabId, 14)}
                                   <div className={styles.tabTitle}>
                                     {tabItem.title}

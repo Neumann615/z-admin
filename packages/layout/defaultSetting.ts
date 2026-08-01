@@ -61,8 +61,8 @@ const defaultSetting: LayoutConfig = {
     tabBar: {
       isEnableTabBar: true,
       style: 'default',
-      widthType: 'auto',
-      width: '100%',
+      widthType: 'fixed',
+      width: 150,
       showIcon: true,
       dblClickEvent: 'refresh',
     },

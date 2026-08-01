@@ -125,7 +125,7 @@ export const tabBarDblClickEventTypeList: Array<{
     value: 'max',
   },
   {
-    label: '打开',
+    label: '新窗口打开',
     value: 'open',
   },
 ]
