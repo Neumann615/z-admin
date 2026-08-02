@@ -151,11 +151,11 @@ export interface LayoutConfig {
 
 /* 过渡动画类型 */
 export type TransitionType
-  = | 'slide-right'
-    | 'fade-in'
+  = | 'fade-in'
     | 'fade-up'
-    | 'lightspeed-left'
-    | 'roll'
+    | 'fade-down'
+    | 'fade-left'
+    | 'fade-right'
 
 /* 过期模式 退出到登录页 | 弹窗提示  */
 export type ExpireMode = 'logout' | 'prompt'

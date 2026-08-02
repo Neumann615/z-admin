@@ -57,7 +57,7 @@ const defaultSetting: LayoutConfig = {
   },
   topBar: {
     order: ['TabBar', 'Toolbar'],
-    position: 'static',
+    position: 'fixed',
     tabBar: {
       isEnableTabBar: true,
       style: 'default',

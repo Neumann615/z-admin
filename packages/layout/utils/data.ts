@@ -186,19 +186,7 @@ export const storageTypeList = [
 
 export const transitionTypeList = [
   {
-    label: '滑动',
-    value: 'slide-right',
-    classNames: {
-      appear: 'animate__animated',
-      appearActive: 'animate__slideInRight',
-      enter: 'animate__animated',
-      enterActive: 'animate__slideInRight',
-      exit: 'animate__animated',
-      exitActive: 'animate__slideOutLeft',
-    },
-  },
-  {
-    label: '淡入淡出1',
+    label: '淡入淡出',
     value: 'fade-in',
     classNames: {
       appear: 'animate__animated',
@@ -210,7 +198,7 @@ export const transitionTypeList = [
     },
   },
   {
-    label: '淡入淡出2',
+    label: '向上淡入',
     value: 'fade-up',
     classNames: {
       appear: 'animate__animated',
@@ -218,31 +206,43 @@ export const transitionTypeList = [
       enter: 'animate__animated',
       enterActive: 'animate__fadeInUp',
       exit: 'animate__animated',
+      exitActive: 'animate__fadeOutUp',
+    },
+  },
+  {
+    label: '向下淡入',
+    value: 'fade-down',
+    classNames: {
+      appear: 'animate__animated',
+      appearActive: 'animate__fadeInDown',
+      enter: 'animate__animated',
+      enterActive: 'animate__fadeInDown',
+      exit: 'animate__animated',
       exitActive: 'animate__fadeOutDown',
     },
   },
   {
-    label: '闪动1',
-    value: 'lightspeed-left',
+    label: '向左淡入',
+    value: 'fade-left',
     classNames: {
       appear: 'animate__animated',
-      appearActive: 'animate__lightSpeedInLeft',
+      appearActive: 'animate__fadeInRight',
       enter: 'animate__animated',
-      enterActive: 'animate__lightSpeedInLeft',
+      enterActive: 'animate__fadeInRight',
       exit: 'animate__animated',
-      exitActive: 'animate__lightSpeedOutRight',
+      exitActive: 'animate__fadeOutLeft',
     },
   },
   {
-    label: '滚动',
-    value: 'roll',
+    label: '向右淡入',
+    value: 'fade-right',
     classNames: {
       appear: 'animate__animated',
-      appearActive: 'animate__rollIn',
+      appearActive: 'animate__fadeInLeft',
       enter: 'animate__animated',
-      enterActive: 'animate__rollIn',
+      enterActive: 'animate__fadeInLeft',
       exit: 'animate__animated',
-      exitActive: 'animate__rollOut',
+      exitActive: 'animate__fadeOutRight',
     },
   },
 ]

@@ -47,3 +47,20 @@
     align-items: center;
     justify-content: center;
 }
+
+/* 页面过渡动画：进入正常速度（0.5s），退出加快（0.25s），切换更干脆简洁 */
+.animate__fadeIn,
+.animate__fadeInUp,
+.animate__fadeInDown,
+.animate__fadeInLeft,
+.animate__fadeInRight {
+    animation-duration: .25s;
+}
+
+.animate__fadeOut,
+.animate__fadeOutUp,
+.animate__fadeOutDown,
+.animate__fadeOutLeft,
+.animate__fadeOutRight {
+    animation-duration: 0s;
+}

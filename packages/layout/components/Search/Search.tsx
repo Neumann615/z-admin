@@ -19,20 +19,28 @@ function flattenMenu(items: any[]): any[] {
 const useStyles = createStyles(({ token, css }) => ({
   trigger: css`
     cursor: pointer;
-    width: 32px;
-    height: 32px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 4px;
+    gap: 8px;
+    width: 100px;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid ${token.colorBorder};
+    background: ${token.colorBgContainer};
+    color: ${token.colorTextTertiary};
+    font-size: 13px;
     transition: all 0.3s;
-    color: ${token.colorIcon};
-    font-size: 18px;
 
     :hover {
-      transition: all 0.3s;
       background-color: ${token.colorFillContentHover};
     }
+  `,
+
+  triggerIcon: css`
+    font-size: 18px;
+    color: ${token.colorText};
   `,
 
   modal: css`
@@ -48,13 +56,25 @@ const useStyles = createStyles(({ token, css }) => ({
   `,
 
   searchArea: css`
-    padding: 0;
+    padding: 12px 12px 4px;
+  `,
+
+  searchInput: css`
+    height: 36px;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.2s;
+  `,
+
+  searchIcon: css`
+    font-size: 16px;
+    color: ${token.colorTextTertiary};
   `,
 
   resultsArea: css`
     flex: 1;
     overflow-y: auto;
-    padding: 0 12px 12px;
+    padding: 8px 12px;
     min-height: 200px;
 
     &::-webkit-scrollbar {
@@ -72,7 +92,6 @@ const useStyles = createStyles(({ token, css }) => ({
     padding: 10px 12px;
     border-radius: 6px;
     cursor: pointer;
-    transition: background 0.15s;
   `,
 
   resultItemActive: css`
@@ -233,7 +252,8 @@ export function Search() {
     <>
       {/* 触发器按钮 */}
       <div className={styles.trigger} onClick={() => setOpen(true)}>
-        <SearchOutlined />
+        <SearchOutlined className={styles.triggerIcon} />
+        <span>搜索</span>
       </div>
 
       {/* 搜索弹窗 */}

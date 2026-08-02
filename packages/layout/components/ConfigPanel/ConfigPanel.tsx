@@ -2,6 +2,7 @@ import type { ExpireMode, MenuType, ThemeType } from '../../types/config'
 import {
   BgColorsOutlined,
   CopyOutlined,
+  ExclamationCircleOutlined,
   FullscreenOutlined,
   MoonOutlined,
   ReloadOutlined,
@@ -11,7 +12,7 @@ import {
   TranslationOutlined,
 } from '@ant-design/icons'
 import { useInterval, useUnmount } from 'ahooks'
-import { Alert, App, Button, Card, Col, Input, Modal, Radio, Row, Segmented, Select, Slider, Switch, Tooltip } from 'antd'
+import { App, Button, Card, Col, Input, Modal, Radio, Row, Segmented, Select, Slider, Switch, Tooltip } from 'antd'
 import { createStyles } from 'antd-style'
 import { useEffect, useRef, useState } from 'react'
 // @ts-ignore
@@ -51,34 +52,34 @@ const useStyles = createStyles(({ token, css }) => {
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 16px;
+      padding: 8px;
       display: flex;
-      gap: 16px;
+      gap: 8px;
     `,
     configColumn: css`
       flex: 1;
       min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 8px;
     `,
     configItem: css`
-      line-height: 30px;
-      min-height: 30px;
+      line-height: 24px;
+      min-height: 24px;
     `,
     cardContent: css`
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
     `,
     moduleTitle: css`
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 500;
       color: ${token.colorText};
       margin-bottom: 8px;
     `,
     moduleLable: css`
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 500;
       color: ${token.colorText};
     `,
@@ -140,7 +141,7 @@ const useStyles = createStyles(({ token, css }) => {
       box-shadow: ${token.boxShadow};
       box-sizing: border-box;
       position: relative;
-      padding: 6px;
+      padding: 8px;
       border-radius: ${token.borderRadius}px;
       cursor: pointer;
     `,
@@ -152,13 +153,13 @@ const useStyles = createStyles(({ token, css }) => {
     `,
     layoutContainer: css`
       width: 100%;
-      height: 78px;
+      height: 74px;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: ${token.boxShadow};
       box-sizing: border-box;
-      padding: 16px;
+      padding: 12px;
       border-radius: ${token.borderRadius}px;
       position: relative;
       cursor: pointer;
@@ -173,8 +174,8 @@ const useStyles = createStyles(({ token, css }) => {
       width: 100%;
       border: 1px solid ${token.colorBorderSecondary};
       box-sizing: border-box;
-      padding: 16px;
-      padding-top: 48px;
+      padding: 12px;
+      padding-top: 38px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -185,9 +186,9 @@ const useStyles = createStyles(({ token, css }) => {
       position: absolute;
       top: 0px;
       left: 0px;
-      padding: 8px 16px;
+      padding: 4px 12px;
       display: flex;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 500;
       color: ${token.colorTextHeading};
       background-color: ${token.colorBgContainerDisabled};
@@ -196,35 +197,33 @@ const useStyles = createStyles(({ token, css }) => {
     resetModal: css`
       .ant-modal-body {
         padding: 0px;
-        max-height: 70vh;
+        max-height: 80vh;
         overflow-y: auto;
       }
       .ant-modal-header {
-        padding: 16px;
+        padding: 12px;
         margin-bottom: 0;
       }
       .ant-modal-container {
         padding: 0px;
       }
-      .ant-modal-footer {
-        margin: 0;
-        padding: 12px 16px;
-      }
       .ant-card-head {
-        padding: 6px 16px;
+        padding: 0px 12px;
         background-color: ${token.colorBgElevated};
         color: ${token.colorTextSecondary};
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 500;
+        min-height: 36px;
       }
       .ant-card-body {
-        padding: 12px 16px;
+        padding: 10px 12px;
       }
     `,
     customHeader: css`
+      width: 100%;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
       h2 {
         margin: 0;
         font-size: 18px;
@@ -237,8 +236,20 @@ const useStyles = createStyles(({ token, css }) => {
         color: ${token.colorTextDescription};
       }
     `,
-    customFooter: css`
-      width: 100%;
+    customHeaderLeft: css`
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    `,
+    customHeaderTip: css`
+      font-size: 16px;
+      color: ${token.colorError};
+      cursor: help;
+    `,
+    customHeaderActions: css`
+      display: flex;
+      align-items: center;
+      gap: 8px;
     `,
   }
 })
@@ -505,6 +516,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Select
+              size="small"
               value={defaultSetting.theme.themeType}
               onChange={(v: ThemeType) => {
                 setDefaultSetting({
@@ -566,6 +578,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Segmented
+              size="small"
               options={[
                 { value: '0', icon: <SunOutlined /> },
                 { value: '1', icon: <MoonOutlined /> },
@@ -592,6 +605,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.theme.colorWeak}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -661,6 +675,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.page.isEnablePageLoadProgress}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -720,6 +735,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.menu.subMenuUniqueOpened}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -737,6 +753,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.menu.isEnableSubMenuCollapse}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -754,6 +771,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.menu.subMenuCollapse}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -778,6 +796,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.topBar.tabBar.isEnableTabBar}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -798,6 +817,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.topBar.toolbar.isEnableToolbar}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -818,6 +838,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.topBar.order[0] === 'TabBar'}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -838,6 +859,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Radio.Group
+              size="small"
               value={defaultSetting.topBar.position}
               onChange={(v: any) => {
                 setDefaultSetting({
@@ -881,6 +903,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Switch
+                size="small"
                 defaultChecked={defaultSetting.topBar.toolbar.breadcrumb.isEnableBreadcrumb}
                 onChange={(v: boolean) => {
                   setDefaultSetting({
@@ -907,6 +930,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Radio.Group
+                size="small"
                 value={defaultSetting.topBar.toolbar.breadcrumb.style}
                 onChange={(v: any) => {
                   setDefaultSetting({
@@ -940,6 +964,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Switch
+                size="small"
                 defaultChecked={defaultSetting.topBar.toolbar.breadcrumb.isEnableMainNav}
                 onChange={(v: boolean) => {
                   setDefaultSetting({
@@ -970,6 +995,7 @@ export default defaultSetting`
               </Col>
               <Col>
                 <Switch
+                  size="small"
                   defaultChecked={defaultSetting.topBar.toolbar[item.key]}
                   onChange={(v: boolean) => {
                     setDefaultSetting({
@@ -1001,6 +1027,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Radio.Group
+              size="small"
               value={defaultSetting.topBar.tabBar.style}
               onChange={(v: any) => {
                 setDefaultSetting({
@@ -1031,6 +1058,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.topBar.tabBar.showIcon}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -1054,6 +1082,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Select
+              size="small"
               defaultValue={defaultSetting.topBar.tabBar.dblClickEvent}
               onChange={(v: string) => {
                 setDefaultSetting({
@@ -1079,6 +1108,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Select
+              size="small"
               defaultValue={defaultSetting.topBar.tabBar.widthType}
               onChange={(v: string) => {
                 setDefaultSetting({
@@ -1132,6 +1162,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.app.isEnableMobileAccess}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -1149,6 +1180,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.app.isEnableDynamicTitle}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -1166,6 +1198,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.app.isEnableMourningMode}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -1183,6 +1216,7 @@ export default defaultSetting`
           </Col>
           <Col>
             <Switch
+              size="small"
               defaultChecked={defaultSetting.app.isEnableWatermark}
               onChange={(v: boolean) => {
                 setDefaultSetting({
@@ -1202,6 +1236,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Switch
+                size="small"
                 defaultChecked={defaultSetting.app.account.isEnablePermission}
                 onChange={(v: boolean) => {
                   setDefaultSetting({
@@ -1225,6 +1260,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Select
+                size="small"
                 defaultValue={defaultSetting.app.account.expireMode}
                 onChange={(v: ExpireMode) => {
                   setDefaultSetting({
@@ -1246,6 +1282,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Switch
+                size="small"
                 defaultChecked={defaultSetting.app.account.isEnableMultiAccount}
                 onChange={(v: boolean) => {
                   setDefaultSetting({
@@ -1272,6 +1309,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Switch
+                size="small"
                 defaultChecked={defaultSetting.app.homePage.isEnableHomePage}
                 onChange={(v: boolean) => {
                   setDefaultSetting({
@@ -1295,6 +1333,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Input
+                size="small"
                 defaultValue={defaultSetting.app.homePage.title}
                 onChange={(v: any) => {
                   setDefaultSetting({
@@ -1321,6 +1360,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Switch
+                size="small"
                 defaultChecked={defaultSetting.app.layout.isCenter}
                 onChange={(v: boolean) => {
                   setDefaultSetting({
@@ -1344,6 +1384,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Radio.Group
+                size="small"
                 defaultValue={defaultSetting.app.layout.layoutScope}
                 onChange={(v: any) => {
                   setDefaultSetting({
@@ -1403,6 +1444,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Switch
+                size="small"
                 defaultChecked={defaultSetting.app.copyright.isEnableCopyright}
                 onChange={(v: boolean) => {
                   setDefaultSetting({
@@ -1426,6 +1468,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Input
+                size="small"
                 defaultValue={defaultSetting.app.copyright.date}
                 onChange={(v: any) => {
                   setDefaultSetting({
@@ -1449,6 +1492,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Input
+                size="small"
                 defaultValue={defaultSetting.app.copyright.company}
                 onChange={(v: any) => {
                   setDefaultSetting({
@@ -1472,6 +1516,7 @@ export default defaultSetting`
             </Col>
             <Col>
               <Input
+                size="small"
                 defaultValue={defaultSetting.app.copyright.website}
                 onChange={(v: any) => {
                   setDefaultSetting({
@@ -1498,75 +1543,59 @@ export default defaultSetting`
     ? [
         { key: 'theme', render: renderThemeConfig, column: '1' },
         { key: 'toolbarFunc', render: renderToolbarFuncConfig, column: '1' },
-        { key: 'tabBar', render: renderTabBarConfig, column: '1' },
-        { key: 'topBar', render: renderTopBarConfig, column: '1' },
         { key: 'transition', render: renderTransitionConfig, column: '1' },
+        { key: 'tabBar', render: renderTabBarConfig, column: '2' },
+        { key: 'topBar', render: renderTopBarConfig, column: '2' },
         { key: 'menuType', render: renderMenuTypeConfig, column: '2' },
-        { key: 'app', render: renderAppConfig, column: '2' },
+        { key: 'app', render: renderAppConfig, column: '3' },
       ]
     : [
         { key: 'theme', render: renderThemeConfig, column: '1' },
-        { key: 'menuType', render: renderMenuTypeConfig, column: '1' },
-        { key: 'transition', render: renderTransitionConfig, column: '1' },
-        { key: 'toolbarFunc', render: renderToolbarFuncConfig, column: '2' },
-        { key: 'tabBar', render: renderTabBarConfig, column: '2' },
-        { key: 'topBar', render: renderTopBarConfig, column: '2' },
+        { key: 'tabBar', render: renderTabBarConfig, column: '1' },
+        { key: 'menuType', render: renderMenuTypeConfig, column: '2' },
+        { key: 'transition', render: renderTransitionConfig, column: '2' },
+        { key: 'toolbarFunc', render: renderToolbarFuncConfig, column: '3' },
+        { key: 'topBar', render: renderTopBarConfig, column: '3' },
       ]
 
   const columnModules1 = configModules.filter(m => m.column === '1')
   const columnModules2 = configModules.filter(m => m.column === '2')
+  const columnModules3 = configModules.filter(m => m.column === '3')
 
   return (
     <Modal
       rootClassName={styles.resetModal}
       getContainer={() => document.getElementById('root') as HTMLElement}
-      width={860}
+      width={1080}
       centered
+      closable={false}
+      footer={null}
       onCancel={onClose}
       open={open}
       title={(
         <div className={styles.customHeader}>
-          {isDev
-            ? (
-                <>
-                  <h2>应用配置</h2>
-                  <p>在生产环境该模块会自动关闭，仅保留用户的偏好设置</p>
-                </>
-              )
-            : (
-                <h2>个人偏好</h2>
-              )}
-        </div>
-      )}
-      footer={(
-        <div className={styles.customFooter}>
-          {isDev
-            ? (
-                <>
-                  <Alert
-                    type="error"
-                    title="调整配置仅临时生效，想真正应用于项目，请点击「 复制配置 」按钮，并粘贴到 packages/layout/defaultSettings.ts 文件中"
-                    style={{
-                      marginBottom: 8,
-                      textAlign: 'center',
-                      color: theme.colorError,
-                    }}
-                  />
-                  <Button
-                    icon={<CopyOutlined />}
-                    style={{ width: '100%' }}
-                    type="primary"
-                    onClick={handleCopyConfig}
-                  >
-                    复制配置
-                  </Button>
-                </>
-              )
-            : (
-                <Button style={{ width: '100%' }} type="primary">
-                  重置
-                </Button>
-              )}
+          <div className={styles.customHeaderLeft}>
+            <h3>{isDev ? '应用配置' : '个人偏好'}</h3>
+            {isDev && (
+              <p>在生产环境该模块会自动关闭，仅保留用户的偏好设置</p>
+            )}
+          </div>
+          <div className={styles.customHeaderActions}>
+            {isDev
+              ? (
+                  <>
+                    <Tooltip title="调整配置仅临时生效，想真正应用于项目，请点击「复制配置」按钮，并粘贴到 packages/layout/defaultSettings.ts 文件中">
+                      <ExclamationCircleOutlined className={styles.customHeaderTip} />
+                    </Tooltip>
+                    <Button icon={<CopyOutlined />} type="primary" onClick={handleCopyConfig}>
+                      复制配置
+                    </Button>
+                  </>
+                )
+              : (
+                  <Button type="primary">重置</Button>
+                )}
+          </div>
         </div>
       )}
     >
@@ -1577,6 +1606,9 @@ export default defaultSetting`
           </div>
           <div className={styles.configColumn}>
             {columnModules2.map(module => module.render())}
+          </div>
+          <div className={styles.configColumn}>
+            {columnModules3.map(module => module.render())}
           </div>
         </div>
       </div>

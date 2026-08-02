@@ -45,9 +45,9 @@ const useStyles = createStyles(({ token, css }) => ({
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    border-radius: 8px;
     transition: all 0.3s;
-    color: ${token.colorIcon};
+    color: ${token.colorText};
     font-size: 18px;
 
     :hover {
@@ -255,7 +255,11 @@ export function Toolbar() {
           <Col span={8}>
             <div className={styles.Toolbar}>
               {topBarStore.toolbar.isEnableSearch
-                ? <Search />
+                ? (
+                    <div style={{ marginRight: 8 }}>
+                      <Search />
+                    </div>
+                  )
                 : null}
               {topBarStore.toolbar.isEnableFullscreen
                 ? (

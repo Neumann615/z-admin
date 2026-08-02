@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-03
+
+- 🔧 **搜索框美化**（`Search.tsx`、`Toolbar.tsx`）：触发器改为小输入框样式（圆角边框 + 搜索图标 + 文字），弹窗输入框圆角化、字号缩小
+- 🔧 **配置面板三列布局**（`ConfigPanel.tsx`）：三列展示，底部按钮与提示移至右上角，组件逐个 `size="small"` 缩小
+- 🔧 **页面过渡动画精简**（`data.ts`、`config.d.ts`、`reset.css`）：移除滑动/闪动/滚动，保留淡入淡出及四方向，进入慢退出快
+
 ## 2026-08-02
 - ✨ **顶部定位模式**（`Header.tsx`、`Content.tsx`、`Layout.tsx`）：`topBar.position` 支持 `static`/`fixed`/`sticky` 三种模式，Header 移入 Content 参与整体滚动，fixed 时内容区独立滚动，sticky 时向下滚动收起、向上滚动展开
 - 🐛 **KeepAlive 刷新修复**（`Content.tsx`）：缓存页按路径记录刷新版本号，刷新时仅重建当前页缓存节点，普通切换不再影响缓存状态；非缓存页过渡层 key 拼接 `refreshKey` 强制重挂载
