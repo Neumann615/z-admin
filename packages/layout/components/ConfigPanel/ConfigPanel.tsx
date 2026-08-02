@@ -794,6 +794,26 @@ export default defaultSetting`
         </Row>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
+            工具栏
+          </Col>
+          <Col>
+            <Switch
+              defaultChecked={defaultSetting.topBar.toolbar.isEnableToolbar}
+              onChange={(v: boolean) => {
+                setDefaultSetting({
+                  ...defaultSetting,
+                  topBar: {
+                    ...defaultSetting.topBar,
+                    toolbar: { ...defaultSetting.topBar.toolbar, isEnableToolbar: v },
+                  },
+                })
+              }}
+            >
+            </Switch>
+          </Col>
+        </Row>
+        <Row align="middle" className={styles.configItem}>
+          <Col flex={1} className={styles.moduleLable}>
             展示切换
           </Col>
           <Col>

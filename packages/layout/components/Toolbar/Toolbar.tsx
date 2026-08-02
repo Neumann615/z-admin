@@ -238,57 +238,59 @@ export function Toolbar() {
     ]
   }, [themeStore])
 
-  return (
-    <Row align="middle" className={styles.headerModule}>
-      <Col span={16}>
-        {isMobile
-          ? <div className={styles.ToolbarItem}>
-              {
-                mobileDrawerOpen
-                  ? <MenuFoldOutlined onClick={() => setMobileDrawerOpen(false)} />
-                  : <MenuUnfoldOutlined onClick={() => setMobileDrawerOpen(true)} />
-              }
+  return topBarStore.toolbar.isEnableToolbar
+    ? (
+        <Row align="middle" className={styles.headerModule}>
+          <Col span={16}>
+            {isMobile
+              ? <div className={styles.ToolbarItem}>
+                  {
+                    mobileDrawerOpen
+                      ? <MenuFoldOutlined onClick={() => setMobileDrawerOpen(false)} />
+                      : <MenuUnfoldOutlined onClick={() => setMobileDrawerOpen(true)} />
+                  }
+                </div>
+              : <Breadcrumb />}
+          </Col>
+          <Col span={8}>
+            <div className={styles.Toolbar}>
+              {topBarStore.toolbar.isEnableSearch
+                ? <Search />
+                : null}
+              {topBarStore.toolbar.isEnableFullscreen
+                ? (
+                    <div className={styles.ToolbarItem} onClick={toggleFullscreen}>
+                      {isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+                    </div>
+                  )
+                : null}
+              {topBarStore.toolbar.isEnableTheme
+                ? (
+                    <Dropdown
+                      menu={{ items: themeMenu }}
+                      open={dropdownOpen}
+                      trigger={[]}
+                    >
+                      <div
+                        className={styles.ToolbarItem}
+                        ref={darkBtnRef}
+                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                      >
+                        <BgColorsOutlined />
+                      </div>
+                    </Dropdown>
+                  )
+                : null}
+              {topBarStore.toolbar.isEnablePageReload
+                ? (
+                    <div className={styles.ToolbarItem} onClick={() => usePageStore.getState().refreshPage()}>
+                      <SyncOutlined />
+                    </div>
+                  )
+                : null}
             </div>
-          : <Breadcrumb />}
-      </Col>
-      <Col span={8}>
-        <div className={styles.Toolbar}>
-          {topBarStore.toolbar.isEnableSearch
-            ? <Search />
-            : null}
-          {topBarStore.toolbar.isEnableFullscreen
-            ? (
-                <div className={styles.ToolbarItem} onClick={toggleFullscreen}>
-                  {isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
-                </div>
-              )
-            : null}
-          {topBarStore.toolbar.isEnableTheme
-            ? (
-                <Dropdown
-                  menu={{ items: themeMenu }}
-                  open={dropdownOpen}
-                  trigger={[]}
-                >
-                  <div
-                    className={styles.ToolbarItem}
-                    ref={darkBtnRef}
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                  >
-                    <BgColorsOutlined />
-                  </div>
-                </Dropdown>
-              )
-            : null}
-          {topBarStore.toolbar.isEnablePageReload
-            ? (
-                <div className={styles.ToolbarItem} onClick={() => usePageStore.getState().refreshPage()}>
-                  <SyncOutlined />
-                </div>
-              )
-            : null}
-        </div>
-      </Col>
-    </Row>
-  )
+          </Col>
+        </Row>
+      )
+    : null
 }

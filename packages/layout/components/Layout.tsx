@@ -8,7 +8,6 @@ import { useAppStore, useMenuStore, usePageStore, useTopBarStore } from '../stor
 import { Content } from './Content/Content'
 import { Footer } from './Footer/Footer'
 import { GlobalProgress } from './GlobalProgress/GlobalProgress'
-import { Header } from './Header/Header'
 import { MainNav } from './MainNav/MainNav'
 import { Menu } from './Menu/Menu'
 import { MobileBlock } from './MobileBlock/MobileBlock'
@@ -156,7 +155,6 @@ export function Layout() {
             <Menu></Menu>
           </div>
           <div className={styles.layoutMainStyle}>
-            <Header></Header>
             <Content></Content>
             <Footer></Footer>
           </div>
@@ -170,7 +168,6 @@ export function Layout() {
             <MainNav />
           </div>
           <div className={styles.layoutMainStyle}>
-            <Header></Header>
             <Content></Content>
             <Footer></Footer>
           </div>
@@ -188,7 +185,6 @@ export function Layout() {
               <Menu></Menu>
             </div>
             <div className={styles.headContentMain}>
-              <Header></Header>
               <Content></Content>
               <Footer></Footer>
             </div>
@@ -202,10 +198,11 @@ export function Layout() {
           <div className={styles.headTop}>
             <MainNav />
           </div>
-          <div className={styles.onlyHeadContent}>
-            <Header></Header>
-            <Content></Content>
-            <Footer></Footer>
+          <div className={styles.headContent}>
+            <div className={styles.headContentMain}>
+              <Content></Content>
+              <Footer></Footer>
+            </div>
           </div>
         </div>
       )
@@ -217,7 +214,6 @@ export function Layout() {
             <Menu />
           </div>
           <div className={styles.singleMainContent}>
-            <Header></Header>
             <Content></Content>
             <Footer></Footer>
           </div>
@@ -230,7 +226,6 @@ export function Layout() {
     return (
       <div className={styles.mobileContainer}>
         <div className={styles.mobileContent}>
-          <Header />
           <Content />
           <Footer />
         </div>

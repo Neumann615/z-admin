@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation, useOutlet } from 'react-router'
 // @ts-ignore
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
-import { useAppStore, usePageStore } from '../../store/index'
+import { useAppStore, usePageStore, useTopBarStore } from '../../store/index'
 import { transitionTypeSet } from '../../utils/data'
+import { Header } from '../Header/Header'
 
 const useStyles = createStyles(({ token, css }) => ({
   content: {
@@ -74,6 +75,9 @@ export function Content() {
     cachedPages,
   } = usePageStore()
   const { layout: layoutConfig } = useAppStore()
+  const { position } = useTopBarStore()
+  // 固定定位：Header 固定在容器顶部，内容区独立滚动
+  const isFixedPosition = position === 'fixed'
 
   const isInsideCenter = !isMaximize && layoutConfig.isCenter && layoutConfig.layoutScope === 'inside'
 
@@ -173,28 +177,40 @@ export function Content() {
   return (
     <div
       className={isMaximize ? styles.maxContent : styles.content}
-      style={{ overflow: globalProgressLoading ? 'hidden' : 'auto' }}
+      style={{
+        overflow: globalProgressLoading || isFixedPosition ? 'hidden' : 'auto',
+      }}
     >
       {isMaximize && (
         <div className={styles.exitMaxBtn} onClick={changeIsMaximize}>
           <FullscreenExitOutlined className={styles.exitMaxBtnIcon} style={{ fontSize: 24 }} />
         </div>
       )}
-      {isInsideCenter
-        ? (
-            <div className={styles.insideCenterWrapper}>
-              <div style={{ maxWidth: layoutConfig.width, width: '100%', height: '100%' }}>
+      {!isMaximize && <Header />}
+      <div
+        style={{
+          flex: 1,
+          width: '100%',
+          minHeight: isFixedPosition ? 0 : undefined,
+          overflowY: isFixedPosition ? 'auto' : 'visible',
+        }}
+      >
+        {isInsideCenter
+          ? (
+              <div className={styles.insideCenterWrapper}>
+                <div style={{ maxWidth: layoutConfig.width, width: '100%', height: '100%' }}>
+                  {cachedLayer}
+                  {transitionLayer}
+                </div>
+              </div>
+            )
+          : (
+              <>
                 {cachedLayer}
                 {transitionLayer}
-              </div>
-            </div>
-          )
-        : (
-            <>
-              {cachedLayer}
-              {transitionLayer}
-            </>
-          )}
+              </>
+            )}
+      </div>
     </div>
   )
 }
