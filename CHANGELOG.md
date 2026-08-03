@@ -5,6 +5,8 @@
 - 🔧 **搜索框美化**（`Search.tsx`、`Toolbar.tsx`）：触发器改为小输入框样式（圆角边框 + 搜索图标 + 文字），弹窗输入框圆角化、字号缩小
 - 🔧 **配置面板三列布局**（`ConfigPanel.tsx`）：三列展示，底部按钮与提示移至右上角，组件逐个 `size="small"` 缩小
 - 🔧 **页面过渡动画精简**（`data.ts`、`config.d.ts`、`reset.css`）：移除滑动/闪动/滚动，保留淡入淡出及四方向，进入慢退出快
+- 🔧 **居中布局结构优化与过渡**（`Content.tsx`、`Layout.tsx`）：固定外层容器层级避免配置变化导致页面重挂载，布局宽度切换增加 `max-width` 平滑过渡
+- ✨ **居中布局演示页面**（`center-layout/layout-in.tsx`、`layout-out.tsx`）：进入页面自动触发居中布局配置，离开时恢复进入前的配置
 
 ## 2026-08-02
 - ✨ **顶部定位模式**（`Header.tsx`、`Content.tsx`、`Layout.tsx`）：`topBar.position` 支持 `static`/`fixed`/`sticky` 三种模式，Header 移入 Content 参与整体滚动，fixed 时内容区独立滚动，sticky 时向下滚动收起、向上滚动展开

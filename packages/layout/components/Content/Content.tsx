@@ -50,7 +50,7 @@ const useStyles = createStyles(({ token, css }) => ({
     width: '100%',
     height: '100%',
   },
-  insideCenterWrapper: {
+  centerWrapper: {
     width: '100%',
     height: '100%',
     display: 'flex',
@@ -195,21 +195,20 @@ export function Content() {
           overflowY: isFixedPosition ? 'auto' : 'visible',
         }}
       >
-        {isInsideCenter
-          ? (
-              <div className={styles.insideCenterWrapper}>
-                <div style={{ maxWidth: layoutConfig.width, width: '100%', height: '100%' }}>
-                  {cachedLayer}
-                  {transitionLayer}
-                </div>
-              </div>
-            )
-          : (
-              <>
-                {cachedLayer}
-                {transitionLayer}
-              </>
-            )}
+        {/* 固定层级结构：仅切换 className / style，避免页面因结构变化而重挂载；max-width 平滑过渡 */}
+        <div className={styles.centerWrapper}>
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              maxWidth: isInsideCenter ? layoutConfig.width : '100%',
+              transition: 'max-width 0.3s ease',
+            }}
+          >
+            {cachedLayer}
+            {transitionLayer}
+          </div>
+        </div>
       </div>
     </div>
   )

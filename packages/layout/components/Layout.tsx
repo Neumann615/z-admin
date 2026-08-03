@@ -102,6 +102,13 @@ const useStyles = createStyles(({ token }) => ({
     boxSizing: 'border-box',
     borderLeft: `1px solid ${token.colorBorderSecondary}`,
     borderRight: `1px solid ${token.colorBorderSecondary}`,
+    transition: 'max-width 0.3s ease',
+  },
+  // 非居中时的中性容器：与 outsideCenterWrapper 保持相同层级，避免配置变化导致整体重挂载
+  layoutInnerWrapper: {
+    width: '100%',
+    height: '100%',
+    transition: 'max-width 0.3s ease',
   },
   // 移动端响应式布局
   mobileContainer: {
@@ -109,6 +116,7 @@ const useStyles = createStyles(({ token }) => ({
     flexDirection: 'column',
     width: '100%',
     height: '100vh',
+    backgroundColor: token.colorBgBase,
   },
   mobileContent: {
     flex: 1,
@@ -272,18 +280,18 @@ export function Layout() {
       }}
     >
       <MobileBlock>
-        {isOutsideCenter
-          ? (
-              <div className={styles.outsideCenterBg}>
-                <div
-                  className={styles.outsideCenterWrapper}
-                  style={{ maxWidth: layoutConfig.width, width: '100%' }}
-                >
-                  {layoutContent}
-                </div>
-              </div>
-            )
-          : layoutContent}
+        {/* 固定层级结构：外层始终为居中容器，仅内层切换 className / style，避免布局配置变化导致整体重挂载；max-width 平滑过渡 */}
+        <div className={styles.outsideCenterBg}>
+          <div
+            className={isOutsideCenter ? styles.outsideCenterWrapper : styles.layoutInnerWrapper}
+            style={{
+              width: '100%',
+              maxWidth: isOutsideCenter ? layoutConfig.width : '100%',
+            }}
+          >
+            {layoutContent}
+          </div>
+        </div>
         <Setting></Setting>
         <ReLoginModal />
         <GlobalProgress

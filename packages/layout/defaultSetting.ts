@@ -21,7 +21,7 @@ const defaultSetting: LayoutConfig = {
     layout: {
       isCenter: false,
       layoutScope: 'outside',
-      width: 1200,
+      width: 1400,
     },
     homePage: {
       isEnableHomePage: true,
