@@ -302,6 +302,7 @@ export function Layout() {
                     rotate={watermarkRotate}
                     gap={watermarkGap as [number, number]}
                     zIndex={watermarkZIndex}
+                    style={{ width: '100%', height: '100%' }}
                   >
                     {layoutContent}
                   </Watermark>
