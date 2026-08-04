@@ -131,10 +131,10 @@ export function Layout() {
   const { menuType, menuCurrentKeys, openKeys, mainNavCurrentKeys, mobileDrawerOpen, setMobileDrawerOpen } = useMenuStore()
   const isMobile = useMobileDetect()
   const globalProgressLoading = usePageStore(state => state.globalProgressLoading)
-  const { layout: layoutConfig, name: appName, isEnableMobileAccess, isEnableWatermark } = useAppStore()
-  const { content: watermarkContent, fontSize: watermarkFontSize, color: watermarkColor, width: watermarkWidth, height: watermarkHeight, rotate: watermarkRotate, gap: watermarkGap, zIndex: watermarkZIndex } = useWatermarkStore()
+  const { layout: layoutConfig, name: appName, isEnableMobileAccess, isEnableWatermark, isEnableDynamicTitle } = useAppStore()
+  const { content: watermarkContent, fontSize: watermarkFontSize, width: watermarkWidth, height: watermarkHeight, rotate: watermarkRotate, gap: watermarkGap, zIndex: watermarkZIndex } = useWatermarkStore()
   // 水印颜色：store 显式配置时优先，否则跟随主题 colorText（12% 透明度）
-  const watermarkTextColor = watermarkColor || `${theme.colorTextDisabled}`
+  const watermarkTextColor = theme.colorTextDisabled
   const { nowTab } = useTopBarStore()
   const { syncTabFromUrl } = useControlTab()
   const location = useLocation()
@@ -144,15 +144,15 @@ export function Layout() {
     syncTabFromUrl(location.pathname)
   }, [location.pathname])
 
-  // 动态网站标题：切换路由时映射到菜单名称
+  // 动态网站标题：启用后切换路由时映射到菜单名称，否则固定为应用名称
   useEffect(() => {
-    if (nowTab?.title) {
+    if (isEnableDynamicTitle && nowTab?.title) {
       document.title = `${nowTab.title} - ${appName}`
     }
     else {
       document.title = appName
     }
-  }, [nowTab?.title])
+  }, [isEnableDynamicTitle, nowTab?.title])
 
   function renderLayout() {
     if (isMobile && isEnableMobileAccess) {
@@ -300,7 +300,7 @@ export function Layout() {
                     height={watermarkHeight}
                     font={{ fontSize: watermarkFontSize, color: watermarkTextColor }}
                     rotate={watermarkRotate}
-                    gap={watermarkGap}
+                    gap={watermarkGap as [number, number]}
                     zIndex={watermarkZIndex}
                   >
                     {layoutContent}

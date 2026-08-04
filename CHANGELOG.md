@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-05
+
+- ✨ **动态标题接入配置项**（`Layout.tsx`）：`isEnableDynamicTitle` 开关控制标题是否随路由动态更新，关闭时固定为应用名称
+- ✨ **水印配置本地缓存**（`watermark.ts`）：zustand persist 持久化水印配置，跟随存储方式写入 localStorage/sessionStorage
+- 🔧 **水印细节调整**（`Layout.tsx`、`watermark.ts`）：颜色跟随主题 `colorTextDisabled`，字号/宽度调整
+
 ## 2026-08-04
 
 - 🔧 **主题代码清理**（`hackerTheme.ts`、`index.ts`）：移除过时注释，统一文件末尾分号与换行
