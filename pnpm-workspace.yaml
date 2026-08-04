@@ -27,8 +27,8 @@ catalog:
   '@types/node': ^22.0.0
   ahooks: ^3.9.7
   animate.css: ^4.1.1
-  antd: ^6.4.4
-  antd-style: ^3.6.2
+  antd: ^6.5.3
+  antd-style: ^3.6.3
   axios: ^1.6.8
   bcryptjs: ^2.4.3
   classnames: ^2.5.1
@@ -50,7 +50,6 @@ catalog:
   react-transition-group: ^4.4.5
   remark-gfm: ^4.0.0
   tsx: ^4.19.0
-
   typescript: ^5.6.0
   vite-plugin-svgr: ^5.2.0
   zustand: ^5.0.14

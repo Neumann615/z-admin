@@ -1,5 +1,3 @@
-// ========== geekTheme.ts ==========
-
 import type { ConfigProviderProps } from 'antd'
 import { theme } from 'antd'
 import { createStyles } from 'antd-style'
@@ -266,4 +264,4 @@ export function useHackerTheme() {
       styles.tooltipRoot,
     ],
   )
-}
+};
