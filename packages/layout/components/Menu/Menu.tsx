@@ -186,7 +186,10 @@ export function Menu() {
   return (
     <div
       className={styles.asideMenu}
-      style={{ width: menuData?.length ? (subMenuCollapse ? 64 : 230) : 0 }}
+      style={{
+        width: menuData?.length ? (subMenuCollapse ? 64 : 230) : 0,
+        borderRight: menuData?.length ? undefined : 'none',
+      }}
     >
       {!subMenuCollapse
         ? (

@@ -1,10 +1,10 @@
-import { ConfigProvider, Drawer } from 'antd'
+import { ConfigProvider, Drawer, Watermark } from 'antd'
 import { createStyles } from 'antd-style'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useControlTab } from '../hooks/useControlTab'
 import { useMobileDetect } from '../hooks/useMobileDetect'
-import { useAppStore, useMenuStore, usePageStore, useTopBarStore } from '../store/index'
+import { useAppStore, useMenuStore, usePageStore, useTopBarStore, useWatermarkStore } from '../store/index'
 import { Content } from './Content/Content'
 import { Footer } from './Footer/Footer'
 import { GlobalProgress } from './GlobalProgress/GlobalProgress'
@@ -131,7 +131,10 @@ export function Layout() {
   const { menuType, menuCurrentKeys, openKeys, mainNavCurrentKeys, mobileDrawerOpen, setMobileDrawerOpen } = useMenuStore()
   const isMobile = useMobileDetect()
   const globalProgressLoading = usePageStore(state => state.globalProgressLoading)
-  const { layout: layoutConfig, name: appName, isEnableMobileAccess } = useAppStore()
+  const { layout: layoutConfig, name: appName, isEnableMobileAccess, isEnableWatermark } = useAppStore()
+  const { content: watermarkContent, fontSize: watermarkFontSize, color: watermarkColor, width: watermarkWidth, height: watermarkHeight, rotate: watermarkRotate, gap: watermarkGap, zIndex: watermarkZIndex } = useWatermarkStore()
+  // 水印颜色：store 显式配置时优先，否则跟随主题 colorText（12% 透明度）
+  const watermarkTextColor = watermarkColor || `${theme.colorTextDisabled}`
   const { nowTab } = useTopBarStore()
   const { syncTabFromUrl } = useControlTab()
   const location = useLocation()
@@ -289,7 +292,21 @@ export function Layout() {
               maxWidth: isOutsideCenter ? layoutConfig.width : '100%',
             }}
           >
-            {layoutContent}
+            {isEnableWatermark
+              ? (
+                  <Watermark
+                    content={watermarkContent}
+                    width={watermarkWidth}
+                    height={watermarkHeight}
+                    font={{ fontSize: watermarkFontSize, color: watermarkTextColor }}
+                    rotate={watermarkRotate}
+                    gap={watermarkGap}
+                    zIndex={watermarkZIndex}
+                  >
+                    {layoutContent}
+                  </Watermark>
+                )
+              : layoutContent}
           </div>
         </div>
         <Setting></Setting>

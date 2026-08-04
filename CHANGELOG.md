@@ -4,6 +4,8 @@
 
 - 🔧 **主题代码清理**（`hackerTheme.ts`、`index.ts`）：移除过时注释，统一文件末尾分号与换行
 - 🔧 **依赖升级**（`pnpm-workspace.yaml`）：antd ^6.4.4 → ^6.5.3，antd-style ^3.6.2 → ^3.6.3
+- ✨ **新增水印功能**（`watermark.ts`、`Layout.tsx`、`store/index.ts`）：antd Watermark 按配置包裹布局，文案自动追加当前用户名，颜色跟随主题
+- 🔧 **菜单边框条件化**（`Menu.tsx`）：`menuData` 为空时隐藏右边框
 
 ## 2026-08-03
 
