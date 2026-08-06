@@ -9,8 +9,8 @@
 受控模式，通过 `value` / `onChange` 管理内容。
 
 ```tsx
-import { useState } from 'react'
 import { ZaRichTextEditor } from '@zealous-admin/components'
+import { useState } from 'react'
 
 export default function App() {
   const [html, setHtml] = useState('<p>你好，<strong>世界</strong>！</p>')
