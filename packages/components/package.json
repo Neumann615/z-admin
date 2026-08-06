@@ -12,6 +12,7 @@
   "peerDependencies": {
     "antd": "catalog:",
     "antd-style": "catalog:",
+    "quill": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-icons": "catalog:"

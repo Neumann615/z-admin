@@ -193,6 +193,7 @@ export function initDb() {
               { title: '跑马灯', name: 'marquee', icon: 'ai:AiOutlineColumnWidth' },
               { title: '图标选择器', name: 'icon-picker', icon: 'ai:AiOutlineSmile' },
               { title: 'Markdown预览', name: 'markdown', icon: 'ai:AiOutlineFileMarkdown' },
+              { title: '富文本编辑器', name: 'rich-text-editor', icon: 'ai:AiOutlineEdit' },
               { title: '图案背景', name: 'pattern-bg', icon: 'ai:AiOutlineBgColors' },
             ],
           },

@@ -33,6 +33,7 @@ export default defineConfig({
         'react-markdown',
         'react-syntax-highlighter',
         'remark-gfm',
+        'quill',
       ],
       input: {
         index: './packages/components/index.ts',

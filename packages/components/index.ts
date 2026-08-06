@@ -4,6 +4,7 @@ export { LinkPreview as ZaLinkPreview, LinkPreviewDemo as ZaLinkPreviewDemo } fr
 export { Markdown as ZaMarkdown, MarkdownDemo as ZaMarkdownDemo } from './Markdown'
 export { Marquee as ZaMarquee, MarqueeDemo as ZaMarqueeDemo } from './Marquee'
 export { PatternBg as ZaPatternBg, PatternBgDemo as ZaPatternBgDemo } from './PatternBg'
+export { RichTextEditor as ZaRichTextEditor, defaultToolbar as ZaRichTextEditorDefaultToolbar, RichTextEditorDemo as ZaRichTextEditorDemo } from './RichTextEditor'
 export { ShinyText as ZaShinyText, ShinyTextDemo as ZaShinyTextDemo } from './ShinyText'
 export { SliderCaptcha as ZaSliderCaptcha, SliderCaptchaDemo as ZaSliderCaptchaDemo } from './SliderCaptcha'
 export { SparklesText as ZaSparklesText, SparklesTextDemo as ZaSparklesTextDemo } from './SparklesText'

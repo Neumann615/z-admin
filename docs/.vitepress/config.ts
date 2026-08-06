@@ -76,6 +76,7 @@ export default defineConfig({
             { text: 'ZaMarkdown Markdown 渲染', link: '/components/z-markdown' },
             { text: 'ZaMarquee 跑马灯', link: '/components/z-marquee' },
             { text: 'ZaPatternBg 图案背景', link: '/components/z-pattern-bg' },
+            { text: 'ZaRichTextEditor 富文本编辑器', link: '/components/z-rich-text-editor' },
             { text: 'ZaShinyText 流光文字', link: '/components/z-shiny-text' },
             { text: 'ZaSliderCaptcha 滑块验证码', link: '/components/z-slider-captcha' },
             { text: 'ZaSparklesText 闪烁文字', link: '/components/z-sparkles-text' },

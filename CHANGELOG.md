@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-07
+
+- ✨ **新增富文本编辑器组件**（`RichTextEditor/`、`packages/components`）：基于 Quill 2 的轻量级编辑器，支持受控/非受控、自定义工具栏、只读模式，样式接入 antd 主题变量自动适配明暗模式
+
 ## 2026-08-05
 
 - ✨ **动态标题接入配置项**（`Layout.tsx`）：`isEnableDynamicTitle` 开关控制标题是否随路由动态更新，关闭时固定为应用名称
