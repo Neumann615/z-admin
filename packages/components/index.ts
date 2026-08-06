@@ -1,5 +1,5 @@
 export { Icon as ZaIcon, IconPicker as ZaIconPicker, IconPickerDemo as ZaIconPickerDemo } from './IconPicker'
-export { Iframe as ZaIframe } from './Iframe'
+export { Iframe as ZaIframe, IframeDemo as ZaIframeDemo } from './Iframe'
 export { LinkPreview as ZaLinkPreview, LinkPreviewDemo as ZaLinkPreviewDemo } from './LinkPreview'
 export { Markdown as ZaMarkdown, MarkdownDemo as ZaMarkdownDemo } from './Markdown'
 export { Marquee as ZaMarquee, MarqueeDemo as ZaMarqueeDemo } from './Marquee'

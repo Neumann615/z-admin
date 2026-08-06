@@ -3,6 +3,8 @@
 ## 2026-08-07
 
 - ✨ **新增富文本编辑器组件**（`RichTextEditor/`、`packages/components`）：基于 Quill 2 的轻量级编辑器，支持受控/非受控、自定义工具栏、只读模式，样式接入 antd 主题变量自动适配明暗模式
+- ✨ **新增 Iframe 演示组件**（`IframeDemo.tsx`、`iframe.tsx`）：网址切换 + iframe 嵌入预览，注册 `ZaIframeDemo` 导出
+- 🔧 **Demo 边框统一去除**（9 个 `*Demo.tsx`）：移除演示组件外层 wrapper 边框
 
 ## 2026-08-05
 

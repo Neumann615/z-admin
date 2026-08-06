@@ -16,7 +16,6 @@ const useStyles = createStyles(({ token }) => ({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: token.colorBgBase,
-    border: `1px solid ${token.colorBorderSecondary}`,
   },
   header: {
     'backgroundColor': token.colorBgBase,
