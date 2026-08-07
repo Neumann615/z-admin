@@ -1,20 +1,25 @@
 import {
   BgColorsOutlined,
-  BulbOutlined,
   EyeOutlined,
   LayoutOutlined,
   MenuOutlined,
 } from '@ant-design/icons'
 import { useLayoutSetting } from '@zealous-admin/layout/index'
-import { Button, Card, Col, Row, Tag, Typography } from 'antd'
-import { createStyles, useTheme } from 'antd-style'
+import { Button, Card, Col, Row, Typography } from 'antd'
+import { createStyles } from 'antd-style'
 
 const { Text } = Typography
 
 const useStyles = createStyles(({ token, css }) => ({
+  wrapper: css`
+    width: 100%;
+    height: 100%;
+    background-color: ${token.colorBgBase};
+    padding: ${token.paddingLG}px;
+  `,
   container: css`
     padding: ${token.paddingLG}px;
-    max-width: 960px;
+    max-width: 1080px;
     margin: 0 auto;
   `,
 
@@ -33,7 +38,7 @@ const useStyles = createStyles(({ token, css }) => ({
   title: css`
     font-size: ${token.fontSizeHeading2}px;
     font-weight: ${token.fontWeightStrong};
-    margin: 0 0 ${token.marginXS}px;
+    margin: 0 0 ${token.margin}px;
     color: ${token.colorTextHeading};
   `,
 
@@ -50,7 +55,7 @@ const useStyles = createStyles(({ token, css }) => ({
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: ${token.marginMD}px;
+    margin-bottom: ${token.margin}px;
     background-color: ${token.colorPrimaryBg};
     transition: background-color 0.3s;
   `,
@@ -61,18 +66,17 @@ const useStyles = createStyles(({ token, css }) => ({
   `,
 
   cardContent: css`
-    line-height: 1.6;
+    line-height: 1.4;
   `,
 
   cardTitle: css`
-    font-size: ${token.fontSize}px;
+    font-size: ${token.fontSizeHeading5}px;
     font-weight: ${token.fontWeightStrong};
     color: ${token.colorText};
-    margin: 0 0 ${token.marginXS}px;
+    margin-bottom: ${token.marginXS}px;
   `,
 
   cardDesc: css`
-    margin: 0;
     font-size: ${token.fontSizeSM}px;
     color: ${token.colorTextSecondary};
   `,
@@ -87,42 +91,37 @@ const FEATURES = [
 
 export default function Style() {
   const { styles } = useStyles()
-  const theme = useTheme()
   const { randomStyle } = useLayoutSetting()
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <Tag
-          icon={<BulbOutlined style={{ fontSize: theme.fontSizeSM, color: theme.colorPrimary }} />}
-          className={styles.headerTag}
-        >
-          风格实验室
-        </Tag>
-        <h1 className={styles.title}>随机切换风格</h1>
-        <p className={styles.description}>
-          一键体验框架的所有视觉风格组合，包括主题配色、菜单模式、圆角样式等
-        </p>
-        <Button type="primary" size="large" onClick={randomStyle}>
-          立即切换
-        </Button>
-      </div>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>随机切换风格</h1>
+          <p className={styles.description}>
+            一键体验框架的所有视觉风格组合，包括主题配色、菜单模式、圆角样式等
+          </p>
+          <Button type="primary" size="large" onClick={randomStyle}>
+            立即切换
+          </Button>
+        </div>
 
-      <Row gutter={[16, 16]}>
-        {FEATURES.map(f => (
-          <Col key={f.title} xs={24} sm={12} lg={6}>
-            <Card hoverable styles={{ body: { padding: 20 } }}>
-              <div className={styles.cardContent}>
-                <div className={styles.iconBox}>
-                  <span className={styles.iconBoxIcon}>{f.icon}</span>
+        <Row gutter={[16, 16]}>
+          {FEATURES.map(f => (
+            <Col key={f.title} xs={24} sm={12} lg={12}>
+              <Card styles={{ body: { padding: 20 } }}>
+                <div className={styles.cardContent}>
+                  <div className={styles.iconBox}>
+                    <span className={styles.iconBoxIcon}>{f.icon}</span>
+                  </div>
+                  <h3 className={styles.cardTitle}>{f.title}</h3>
+                  <Text className={styles.cardDesc}>{f.desc}</Text>
                 </div>
-                <h3 className={styles.cardTitle}>{f.title}</h3>
-                <Text className={styles.cardDesc}>{f.desc}</Text>
-              </div>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </div>
     </div>
   )
 }

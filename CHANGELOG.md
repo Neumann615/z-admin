@@ -6,6 +6,8 @@
 - ✨ **新增 Iframe 演示组件**（`IframeDemo.tsx`、`iframe.tsx`）：网址切换 + iframe 嵌入预览，注册 `ZaIframeDemo` 导出
 - 🔧 **Demo 边框统一去除**（9 个 `*Demo.tsx`）：移除演示组件外层 wrapper 边框
 - ✨ **新增签名板组件**（`SignaturePad/`）：canvas 实现手写签名，支持重签、生成图片、下载图片，接入 antd 主题 token、高 DPI 适配、中点连续法平滑笔迹
+- ✨ **新增路由传参示例**（`route-params/`）：演示页面间通过 URL 参数传递数据，A 页面使用 `openTab` 跳转并携带用户信息，B 页面通过 `useSearchParams` 读取参数
+- 🔧 **风格实验室页面重构**（`style.tsx`）：布局调整为 wrapper + container 双层结构，卡片改为 2 列布局，移除 Tag 组件，优化间距和字号
 
 ## 2026-08-05
 
