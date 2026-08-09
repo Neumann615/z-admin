@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-09
+
+- 📝 **文档同步更新**（`README.md`、`docs/`）：组件数量更新为 12 个，新增 `ZaSignaturePad` 文档页与侧边栏入口，README 目录/组件表格移除已不存在的 `QrCode` 并补全 `RichTextEditor`、`SignaturePad`
+
 ## 2026-08-07
 
 - ✨ **新增富文本编辑器组件**（`RichTextEditor/`、`packages/components`）：基于 Quill 2 的轻量级编辑器，支持受控/非受控、自定义工具栏、只读模式，样式接入 antd 主题变量自动适配明暗模式

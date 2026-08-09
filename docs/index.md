@@ -41,8 +41,8 @@ features:
     details: 拖拽排序、右键菜单、固定标签、图标激活态切换，三种风格。
     link: /layout/tab-bar
   - icon: 🧩
-    title: 10 个业务组件
-    details: 图标选择器 · Iframe 外链 · 链接预览 · Markdown · 跑马灯 · 图案背景 · 流光文字 · 滑块验证码 · 闪烁文字
+    title: 12 个业务组件
+    details: 图标选择器 · 富文本编辑器 · 签名板 · Iframe 外链 · 链接预览 · Markdown · 跑马灯 · 滑块验证码
     link: /components/
   - icon: 🧠
     title: 页面 KeepAlive

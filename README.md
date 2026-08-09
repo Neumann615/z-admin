@@ -9,7 +9,7 @@
 - 🔐 **自包含权限体系** — 登录/登出/用户信息封装在 layout 包，401 过期自动分流，HTTP 拦截器内置 token 注入
 - 🔧 **可视化配置面板** — 50+ 配置项实时预览，风格实验室一键随机切换，支持复制导出为 TypeScript 代码
 - 🏷️ **多标签页导航** — 拖拽排序、右键菜单、固定标签、图标激活态切换
-- 🧩 **10 个业务组件** — 图标选择器（32 个图标库）、Iframe 外链、链接预览、Markdown 渲染、跑马灯、图案背景、流光文字、滑块验证码等
+- 🧩 **12 个业务组件** — 图标选择器（32 个图标库）、Iframe 外链、链接预览、Markdown 渲染、富文本编辑器、签名板、跑马灯、图案背景、流光文字、滑块验证码等
 - 🧠 **页面 KeepAlive** — 双层渲染架构，缓存页保持组件状态，支持外部配置缓存列表
 - 🗄️ **内置后端服务** — Express + SQLite，用户/角色/菜单/字典完整 CRUD，JWT 认证
 
@@ -62,10 +62,14 @@ zealous-admin/
 │           │   ├── components/   #   组件演示页
 │           │   ├── func/         #   功能演示（烟花 / 最大化 / 登录过期）
 │           │   ├── breadcrumb/   #   面包屑导航示例
+│           │   ├── center-layout/#   居中布局演示
+│           │   ├── link/         #   官网外链演示
 │           │   ├── nav/          #   多级导航示例
 │           │   ├── menu-active/  #   菜单图标激活态示例
+│           │   ├── route-params/ #   路由传参示例
 │           │   ├── keepalive.tsx #   页面保活演示
-│           │   └── style.tsx     #   风格实验室
+│           │   ├── style.tsx     #   风格实验室
+│           │   └── theme-preview.tsx # 主题预览
 │           ├── system/           # 系统管理页
 │           │   ├── admin.tsx     #   用户管理
 │           │   ├── role.tsx      #   角色管理
@@ -121,8 +125,9 @@ zealous-admin/
 │   │   ├── Markdown/             #   Markdown 渲染
 │   │   ├── Marquee/              #   跑马灯滚动
 │   │   ├── PatternBg/            #   图案背景（grid / dot）
-│   │   ├── QrCode/               #   二维码生成
+│   │   ├── RichTextEditor/       #   富文本编辑器（Quill）
 │   │   ├── ShinyText/            #   流光文字动效
+│   │   ├── SignaturePad/         #   手写签名板
 │   │   ├── SliderCaptcha/        #   滑块验证码
 │   │   └── SparklesText/         #   闪烁粒子文字动效
 │   ├── theme/                    # 主题包 @zealous-admin/theme
@@ -201,7 +206,7 @@ zealous-admin/
 
 ### @zealous-admin/components
 
-10 个通用业务组件：
+12 个通用业务组件：
 
 | 组件 | 说明 |
 |------|------|
@@ -211,8 +216,9 @@ zealous-admin/
 | `ZaMarkdown` | Markdown 渲染组件 |
 | `ZaMarquee` | 跑马灯 / 无限滚动 |
 | `ZaPatternBg` | 图案背景（grid / dot） |
-| `ZaQrCode` | 二维码生成 |
+| `ZaRichTextEditor` | Quill 富文本编辑器，支持自定义工具栏 / 只读 |
 | `ZaShinyText` | 流光文字动效 |
+| `ZaSignaturePad` | 手写签名板，支持生成 / 下载图片 |
 | `ZaSliderCaptcha` | 滑块验证码 |
 | `ZaSparklesText` | 闪烁粒子文字动效 |
 

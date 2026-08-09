@@ -78,6 +78,7 @@ export default defineConfig({
             { text: 'ZaPatternBg 图案背景', link: '/components/z-pattern-bg' },
             { text: 'ZaRichTextEditor 富文本编辑器', link: '/components/z-rich-text-editor' },
             { text: 'ZaShinyText 流光文字', link: '/components/z-shiny-text' },
+            { text: 'ZaSignaturePad 签名板', link: '/components/z-signature-pad' },
             { text: 'ZaSliderCaptcha 滑块验证码', link: '/components/z-slider-captcha' },
             { text: 'ZaSparklesText 闪烁文字', link: '/components/z-sparkles-text' },
           ],

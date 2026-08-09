@@ -17,7 +17,7 @@ zealous-admin 是一个基于 **React 19 + Vite 8 + Ant Design 6** 构建的现�
 |------|------|
 | `@zealous-admin/layout` | 布局核心：21 个组件、7 个 Store、7 个 Hooks、HTTP 实例、用户/权限体系 |
 | `@zealous-admin/theme` | 8 套主题配置 |
-| `@zealous-admin/components` | 10 个业务组件：图标选择器、Iframe、链接预览、Markdown、跑马灯等 |
+| `@zealous-admin/components` | 12 个业务组件：图标选择器、富文本编辑器、签名板、Iframe、链接预览、Markdown 等 |
 | `@zealous-admin/utils` | 通用工具函数：data / env / file / parse / time 五大模块 |
 
 ## 技术栈
