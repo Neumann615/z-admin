@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-11
+
+- ✨ **新增个人信息弹窗**（`ProfileModal.tsx`、`UserInfo.tsx`）：个人资料展示 + 修改密码功能，从用户头像菜单「用户信息」触发，弹窗样式对齐配置面板（无内边距、无关闭按钮、body 内滚动）
+- 🔧 **修改密码接口规范化**（`admin.ts`）：响应改为标准 `success/failed` 格式，身份改用认证 token 而非信任 body
+
 ## 2026-08-09
 
 - 📝 **文档同步更新**（`README.md`、`docs/`）：组件数量更新为 12 个，新增 `ZaSignaturePad` 文档页与侧边栏入口，README 目录/组件表格移除已不存在的 `QrCode` 并补全 `RichTextEditor`、`SignaturePad`

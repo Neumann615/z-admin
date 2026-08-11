@@ -2,10 +2,10 @@ import { HomeFilled, LogoutOutlined, RightOutlined, SettingFilled, ToolFilled } 
 import { App, Avatar, Divider, Popover } from 'antd'
 import { createStyles } from 'antd-style'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useLogout } from '../../hooks/useAuth'
 import { useMenuStore, useUserStore } from '../../store/index'
 import { ConfigPanel } from '../ConfigPanel/ConfigPanel'
+import { ProfileModal } from './ProfileModal'
 
 const useStyles = createStyles(({ token }) => ({
   userInfo: {
@@ -106,10 +106,10 @@ const useStyles = createStyles(({ token }) => ({
 export function UserInfo() {
   const { message } = App.useApp()
   const { styles, theme } = useStyles()
-  const navigate = useNavigate()
   const menuStore = useMenuStore()
   const { menuType, subMenuCollapse } = menuStore
   const [configPanelOpen, setConfigPanelOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [loggingOut, setLoggingOut] = useState(false)
   const { logout } = useLogout()
@@ -148,7 +148,13 @@ export function UserInfo() {
       </div>
       <Divider style={{ margin: 0 }} />
       <div className={styles.menuContent}>
-        <div className={styles.menuItem} onClick={() => { setPopoverOpen(false) }}>
+        <div
+          className={styles.menuItem}
+          onClick={() => {
+            setPopoverOpen(false)
+            setProfileOpen(true)
+          }}
+        >
           <span className={styles.menuItemIcon}><HomeFilled /></span>
           <span>用户信息</span>
         </div>
@@ -212,6 +218,10 @@ export function UserInfo() {
         isDev={false}
         open={configPanelOpen}
         onClose={() => setConfigPanelOpen(false)}
+      />
+      <ProfileModal
+        open={profileOpen}
+        onClose={() => setProfileOpen(false)}
       />
     </div>
   )

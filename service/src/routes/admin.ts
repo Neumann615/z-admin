@@ -193,32 +193,37 @@ router.get('/admin/:id', (req, res) => {
 
 router.post('/admin/updatePassword', async (req, res) => {
   try {
-    const { username, oldPassword, newPassword } = req.body
+    const { oldPassword, newPassword } = req.body
 
-    if (!username || !oldPassword || !newPassword) {
-      res.json({ code: -1, message: '参数不合法', data: null })
+    if (!oldPassword || !newPassword) {
+      res.json(failed('旧密码和新密码不能为空'))
       return
     }
 
-    const admin = db.prepare('SELECT * FROM za_admin WHERE username = ?').get(username) as any
+    if (oldPassword === newPassword) {
+      res.json(failed('新密码不能与旧密码相同'))
+      return
+    }
+
+    const admin = db.prepare('SELECT * FROM za_admin WHERE username = ?').get(req.username!) as any
     if (!admin) {
-      res.json({ code: -2, message: '用户不存在', data: null })
+      res.json(failed('用户不存在'))
       return
     }
 
     const valid = await bcrypt.compare(oldPassword, admin.password)
     if (!valid) {
-      res.json({ code: -3, message: '旧密码错误', data: null })
+      res.json(failed('旧密码错误'))
       return
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10)
     db.prepare('UPDATE za_admin SET password = ? WHERE id = ?').run(hashedPassword, admin.id)
 
-    res.json({ code: 1, message: '密码修改成功', data: null })
+    res.json(success(null, '密码修改成功'))
   }
   catch (e: any) {
-    res.json({ code: -1, message: e.message || '密码修改失败', data: null })
+    res.json(failed(e.message || '密码修改失败'))
   }
 })
 

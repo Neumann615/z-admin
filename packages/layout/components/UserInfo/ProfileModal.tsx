@@ -1,0 +1,337 @@
+import { LockOutlined, MailOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons'
+import { App, Avatar, Badge, Button, Card, Descriptions, Divider, Form, Input, Modal, Space, Tag, Typography } from 'antd'
+import { createStyles } from 'antd-style'
+import { useState } from 'react'
+import { logoutAction } from '../../hooks/useAuth'
+import { useUserStore } from '../../store/index'
+import http from '../../utils/http'
+
+const { Text, Title } = Typography
+
+/** 修改当前登录用户密码 */
+function updatePasswordAPI(data: { oldPassword: string, newPassword: string }) {
+  return http({
+    method: 'POST',
+    url: '/admin/updatePassword',
+    data,
+  })
+}
+
+const useStyles = createStyles(({ token, css }) => {
+  const gradient = `linear-gradient(135deg, ${token.colorPrimary} 0%, ${token.colorPrimaryHover} 100%)`
+
+  return {
+    body: {
+      padding: 0,
+    },
+    resetModal: css`
+      .ant-modal-body {
+        padding: 0px;
+      }
+      .ant-modal-container {
+        padding: 0px;
+      }
+      .ant-card-body {
+        padding: ${token.padding}px;
+      }
+    `,
+    banner: css`
+      position: relative;
+      overflow: hidden;
+      padding: ${token.paddingLG}px ${token.paddingLG}px;
+      background: ${gradient};
+      color: #fff;
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.12);
+      }
+      &::before {
+        width: 220px;
+        height: 220px;
+        right: -60px;
+        top: -90px;
+      }
+      &::after {
+        width: 150px;
+        height: 150px;
+        right: 150px;
+        bottom: -80px;
+      }
+    `,
+    bannerInner: {
+      position: 'relative',
+      zIndex: 1,
+      display: 'flex',
+      alignItems: 'center',
+      gap: token.paddingLG,
+    },
+    avatarWrap: {
+      flexShrink: 0,
+      display: 'flex',
+      padding: 4,
+      borderRadius: '50%',
+      background: 'rgba(255, 255, 255, 0.3)',
+      boxShadow: `0 6px 20px rgba(0, 0, 0, 0.18)`,
+    },
+    bannerInfo: {
+      flex: 1,
+      minWidth: 0,
+    },
+    bannerName: {
+      margin: 0,
+      color: '#fff',
+      fontSize: token.fontSizeHeading3,
+      fontWeight: token.fontWeightStrong,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    },
+    bannerSub: {
+      marginTop: 6,
+      color: 'rgba(255, 255, 255, 0.85)',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 6,
+      fontSize: token.fontSize,
+    },
+    bannerTags: {
+      marginTop: 10,
+    },
+    roleTag: {
+      background: 'rgba(255, 255, 255, 0.2)',
+      borderColor: 'rgba(255, 255, 255, 0.4)',
+      color: '#fff',
+      borderRadius: token.borderRadiusSM,
+    },
+    bannerMeta: {
+      flexShrink: 0,
+      textAlign: 'right',
+      fontSize: token.fontSizeSM,
+    },
+    metaItem: {
+      'display': 'flex',
+      'alignItems': 'center',
+      'justifyContent': 'flex-end',
+      'gap': 6,
+      'color': 'rgba(255, 255, 255, 0.85)',
+      'marginTop': 8,
+      '&:first-child': { marginTop: 0 },
+    },
+    content: {
+      padding: token.padding,
+      display: 'flex',
+      gap: token.padding,
+    },
+    card: {
+      width: '50%',
+      boxShadow: token.boxShadowTertiary,
+      borderRadius: token.borderRadiusLG,
+    },
+    cardTitle: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      fontSize: token.fontSizeLG,
+      fontWeight: token.fontWeightStrong,
+      color: token.colorText,
+    },
+    descLabel: {
+      color: token.colorTextSecondary,
+    },
+    formTip: {
+      marginTop: token.margin,
+      color: token.colorTextTertiary,
+      fontSize: token.fontSizeSM,
+      textAlign: 'center',
+    },
+  }
+})
+
+export interface ProfileModalProps {
+  open: boolean
+  onClose: () => void
+}
+
+export function ProfileModal({ open, onClose }: ProfileModalProps) {
+  const { styles, theme } = useStyles()
+  const { message } = App.useApp()
+  const [form] = Form.useForm()
+  const [submitting, setSubmitting] = useState(false)
+
+  const userInfo = useUserStore(state => state.userInfo)
+  const { username, nickName, email, avatar, roles, status, loginTime } = userInfo
+  const displayName = nickName || username || '未登录'
+  const avatarSrc = avatar || `https://api.dicebear.com/9.x/avataaars-neutral/svg?seed=${username}`
+
+  const handleSubmit = async () => {
+    const values = await form.validateFields()
+    setSubmitting(true)
+    try {
+      await updatePasswordAPI({
+        oldPassword: values.oldPassword,
+        newPassword: values.newPassword,
+      })
+      message.success('密码修改成功，请重新登录')
+      form.resetFields()
+      setTimeout(logoutAction, 1500)
+    }
+    catch {
+      // 错误提示已由 http 拦截器统一处理
+    }
+    finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <Modal
+      className={styles.resetModal}
+      width={880}
+      open={open}
+      onCancel={onClose}
+      closable={false}
+      footer={null}
+      title={null}
+      styles={{ body: { padding: 0 } }}
+    >
+      <div className={styles.body}>
+        <div className={styles.banner}>
+          <div className={styles.bannerInner}>
+            <div className={styles.avatarWrap}>
+              <Avatar size={72} src={avatarSrc} />
+            </div>
+            <div className={styles.bannerInfo}>
+              <Title level={4} className={styles.bannerName}>{displayName}</Title>
+              <div className={styles.bannerSub}>
+                <UserOutlined />
+                <span>
+                  @
+                  {username || '-'}
+                </span>
+                {email && (
+                  <>
+                    <Divider type="vertical" style={{ borderColor: 'rgba(255,255,255,0.4)', margin: '0 4px' }} />
+                    <MailOutlined />
+                    <span>{email}</span>
+                  </>
+                )}
+              </div>
+              <div className={styles.bannerTags}>
+                {roles?.length
+                  ? roles.map(role => <Tag key={role} className={styles.roleTag}>{role}</Tag>)
+                  : <Tag className={styles.roleTag}>普通用户</Tag>}
+              </div>
+            </div>
+            <div className={styles.bannerMeta}>
+              <div className={styles.metaItem}>
+                <Badge status={Number(status) === 1 ? 'success' : 'error'} text={Number(status) === 1 ? '账号正常' : '已禁用'} />
+              </div>
+              <div className={styles.metaItem}>
+                <span>最后登录</span>
+                <span>{loginTime || '-'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.content}>
+          <Card className={styles.card}>
+            <div className={styles.cardTitle}>
+              <SafetyCertificateOutlined style={{ color: theme.colorPrimary }} />
+              个人资料
+            </div>
+            <Divider style={{ margin: '12px 0 16px' }} />
+            <Descriptions column={1} colon={false} size="middle">
+              <Descriptions.Item label={<span className={styles.descLabel}>用户名</span>}>
+                <Space>
+                  <UserOutlined style={{ fontSize: 12 }} />
+                  {username || '-'}
+                </Space>
+              </Descriptions.Item>
+              <Descriptions.Item label={<span className={styles.descLabel}>昵称</span>}>
+                {nickName || '-'}
+              </Descriptions.Item>
+              <Descriptions.Item label={<span className={styles.descLabel}>邮箱</span>}>
+                {email || '-'}
+              </Descriptions.Item>
+              <Descriptions.Item label={<span className={styles.descLabel}>账号状态</span>}>
+                <Badge status={Number(status) === 1 ? 'success' : 'error'} text={Number(status) === 1 ? '启用' : '禁用'} />
+              </Descriptions.Item>
+              <Descriptions.Item label={<span className={styles.descLabel}>角色</span>}>
+                <Space wrap>
+                  {roles?.length
+                    ? roles.map(role => <Tag color="blue" key={role}>{role}</Tag>)
+                    : <Text type="secondary">-</Text>}
+                </Space>
+              </Descriptions.Item>
+              <Descriptions.Item label={<span className={styles.descLabel}>最后登录时间</span>}>
+                {loginTime || '-'}
+              </Descriptions.Item>
+            </Descriptions>
+          </Card>
+          <Card className={styles.card}>
+            <div className={styles.cardTitle}>
+              <LockOutlined style={{ color: theme.colorPrimary }} />
+              修改密码
+            </div>
+            <Divider style={{ margin: '12px 0 16px' }} />
+            <Form form={form} layout="vertical" requiredMark={false} onFinish={handleSubmit}>
+              <Form.Item
+                label="旧密码"
+                name="oldPassword"
+                rules={[{ required: true, message: '请输入旧密码' }]}
+              >
+                <Input.Password prefix={<LockOutlined />} placeholder="请输入当前密码" />
+              </Form.Item>
+              <Form.Item
+                label="新密码"
+                name="newPassword"
+                rules={[
+                  { required: true, message: '请输入新密码' },
+                  { min: 6, max: 20, message: '密码长度为 6-20 位' },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || value !== getFieldValue('oldPassword')) {
+                        return Promise.resolve()
+                      }
+                      return Promise.reject(new Error('新密码不能与旧密码相同'))
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password prefix={<SafetyCertificateOutlined />} placeholder="6-20 位新密码" />
+              </Form.Item>
+              <Form.Item
+                label="确认新密码"
+                name="confirmPassword"
+                dependencies={['newPassword']}
+                rules={[
+                  { required: true, message: '请再次输入新密码' },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('newPassword') === value) {
+                        return Promise.resolve()
+                      }
+                      return Promise.reject(new Error('两次输入的密码不一致'))
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password prefix={<UserOutlined />} placeholder="请再次输入新密码" />
+              </Form.Item>
+              <Form.Item style={{ marginBottom: 0 }}>
+                <Button type="primary" htmlType="submit" block loading={submitting}>
+                  确认修改
+                </Button>
+              </Form.Item>
+              <div className={styles.formTip}>修改成功后需重新登录，请妥善保管新密码</div>
+            </Form>
+          </Card>
+        </div>
+      </div>
+    </Modal>
+  )
+}
