@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-12
+
+- ✨ **新增快捷键弹窗**（`ShortcutsModal.tsx`、`UserInfo.tsx`）：两列网格展示全局/主导航/标签栏/页面快捷键，样式对齐配置面板（`rootClassName` 全局样式 + 内层 `content` 包裹）
+
 ## 2026-08-11
 
 - ✨ **新增个人信息弹窗**（`ProfileModal.tsx`、`UserInfo.tsx`）：个人资料展示 + 修改密码功能，从用户头像菜单「用户信息」触发，弹窗样式对齐配置面板（无内边距、无关闭按钮、body 内滚动）

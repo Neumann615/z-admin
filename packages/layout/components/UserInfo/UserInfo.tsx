@@ -6,6 +6,7 @@ import { useLogout } from '../../hooks/useAuth'
 import { useMenuStore, useUserStore } from '../../store/index'
 import { ConfigPanel } from '../ConfigPanel/ConfigPanel'
 import { ProfileModal } from './ProfileModal'
+import { ShortcutsModal } from './ShortcutsModal'
 
 const useStyles = createStyles(({ token }) => ({
   userInfo: {
@@ -110,6 +111,7 @@ export function UserInfo() {
   const { menuType, subMenuCollapse } = menuStore
   const [configPanelOpen, setConfigPanelOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
+  const [shortcutsOpen, setShortcutsOpen] = useState(false)
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [loggingOut, setLoggingOut] = useState(false)
   const { logout } = useLogout()
@@ -171,7 +173,13 @@ export function UserInfo() {
       </div>
       <Divider style={{ margin: 0 }} />
       <div className={styles.menuContent}>
-        <div className={styles.menuItem} onClick={() => { }}>
+        <div
+          className={styles.menuItem}
+          onClick={() => {
+            setPopoverOpen(false)
+            setShortcutsOpen(true)
+          }}
+        >
           <span className={styles.menuItemIcon}><ToolFilled /></span>
           <span>快捷键</span>
         </div>
@@ -222,6 +230,10 @@ export function UserInfo() {
       <ProfileModal
         open={profileOpen}
         onClose={() => setProfileOpen(false)}
+      />
+      <ShortcutsModal
+        open={shortcutsOpen}
+        onClose={() => setShortcutsOpen(false)}
       />
     </div>
   )
