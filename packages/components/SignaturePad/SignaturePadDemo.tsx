@@ -2,6 +2,7 @@ import type { SignaturePadRef } from './SignaturePad'
 import { App, Button, Card, Col, ColorPicker, Form, Image, InputNumber, Modal, Row, Space } from 'antd'
 import { createStyles } from 'antd-style'
 import { useRef, useState } from 'react'
+import { useT } from '../locale'
 import { SignaturePad } from './SignaturePad'
 
 const useStyles = createStyles(({ token }) => ({
@@ -62,6 +63,7 @@ const useStyles = createStyles(({ token }) => ({
 export function SignaturePadDemo() {
   const { styles } = useStyles()
   const { message } = App.useApp()
+  const t = useT()
   const sigRef = useRef<SignaturePadRef>(null)
   const [penColor, setPenColor] = useState<string | undefined>(undefined)
   const [bgColor, setBgColor] = useState<string | undefined>(undefined)
@@ -73,11 +75,11 @@ export function SignaturePadDemo() {
   const handleGenerate = () => {
     const url = sigRef.current?.getDataURL()
     if (!url) {
-      message.warning('请先完成签名')
+      message.warning(t('component.signaturePad.signRequired'))
       return
     }
     setPreviewUrl(url)
-    message.success('签名图片已生成')
+    message.success(t('component.demo.signaturePad.generated'))
   }
 
   const handleDownload = () => {
@@ -92,7 +94,7 @@ export function SignaturePadDemo() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h2>签名板</h2>
+        <h2>{t('component.demo.signaturePad.title')}</h2>
         <p>ZaSignaturePad</p>
       </div>
 
@@ -104,7 +106,7 @@ export function SignaturePadDemo() {
               <Form layout="vertical">
                 <Row gutter={16}>
                   <Col span={12}>
-                    <Form.Item label="宽度 (px)">
+                    <Form.Item label={t('component.demo.common.width')}>
                       <InputNumber
                         value={width}
                         onChange={v => setWidth(v || 500)}
@@ -116,7 +118,7 @@ export function SignaturePadDemo() {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="高度 (px)">
+                    <Form.Item label={t('component.demo.common.height')}>
                       <InputNumber
                         value={height}
                         onChange={v => setHeight(v || 265)}
@@ -128,7 +130,7 @@ export function SignaturePadDemo() {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="画笔粗细 (px)">
+                    <Form.Item label={t('component.demo.signaturePad.penWidth')}>
                       <InputNumber
                         value={penWidth}
                         onChange={v => setPenWidth(v || 2.5)}
@@ -140,7 +142,7 @@ export function SignaturePadDemo() {
                     </Form.Item>
                   </Col>
                 </Row>
-                <Form.Item label="画笔颜色">
+                <Form.Item label={t('component.demo.signaturePad.penColor')}>
                   <ColorPicker
                     value={penColor}
                     onChange={c => setPenColor(c.toHexString())}
@@ -149,7 +151,7 @@ export function SignaturePadDemo() {
                     onClear={() => setPenColor(undefined)}
                   />
                 </Form.Item>
-                <Form.Item label="背景颜色">
+                <Form.Item label={t('component.demo.signaturePad.bgColor')}>
                   <ColorPicker
                     value={bgColor}
                     onChange={c => setBgColor(c.toHexString())}
@@ -180,9 +182,9 @@ export function SignaturePadDemo() {
 
               <div className={styles.toolbar}>
                 <Space>
-                  <Button onClick={handleClear}>重签</Button>
-                  <Button type="primary" onClick={handleGenerate}>生成图片</Button>
-                  <Button type="primary" onClick={handleDownload}>下载图片</Button>
+                  <Button onClick={handleClear}>{t('component.demo.signaturePad.reSign')}</Button>
+                  <Button type="primary" onClick={handleGenerate}>{t('component.demo.signaturePad.generate')}</Button>
+                  <Button type="primary" onClick={handleDownload}>{t('component.demo.signaturePad.download')}</Button>
                 </Space>
               </div>
             </Col>
@@ -191,15 +193,15 @@ export function SignaturePadDemo() {
       </div>
 
       <Modal
-        title="签名预览"
+        title={t('component.demo.signaturePad.previewTitle')}
         open={!!previewUrl}
         onCancel={() => setPreviewUrl(undefined)}
         footer={[
           <Button key="download" type="primary" onClick={handleDownload}>
-            下载图片
+            {t('component.demo.signaturePad.download')}
           </Button>,
           <Button key="close" onClick={() => setPreviewUrl(undefined)}>
-            关闭
+            {t('component.demo.signaturePad.close')}
           </Button>,
         ]}
       >
@@ -207,7 +209,7 @@ export function SignaturePadDemo() {
           <div className={styles.modalImage}>
             <Image
               src={previewUrl}
-              alt="签名预览"
+              alt={t('component.demo.signaturePad.previewTitle')}
               width={width}
               style={{ border: `1px solid #f0f0f0`, borderRadius: 8 }}
             />

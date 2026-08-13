@@ -3,6 +3,7 @@ import { createStyles } from 'antd-style'
 import createPuzzle from 'create-puzzle'
 import RcSliderCaptcha from 'rc-slider-captcha'
 import { useMemo, useRef } from 'react'
+import { useT } from '../locale'
 // @ts-ignore
 import bg1 from './bg1.jpg'
 // @ts-ignore
@@ -65,14 +66,15 @@ export function SliderCaptcha({
   const { styles, cx } = useStyles()
   const actionRef = useRef<ActionType>()
   const offsetXRef = useRef(0)
+  const t = useT()
 
   const defaultTipText = useMemo(() => ({
-    default: '请按住滑块，拖动到最右边',
-    moving: '请按住滑块，拖动到最右边',
-    error: '验证失败，请重新操作',
-    success: '验证成功',
+    default: t('component.sliderCaptcha.tip.default'),
+    moving: t('component.sliderCaptcha.tip.moving'),
+    error: t('component.sliderCaptcha.tip.error'),
+    success: t('component.sliderCaptcha.tip.success'),
     ...tipText,
-  }), [tipText])
+  }), [t, tipText])
 
   const availableImages = useMemo(() => {
     if (!bgImages) {
@@ -92,7 +94,7 @@ export function SliderCaptcha({
           onVerify?.(true)
           return Promise.resolve()
         }
-        throw new Error('验证失败')
+        throw new Error(t('component.sliderCaptcha.verifyFailed'))
       }
       else {
         // 拼图验证：检查位置是否匹配
@@ -100,7 +102,7 @@ export function SliderCaptcha({
           onVerify?.(true)
           return Promise.resolve()
         }
-        throw new Error('验证失败')
+        throw new Error(t('component.sliderCaptcha.verifyFailed'))
       }
     }
     catch (error) {

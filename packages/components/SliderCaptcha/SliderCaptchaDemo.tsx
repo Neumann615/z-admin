@@ -9,22 +9,11 @@ import {
   Select,
 } from 'antd'
 import { createStyles } from 'antd-style'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useT } from '../locale'
 import { SliderCaptcha } from './SliderCaptcha'
 
 type CaptchaType = 'slider' | 'embed' | 'float'
-
-const typeOptions = [
-  { label: '纯滑块验证', value: 'slider' },
-  { label: '拼图验证', value: 'embed' },
-  { label: '触发式拼图验证', value: 'float' },
-]
-
-const typeLabels: Record<CaptchaType, string> = {
-  slider: '纯滑块验证',
-  embed: '拼图验证',
-  float: '触发式拼图验证',
-}
 
 const useStyles = createStyles(({ token }) => ({
   wrapper: {
@@ -71,21 +60,39 @@ const useStyles = createStyles(({ token }) => ({
 
 export function SliderCaptchaDemo() {
   const { styles } = useStyles()
+  const t = useT()
+  const typeLabels: Record<CaptchaType, string> = {
+    slider: t('component.demo.sliderCaptcha.type.slider'),
+    embed: t('component.demo.sliderCaptcha.type.embed'),
+    float: t('component.demo.sliderCaptcha.type.float'),
+  }
+  const typeOptions = [
+    { label: typeLabels.slider, value: 'slider' },
+    { label: typeLabels.embed, value: 'embed' },
+    { label: typeLabels.float, value: 'float' },
+  ]
   const [captchaType, setCaptchaType] = useState<CaptchaType>('float')
   const [width, setWidth] = useState(384)
   const [height, setHeight] = useState(216)
-  const [defaultTip, setDefaultTip] = useState('请按住滑块，拖动到最右边')
-  const [successTip, setSuccessTip] = useState('验证成功')
-  const [errorTip, setErrorTip] = useState('验证失败，请重新操作')
+  const [defaultTip, setDefaultTip] = useState(() => t('component.demo.sliderCaptcha.defaultTipText'))
+  const [successTip, setSuccessTip] = useState(() => t('component.demo.sliderCaptcha.successTipText'))
+  const [errorTip, setErrorTip] = useState(() => t('component.demo.sliderCaptcha.errorTipText'))
   const [renderKey, setRenderKey] = useState(0)
   const [messageApi, contextHolder] = message.useMessage()
 
+  // 语言切换时重置默认提示文案
+  useEffect(() => {
+    setDefaultTip(t('component.demo.sliderCaptcha.defaultTipText'))
+    setSuccessTip(t('component.demo.sliderCaptcha.successTipText'))
+    setErrorTip(t('component.demo.sliderCaptcha.errorTipText'))
+  }, [t])
+
   const handleVerify = (success: boolean) => {
     if (success) {
-      messageApi.success(`${typeLabels[captchaType]}验证成功`)
+      messageApi.success(t('component.demo.sliderCaptcha.verifySuccess').replace('{type}', typeLabels[captchaType]))
     }
     else {
-      messageApi.error(`${typeLabels[captchaType]}验证失败，请重试`)
+      messageApi.error(t('component.demo.sliderCaptcha.verifyError').replace('{type}', typeLabels[captchaType]))
     }
   }
 
@@ -97,7 +104,7 @@ export function SliderCaptchaDemo() {
     <div className={styles.wrapper}>
       {contextHolder}
       <div className={styles.header}>
-        <h2>滑块验证</h2>
+        <h2>{t('component.demo.sliderCaptcha.title')}</h2>
         <p>ZaSliderCaptcha</p>
       </div>
       <div className={styles.content}>
@@ -106,7 +113,7 @@ export function SliderCaptchaDemo() {
             {/* 左侧：表单配置 */}
             <Col span={12}>
               <Form layout="vertical">
-                <Form.Item label="验证类型">
+                <Form.Item label={t('component.demo.sliderCaptcha.type')}>
                   <Select
                     value={captchaType}
                     onChange={(v) => {
@@ -119,7 +126,7 @@ export function SliderCaptchaDemo() {
                 </Form.Item>
                 <Row gutter={16}>
                   <Col span={12}>
-                    <Form.Item label="背景宽度 (px)">
+                    <Form.Item label={t('component.demo.sliderCaptcha.bgWidth')}>
                       <InputNumber
                         value={width}
                         onChange={(v) => {
@@ -133,7 +140,7 @@ export function SliderCaptchaDemo() {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="背景高度 (px)">
+                    <Form.Item label={t('component.demo.sliderCaptcha.bgHeight')}>
                       <InputNumber
                         value={height}
                         onChange={(v) => {
@@ -147,7 +154,7 @@ export function SliderCaptchaDemo() {
                     </Form.Item>
                   </Col>
                 </Row>
-                <Form.Item label="默认提示">
+                <Form.Item label={t('component.demo.sliderCaptcha.defaultTip')}>
                   <Input
                     value={defaultTip}
                     onChange={(e) => {
@@ -156,7 +163,7 @@ export function SliderCaptchaDemo() {
                     }}
                   />
                 </Form.Item>
-                <Form.Item label="成功提示">
+                <Form.Item label={t('component.demo.sliderCaptcha.successTip')}>
                   <Input
                     value={successTip}
                     onChange={(e) => {
@@ -165,7 +172,7 @@ export function SliderCaptchaDemo() {
                     }}
                   />
                 </Form.Item>
-                <Form.Item label="失败提示">
+                <Form.Item label={t('component.demo.sliderCaptcha.errorTip')}>
                   <Input
                     value={errorTip}
                     onChange={(e) => {

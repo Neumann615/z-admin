@@ -1,5 +1,6 @@
 import type { LayoutConfig, MenuData } from '../types/config'
-import type { I18nMessages } from '../utils/i18n'
+import { messages } from '@zealous-admin/locales/index'
+import { ZaConfigProvider } from '@zealous-admin/components/index'
 import { theme as antdTheme, App, ConfigProvider } from 'antd'
 import { StyleProvider } from 'antd-style'
 import zhCN from 'antd/locale/zh_CN'
@@ -26,8 +27,6 @@ interface AppLayoutProps {
   menuData?: MenuData
   defaultSetting?: LayoutConfig
   cachedPages?: string[]
-  /** 国际化文案映射：{ [locale]: { [菜单key]: 名称 } }，菜单多语言由用户应用侧维护 */
-  messages?: I18nMessages
 }
 
 export function LayoutProvider({
@@ -35,7 +34,6 @@ export function LayoutProvider({
   menuData,
   defaultSetting,
   cachedPages,
-  messages,
 }: AppLayoutProps) {
   const themeStore = useThemeStore()
   const menuStore = useMenuStore()
@@ -101,23 +99,16 @@ export function LayoutProvider({
       usePageStore.setState({ ...defaultSetting.page })
       useTopBarStore.setState({ ...defaultSetting.topBar })
       useThemeStore.setState({ ...defaultSetting.theme })
-      if (defaultSetting.i18n) {
-        useI18nStore.setState({ ...defaultSetting.i18n })
+      if (defaultSetting.topBar.toolbar.i18n) {
+        useI18nStore.setState({ ...defaultSetting.topBar.toolbar.i18n })
       }
     }
   }, [])
 
-  // 同步外部传入的国际化文案映射
-  useEffect(() => {
-    if (messages) {
-      useI18nStore.getState().setMessages(messages)
-    }
-  }, [messages])
-
   // 按当前语言解析菜单名称（集中处理，下游 Menu/Search/Breadcrumb 自动同步）
   const resolvedMenuData = useMemo(
     () => resolveMenuLabels(menuData || [], messages, locale),
-    [menuData, messages, locale],
+    [menuData, locale],
   )
 
   // menuData 变化时更新菜单数据（登录后 menus 从空变为有值时触发）
@@ -141,7 +132,7 @@ export function LayoutProvider({
   // 语言/菜单变化时回填标签栏与面包屑的标题快照
   useEffect(() => {
     const topBarStore = useTopBarStore.getState()
-    const homeTitle = messages?.[locale]?.['/'] ?? appStore.homePage.title
+    const homeTitle = messages[locale]?.['/'] ?? appStore.homePage.title
 
     const resolveTitle = (key: string): string => {
       if (key === '/')
@@ -175,7 +166,7 @@ export function LayoutProvider({
       })
       topBarStore.setBreadcrumbList(breadcrumbList)
     }
-  }, [resolvedMenuData, locale, messages, appStore.homePage.title])
+  }, [resolvedMenuData, locale, appStore.homePage.title])
 
   // locale 变化时：同步 html lang 属性 + 懒加载 antd 语言包
   useEffect(() => {
@@ -220,7 +211,9 @@ export function LayoutProvider({
       >
         <App>
           <AppMessageProvider>
-            <Suspense fallback={<p>Loading...</p>}>{children}</Suspense>
+            <ZaConfigProvider locale={locale}>
+              <Suspense fallback={<p>Loading...</p>}>{children}</Suspense>
+            </ZaConfigProvider>
           </AppMessageProvider>
         </App>
       </ConfigProvider>

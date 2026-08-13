@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-14
+
+- ✨ **新增 locales 包统一国际化文案**（`packages/locales/`）：整合 layout 与示例应用两处文案，全量中英文案统一从 `@zealous-admin/locales` 读取，`App.tsx` 移除外部 messages 注入，补齐 13 个遗漏菜单路径
+- ✨ **components 包接入国际化**（`locale/`、4 个组件、11 个 demo）：新增 `ZaConfigProvider` Context 统一注入，主组件与演示页文案全部 `useT` 动态翻译
+- 🔧 **配置面板国际化与 i18n 配置迁移**（`ConfigPanel.tsx`、`data.ts`、`config.d.ts`）：选项列表改用 `labelKey` 动态翻译，i18n 配置收拢至 `topBar.toolbar.i18n`
+
 ## 2026-08-13
 
 - ✨ **新增国际化功能**（`store/i18n.ts`、`locales/`、`LayoutProvider.tsx`、`Toolbar.tsx`）：`useI18nStore` 集中管理语言状态并持久化，antd locale 动态懒加载，菜单/标签页/面包屑按语言解析，工具栏语言切换器，layout 内置中英文案替换硬编码

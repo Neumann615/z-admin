@@ -1,30 +1,10 @@
 import type { ToolbarConfig } from 'quill/modules/toolbar'
 import { Card, Col, Form, Input, Row, Select, Switch } from 'antd'
 import { createStyles } from 'antd-style'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useT } from '../locale'
 import { RichTextEditor } from './RichTextEditor'
 import { defaultToolbar } from './toolbar'
-
-const initialContent = `
-<h2>欢迎使用富文本编辑器</h2>
-<p>基于 <strong>Quill</strong> 的轻量级编辑器，样式已接入 <strong>antd 主题变量</strong>，可随主题自动适配<em>明暗模式</em>。</p>
-<p>支持<strong>加粗</strong>、<em>斜体</em>、<u>下划线</u>、<s>删除线</s> 等常用格式。</p>
-<h3>列表与对齐</h3>
-<ul>
-  <li>无序列表第一项</li>
-  <li>无序列表第二项</li>
-</ul>
-<ol>
-  <li>有序列表第一项</li>
-  <li>有序列表第二项</li>
-</ol>
-<p style="text-align: center">这段文字居中显示。</p>
-<blockquote>好的工具应该让复杂的事情变简单。</blockquote>
-<pre class="ql-syntax" spellcheck="false">import Quill from 'quill'
-
-const editor = new Quill('#editor', { theme: 'snow' })</pre>
-<p>可以插入 <a href="https://quilljs.com" target="_blank">链接</a> 与图片。试试编辑上方内容，观察下方输出如何实时变化。</p>
-`
 
 const simpleToolbar: ToolbarConfig = [
   ['bold', 'italic', 'underline'],
@@ -113,11 +93,18 @@ const useStyles = createStyles(({ token }) => ({
 
 export function RichTextEditorDemo() {
   const { styles } = useStyles()
-  const [html, setHtml] = useState(initialContent)
+  const t = useT()
+  const [html, setHtml] = useState(() => t('component.demo.richTextEditor.initialContent'))
   const [height, setHeight] = useState<number | 'auto'>(280)
-  const [placeholder, setPlaceholder] = useState('请输入内容...')
+  const [placeholder, setPlaceholder] = useState(() => t('component.richTextEditor.placeholder'))
   const [readOnly, setReadOnly] = useState(false)
   const [toolbarMode, setToolbarMode] = useState<'full' | 'simple' | 'none'>('full')
+
+  // 语言切换时重置初始内容与默认占位提示
+  useEffect(() => {
+    setHtml(t('component.demo.richTextEditor.initialContent'))
+    setPlaceholder(t('component.richTextEditor.placeholder'))
+  }, [t])
 
   const toolbar = toolbarMode === 'full'
     ? defaultToolbar
@@ -128,7 +115,7 @@ export function RichTextEditorDemo() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h2>富文本编辑器</h2>
+        <h2>{t('component.demo.richTextEditor.title')}</h2>
         <p>ZaRichTextEditor</p>
       </div>
       <div className={styles.content}>
@@ -136,21 +123,21 @@ export function RichTextEditorDemo() {
           <Form layout="vertical">
             <Row gutter={16}>
               <Col span={6}>
-                <Form.Item label="工具栏">
+                <Form.Item label={t('component.demo.richTextEditor.toolbar')}>
                   <Select
                     value={toolbarMode}
                     onChange={v => setToolbarMode(v as 'full' | 'simple' | 'none')}
                     options={[
-                      { label: '完整工具栏', value: 'full' },
-                      { label: '简约工具栏', value: 'simple' },
-                      { label: '隐藏工具栏', value: 'none' },
+                      { label: t('component.demo.richTextEditor.toolbarMode.full'), value: 'full' },
+                      { label: t('component.demo.richTextEditor.toolbarMode.simple'), value: 'simple' },
+                      { label: t('component.demo.richTextEditor.toolbarMode.none'), value: 'none' },
                     ]}
                     style={{ width: '100%' }}
                   />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="编辑区高度">
+                <Form.Item label={t('component.demo.richTextEditor.height')}>
                   <Select
                     value={height}
                     onChange={v => setHeight(v as number | 'auto')}
@@ -158,14 +145,14 @@ export function RichTextEditorDemo() {
                       { label: '200px', value: 200 },
                       { label: '280px', value: 280 },
                       { label: '400px', value: 400 },
-                      { label: '自动填满父容器', value: 'auto' },
+                      { label: t('component.demo.richTextEditor.height.auto'), value: 'auto' },
                     ]}
                     style={{ width: '100%' }}
                   />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="占位提示">
+                <Form.Item label={t('component.demo.common.placeholderLabel')}>
                   <Input
                     value={placeholder}
                     onChange={e => setPlaceholder(e.target.value)}
@@ -173,7 +160,7 @@ export function RichTextEditorDemo() {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="只读模式" valuePropName="checked">
+                <Form.Item label={t('component.demo.richTextEditor.readOnly')} valuePropName="checked">
                   <Switch checked={readOnly} onChange={setReadOnly} />
                 </Form.Item>
               </Col>
@@ -193,12 +180,12 @@ export function RichTextEditorDemo() {
         </Card>
         <Row gutter={24}>
           <Col span={12}>
-            <Card title="HTML 源码">
+            <Card title={t('component.demo.richTextEditor.htmlSource')}>
               <pre className={styles.output}>{formatHtml(html)}</pre>
             </Card>
           </Col>
           <Col span={12}>
-            <Card title="渲染效果">
+            <Card title={t('component.demo.richTextEditor.renderEffect')}>
               {/* 只读模式隐藏工具栏，直接展示富文本渲染效果 */}
               <RichTextEditor value={html} readOnly />
             </Card>

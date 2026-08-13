@@ -9,31 +9,8 @@ import {
 } from 'antd'
 import { createStyles } from 'antd-style'
 import { useState } from 'react'
+import { useT } from '../locale'
 import { PatternBg } from './PatternBg'
-
-const patternOptions = [
-  { label: '网格', value: 'grid' },
-  { label: '圆点', value: 'dot' },
-]
-
-const animationOptions = [
-  { label: '向上', value: 'up' },
-  { label: '向下', value: 'down' },
-  { label: '向左', value: 'left' },
-  { label: '向右', value: 'right' },
-  { label: '无', value: 'none' },
-]
-
-const maskOptions = [
-  { label: '全部', value: 'all' },
-  { label: '顶部', value: 'top' },
-  { label: '底部', value: 'bottom' },
-  { label: '左侧', value: 'left' },
-  { label: '右侧', value: 'right' },
-  { label: '上下', value: 'top-bottom' },
-  { label: '左右', value: 'left-right' },
-  { label: '无', value: 'none' },
-]
 
 const useStyles = createStyles(({ token }) => ({
   wrapper: {
@@ -85,6 +62,28 @@ const useStyles = createStyles(({ token }) => ({
 
 export function PatternBgDemo() {
   const { styles } = useStyles()
+  const t = useT()
+  const patternOptions = [
+    { label: t('component.demo.patternBg.pattern.grid'), value: 'grid' },
+    { label: t('component.demo.patternBg.pattern.dot'), value: 'dot' },
+  ]
+  const animationOptions = [
+    { label: t('component.demo.patternBg.animation.up'), value: 'up' },
+    { label: t('component.demo.patternBg.animation.down'), value: 'down' },
+    { label: t('component.demo.patternBg.animation.left'), value: 'left' },
+    { label: t('component.demo.patternBg.animation.right'), value: 'right' },
+    { label: t('component.demo.patternBg.animation.none'), value: 'none' },
+  ]
+  const maskOptions = [
+    { label: t('component.demo.patternBg.mask.all'), value: 'all' },
+    { label: t('component.demo.patternBg.mask.top'), value: 'top' },
+    { label: t('component.demo.patternBg.mask.bottom'), value: 'bottom' },
+    { label: t('component.demo.patternBg.mask.left'), value: 'left' },
+    { label: t('component.demo.patternBg.mask.right'), value: 'right' },
+    { label: t('component.demo.patternBg.mask.topBottom'), value: 'top-bottom' },
+    { label: t('component.demo.patternBg.mask.leftRight'), value: 'left-right' },
+    { label: t('component.demo.patternBg.mask.none'), value: 'none' },
+  ]
   const [pattern, setPattern] = useState<PatternType>('grid')
   const [size, setSize] = useState(24)
   const [animationDirection, setAnimationDirection] = useState<AnimationDirection>('up')
@@ -94,7 +93,7 @@ export function PatternBgDemo() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h2>图案背景</h2>
+        <h2>{t('component.demo.patternBg.title')}</h2>
         <p>ZaPatternBg</p>
       </div>
 
@@ -103,7 +102,7 @@ export function PatternBgDemo() {
           <Form>
             <Row gutter={24}>
               <Col>
-                <Form.Item label="图案类型">
+                <Form.Item label={t('component.demo.patternBg.patternType')}>
                   <Select
                     value={pattern}
                     onChange={v => setPattern(v)}
@@ -113,7 +112,7 @@ export function PatternBgDemo() {
                 </Form.Item>
               </Col>
               <Col>
-                <Form.Item label="图案尺寸 (px)">
+                <Form.Item label={t('component.demo.patternBg.size')}>
                   <InputNumber
                     value={size}
                     onChange={v => setSize(v || 24)}
@@ -124,7 +123,7 @@ export function PatternBgDemo() {
                 </Form.Item>
               </Col>
               <Col>
-                <Form.Item label="透明度">
+                <Form.Item label={t('component.demo.patternBg.opacity')}>
                   <InputNumber
                     value={opacity}
                     onChange={v => setOpacity(v || 0.5)}
@@ -136,7 +135,7 @@ export function PatternBgDemo() {
                 </Form.Item>
               </Col>
               <Col>
-                <Form.Item label="动画方向">
+                <Form.Item label={t('component.demo.patternBg.animationDirection')}>
                   <Select
                     value={animationDirection}
                     onChange={v => setAnimationDirection(v)}
@@ -146,7 +145,7 @@ export function PatternBgDemo() {
                 </Form.Item>
               </Col>
               <Col>
-                <Form.Item label="遮罩方向">
+                <Form.Item label={t('component.demo.patternBg.maskDirection')}>
                   <Select
                     value={maskDirection}
                     onChange={v => setMaskDirection(v)}

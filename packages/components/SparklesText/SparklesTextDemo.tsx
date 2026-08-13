@@ -9,23 +9,12 @@ import {
   Select,
 } from 'antd'
 import { createStyles } from 'antd-style'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useT } from '../locale'
 import { SparklesText } from './SparklesText'
 
 type SparkleShape = 'star' | 'four-point-star' | 'flower'
 type AnimationSpeed = 'fast' | 'medium' | 'slow'
-
-const shapeOptions = [
-  { label: '四角星', value: 'four-point-star' },
-  { label: '五角星', value: 'star' },
-  { label: '花朵', value: 'flower' },
-]
-
-const speedOptions = [
-  { label: '快速', value: 'fast' },
-  { label: '中等', value: 'medium' },
-  { label: '慢速', value: 'slow' },
-]
 
 const useStyles = createStyles(({ token }) => ({
   wrapper: {
@@ -73,18 +62,36 @@ const useStyles = createStyles(({ token }) => ({
 
 export function SparklesTextDemo() {
   const { styles } = useStyles()
-  const [text, setText] = useState('Zealous-admin是一套好用的后台管理系统模板')
+  const t = useT()
+  const [text, setText] = useState(() => t('component.demo.sparklesText.defaultText'))
   const [fontSize, setFontSize] = useState(36)
   const [shapes, setShapes] = useState<SparkleShape[]>(['four-point-star'])
   const [animationSpeed, setAnimationSpeed] = useState<AnimationSpeed>('fast')
   const [renderKey, setRenderKey] = useState(0)
 
+  // 语言切换时重置默认文案
+  useEffect(() => {
+    setText(t('component.demo.sparklesText.defaultText'))
+  }, [t])
+
   const forceUpdate = () => setRenderKey(prev => prev + 1)
+
+  const shapeOptions = [
+    { label: t('component.demo.sparklesText.shape.fourPointStar'), value: 'four-point-star' },
+    { label: t('component.demo.sparklesText.shape.star'), value: 'star' },
+    { label: t('component.demo.sparklesText.shape.flower'), value: 'flower' },
+  ]
+
+  const speedOptions = [
+    { label: t('component.demo.common.speedFast'), value: 'fast' },
+    { label: t('component.demo.common.speedMedium'), value: 'medium' },
+    { label: t('component.demo.common.speedSlow'), value: 'slow' },
+  ]
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h2>闪烁文字</h2>
+        <h2>{t('component.demo.sparklesText.title')}</h2>
         <p>ZaSparklesText</p>
       </div>
 
@@ -93,7 +100,7 @@ export function SparklesTextDemo() {
           <Form layout="vertical">
             <Row gutter={24}>
               <Col span={12}>
-                <Form.Item label="文本内容">
+                <Form.Item label={t('component.demo.common.textContent')}>
                   <Input
                     value={text}
                     onChange={(e) => {
@@ -104,7 +111,7 @@ export function SparklesTextDemo() {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="字体大小 (px)">
+                <Form.Item label={t('component.demo.common.fontSize')}>
                   <InputNumber
                     value={fontSize}
                     onChange={(v) => {
@@ -118,7 +125,7 @@ export function SparklesTextDemo() {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="动画速度">
+                <Form.Item label={t('component.demo.common.animationSpeed')}>
                   <Select
                     value={animationSpeed}
                     onChange={(v) => {
@@ -131,7 +138,7 @@ export function SparklesTextDemo() {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="形状类型">
+                <Form.Item label={t('component.demo.sparklesText.shapeType')}>
                   <Checkbox.Group
                     options={shapeOptions}
                     value={shapes}

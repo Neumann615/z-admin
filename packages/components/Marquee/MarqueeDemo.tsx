@@ -1,12 +1,8 @@
 import { Avatar, Card, Col, Form, InputNumber, Row, Select, Switch } from 'antd'
 import { createStyles } from 'antd-style'
 import { useState } from 'react'
+import { useT } from '../locale'
 import { Marquee } from './Marquee'
-
-const directionOptions = [
-  { label: '横向', value: 'horizontal' },
-  { label: '竖向', value: 'vertical' },
-]
 
 const useStyles = createStyles(({ token }) => ({
   wrapper: {
@@ -97,19 +93,23 @@ const useStyles = createStyles(({ token }) => ({
   },
 }))
 
-const reviews = [
-  { name: 'w***@qq.com', content: '这套组件库的设计风格非常现代化，API 设计清晰易懂，文档也很详细，上手非常快。团队使用下来整体体验很棒，大大提升了开发效率，推荐给所有前端开发者使用。' },
-  { name: 'z***@163.com', content: '组件质量很高，性能优化做得很好，在复杂场景下依然保持流畅的用户体验。特别是表格组件和表单组件，功能强大且易于定制，非常适合企业级应用开发。' },
-  { name: 'l***@gmail.com', content: '非常喜欢这个组件库的设计系统，主题定制能力很强，很容易适配我们的产品风格。暗色模式和亮色模式切换流畅，动画效果精致，用户体验非常好。' },
-  { name: 'm***@126.com', content: '团队协作效率提升很多，组件复用性强，大大减少了重复开发的工作量。代码结构清晰，易于维护，新成员能够快速上手，是一个非常成熟的组件库。' },
-  { name: 'k***@aliyun.com', content: '技术支持响应及时，社区活跃，遇到问题能很快找到解决方案。更新频率稳定，bug修复及时，是一个值得信赖的开源项目。' },
-  { name: 's***@msn.com', content: 'TypeScript 类型定义非常完善，开发体验很好，减少了很多类型错误。智能提示准确，类型安全有保障，强烈推荐 TypeScript 项目使用。' },
-  { name: 'h***@qq.com', content: '移动端适配做得很棒，响应式设计让我们的应用在各种设备上都有很好的表现。无论是手机、平板还是桌面端，都能提供一致的用户体验。' },
-  { name: 'g***@hotmail.com', content: '组件的可访问性做得很好，符合 WCAG 标准，对我们的无障碍需求支持很到位。键盘导航、屏幕阅读器支持都很完善，是一个负责任的组件库。' },
-]
-
 export function MarqueeDemo() {
   const { styles } = useStyles()
+  const t = useT()
+  const directionOptions = [
+    { label: t('component.demo.marquee.direction.horizontal'), value: 'horizontal' },
+    { label: t('component.demo.marquee.direction.vertical'), value: 'vertical' },
+  ]
+  const reviews = [
+    { name: 'w***@qq.com', content: t('component.demo.marquee.review1') },
+    { name: 'z***@163.com', content: t('component.demo.marquee.review2') },
+    { name: 'l***@gmail.com', content: t('component.demo.marquee.review3') },
+    { name: 'm***@126.com', content: t('component.demo.marquee.review4') },
+    { name: 'k***@aliyun.com', content: t('component.demo.marquee.review5') },
+    { name: 's***@msn.com', content: t('component.demo.marquee.review6') },
+    { name: 'h***@qq.com', content: t('component.demo.marquee.review7') },
+    { name: 'g***@hotmail.com', content: t('component.demo.marquee.review8') },
+  ]
   const [duration, setDuration] = useState(30)
   const [gap, setGap] = useState(16)
   const [repeat, setRepeat] = useState(2)
@@ -124,7 +124,7 @@ export function MarqueeDemo() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h2>跑马灯</h2>
+        <h2>{t('component.demo.marquee.title')}</h2>
         <p>ZaMarquee</p>
       </div>
 
@@ -133,7 +133,7 @@ export function MarqueeDemo() {
           <Form layout="vertical">
             <Row gutter={24}>
               <Col span={6}>
-                <Form.Item label="动画时长 (秒)">
+                <Form.Item label={t('component.demo.marquee.duration')}>
                   <InputNumber
                     value={duration}
                     onChange={(v) => {
@@ -147,7 +147,7 @@ export function MarqueeDemo() {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="子项间距 (px)">
+                <Form.Item label={t('component.demo.marquee.gap')}>
                   <InputNumber
                     value={gap}
                     onChange={(v) => {
@@ -161,7 +161,7 @@ export function MarqueeDemo() {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="重复次数">
+                <Form.Item label={t('component.demo.marquee.repeat')}>
                   <InputNumber
                     value={repeat}
                     onChange={(v) => {
@@ -175,7 +175,7 @@ export function MarqueeDemo() {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="滚动方向">
+                <Form.Item label={t('component.demo.marquee.direction')}>
                   <Select
                     value={direction}
                     onChange={(v) => {
@@ -188,7 +188,7 @@ export function MarqueeDemo() {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="反向滚动">
+                <Form.Item label={t('component.demo.marquee.reverse')}>
                   <Switch
                     checked={reverse}
                     onChange={(v) => {
@@ -199,7 +199,7 @@ export function MarqueeDemo() {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="悬停暂停">
+                <Form.Item label={t('component.demo.marquee.pauseOnHover')}>
                   <Switch
                     checked={pauseOnHover}
                     onChange={(v) => {
@@ -210,7 +210,7 @@ export function MarqueeDemo() {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="渐变蒙层">
+                <Form.Item label={t('component.demo.marquee.gradient')}>
                   <Switch
                     checked={gradient}
                     onChange={(v) => {
@@ -249,7 +249,7 @@ export function MarqueeDemo() {
             </Marquee>
           </div>
         </Card>
-        <Card title="特殊示例">
+        <Card title={t('component.demo.marquee.specialDemo')}>
           <div className={styles.specialDemo}>
             <div>
               {Array.from({ length: 4 }, (_, i) => (

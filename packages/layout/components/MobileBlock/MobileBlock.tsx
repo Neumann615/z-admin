@@ -3,7 +3,7 @@ import { StopOutlined } from '@ant-design/icons'
 import { ZaPatternBg } from '@zealous-admin/components/index'
 import { createStyles } from 'antd-style'
 import { useMobileDetect } from '../../hooks/useMobileDetect'
-import { useT } from '../../locales/index'
+import { useT } from '../../hooks/useT'
 import { useAppStore } from '../../store/index'
 
 const useStyles = createStyles(({ token, css }) => ({

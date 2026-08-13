@@ -1,13 +1,8 @@
 import { Card, Col, ColorPicker, Form, Input, InputNumber, Row, Select } from 'antd'
 import { createStyles } from 'antd-style'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useT } from '../locale'
 import { ShinyText } from './ShinyText'
-
-const speedOptions = [
-  { label: '快速', value: 'fast' },
-  { label: '中等', value: 'medium' },
-  { label: '慢速', value: 'slow' },
-]
 
 const useStyles = createStyles(({ token }) => ({
   wrapper: {
@@ -55,19 +50,31 @@ const useStyles = createStyles(({ token }) => ({
 
 export function ShinyTextDemo() {
   const { styles } = useStyles()
-  const [text, setText] = useState('Zealous-admin是一套好用的后台管理系统模板')
+  const t = useT()
+  const [text, setText] = useState(() => t('component.demo.shinyText.defaultText'))
   const [fontSize, setFontSize] = useState(36)
   const [speed, setSpeed] = useState<'slow' | 'medium' | 'fast'>('medium')
   const [shinyColor, setShinyColor] = useState<string | undefined>(undefined)
   const [textColor, setTextColor] = useState<string | undefined>(undefined)
   const [renderKey, setRenderKey] = useState(0)
 
+  // 语言切换时重置默认文案
+  useEffect(() => {
+    setText(t('component.demo.shinyText.defaultText'))
+  }, [t])
+
   const forceUpdate = () => setRenderKey(prev => prev + 1)
+
+  const speedOptions = [
+    { label: t('component.demo.common.speedFast'), value: 'fast' },
+    { label: t('component.demo.common.speedMedium'), value: 'medium' },
+    { label: t('component.demo.common.speedSlow'), value: 'slow' },
+  ]
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h2>流光文字</h2>
+        <h2>{t('component.demo.shinyText.title')}</h2>
         <p>ZaShinyText</p>
       </div>
 
@@ -76,7 +83,7 @@ export function ShinyTextDemo() {
           <Form layout="vertical">
             <Row gutter={24}>
               <Col span={12}>
-                <Form.Item label="文本内容">
+                <Form.Item label={t('component.demo.common.textContent')}>
                   <Input
                     value={text}
                     onChange={(e) => {
@@ -87,7 +94,7 @@ export function ShinyTextDemo() {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="字体大小 (px)">
+                <Form.Item label={t('component.demo.common.fontSize')}>
                   <InputNumber
                     value={fontSize}
                     onChange={(v) => {
@@ -101,7 +108,7 @@ export function ShinyTextDemo() {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="动画速度">
+                <Form.Item label={t('component.demo.common.animationSpeed')}>
                   <Select
                     value={speed}
                     onChange={(v) => {
@@ -114,7 +121,7 @@ export function ShinyTextDemo() {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="文本颜色">
+                <Form.Item label={t('component.demo.shinyText.textColor')}>
                   <ColorPicker
                     value={textColor}
                     onChange={(c) => {
@@ -131,7 +138,7 @@ export function ShinyTextDemo() {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="流光颜色">
+                <Form.Item label={t('component.demo.shinyText.shinyColor')}>
                   <ColorPicker
                     value={shinyColor}
                     onChange={(c) => {

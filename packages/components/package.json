@@ -10,6 +10,7 @@
     }
   },
   "peerDependencies": {
+    "@zealous-admin/locales": "workspace:*",
     "antd": "catalog:",
     "antd-style": "catalog:",
     "quill": "catalog:",

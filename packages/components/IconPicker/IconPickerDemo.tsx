@@ -1,7 +1,8 @@
 import type { IconLibraryKey } from './IconPicker'
 import { Button, Card, Checkbox, Col, Form, Input, Row, Select } from 'antd'
 import { createStyles } from 'antd-style'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useT } from '../locale'
 import { Icon } from './Icon'
 import { IconPicker } from './IconPicker'
 
@@ -94,18 +95,24 @@ const libraryOptions = [
 
 export function IconPickerDemo() {
   const { styles } = useStyles()
+  const t = useT()
   const [selectedIcon, setSelectedIcon] = useState<string | undefined>(undefined)
   const [library, setLibrary] = useState<IconLibraryKey[]>(['ai', 'bs', 'wi', 'fi', 'fc'])
   const [clearable, setClearable] = useState(false)
-  const [placeholder, setPlaceholder] = useState('请选择图标')
+  const [placeholder, setPlaceholder] = useState(() => t('component.iconPicker.placeholder'))
   const [renderKey, setRenderKey] = useState(0)
+
+  // 语言切换时重置默认占位提示
+  useEffect(() => {
+    setPlaceholder(t('component.iconPicker.placeholder'))
+  }, [t])
 
   const forceUpdate = () => setRenderKey(prev => prev + 1)
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h2>图标选择器</h2>
+        <h2>{t('component.demo.iconPicker.title')}</h2>
         <p>ZaIconPicker</p>
       </div>
 
@@ -114,7 +121,7 @@ export function IconPickerDemo() {
           <Row gutter={24} style={{ height: '100%' }}>
             <Col span={10}>
               <Form layout="vertical">
-                <Form.Item label="图标库">
+                <Form.Item label={t('component.demo.iconPicker.library')}>
                   <Select
                     mode="multiple"
                     value={library}
@@ -127,11 +134,11 @@ export function IconPickerDemo() {
                       value: opt.key,
                     }))}
                     style={{ width: '100%' }}
-                    placeholder="请选择图标库"
+                    placeholder={t('component.demo.iconPicker.libraryPlaceholder')}
                     maxTagCount="responsive"
                   />
                 </Form.Item>
-                <Form.Item label="占位提示">
+                <Form.Item label={t('component.demo.common.placeholderLabel')}>
                   <Input
                     value={placeholder}
                     onChange={(e) => {
@@ -140,7 +147,7 @@ export function IconPickerDemo() {
                     }}
                   />
                 </Form.Item>
-                <Form.Item label="可清除">
+                <Form.Item label={t('component.demo.iconPicker.clearable')}>
                   <Checkbox
                     checked={clearable}
                     onChange={(e) => {
@@ -170,13 +177,13 @@ export function IconPickerDemo() {
                     clearable={clearable}
                   >
                     <Button type="primary" icon={selectedIcon ? <Icon value={selectedIcon} /> : null}>
-                      选择图标
+                      {t('component.demo.iconPicker.selectIcon')}
                     </Button>
                   </IconPicker>
                   {selectedIcon && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <div className={styles.selectedValue}>
-                        选中值:
+                        {t('component.demo.iconPicker.selectedValue')}
                         {' '}
                         <code>{selectedIcon}</code>
                       </div>

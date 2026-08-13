@@ -19,10 +19,11 @@ export default defineConfig({
     resolve: {
       alias: {
         '@zealous-admin/components': path.resolve(__dirname, '../../packages/components'),
+        '@zealous-admin/locales': path.resolve(__dirname, '../../packages/locales'),
       },
     },
     ssr: {
-      noExternal: ['@zealous-admin/components'],
+      noExternal: ['@zealous-admin/components', '@zealous-admin/locales'],
     },
   },
 

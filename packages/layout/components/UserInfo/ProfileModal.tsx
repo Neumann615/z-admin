@@ -3,7 +3,7 @@ import { App, Avatar, Badge, Button, Card, Descriptions, Divider, Form, Input, M
 import { createStyles } from 'antd-style'
 import { useState } from 'react'
 import { logoutAction } from '../../hooks/useAuth'
-import { useT } from '../../locales/index'
+import { useT } from '../../hooks/useT'
 import { useUserStore } from '../../store/index'
 import http from '../../utils/http'
 

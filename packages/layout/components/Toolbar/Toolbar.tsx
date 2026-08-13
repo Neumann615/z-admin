@@ -17,7 +17,7 @@ import { createStyles } from 'antd-style'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { useMobileDetect } from '../../hooks/useMobileDetect'
-import { useT } from '../../locales/index'
+import { useT } from '../../hooks/useT'
 import { useI18nStore } from '../../store/i18n'
 import { useMenuStore } from '../../store/menu'
 import { usePageStore } from '../../store/page'
@@ -281,7 +281,7 @@ export function Toolbar() {
                     </div>
                   )
                 : null}
-              {topBarStore.toolbar.isEnableI18n
+              {topBarStore.toolbar.i18n.isEnableI18n
                 ? (
                     <Dropdown menu={{ items: i18nMenu }}>
                       <div className={styles.ToolbarItem}>

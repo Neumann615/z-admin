@@ -1,6 +1,7 @@
 export { Icon as ZaIcon, IconPicker as ZaIconPicker, IconPickerDemo as ZaIconPickerDemo } from './IconPicker'
 export { Iframe as ZaIframe, IframeDemo as ZaIframeDemo } from './Iframe'
 export { LinkPreview as ZaLinkPreview, LinkPreviewDemo as ZaLinkPreviewDemo } from './LinkPreview'
+export { useT, ZaConfigProvider } from './locale'
 export { Markdown as ZaMarkdown, MarkdownDemo as ZaMarkdownDemo } from './Markdown'
 export { Marquee as ZaMarquee, MarqueeDemo as ZaMarqueeDemo } from './Marquee'
 export { PatternBg as ZaPatternBg, PatternBgDemo as ZaPatternBgDemo } from './PatternBg'

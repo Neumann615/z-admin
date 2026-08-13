@@ -1,0 +1,16 @@
+{
+  "name": "@zealous-admin/locales",
+  "type": "module",
+  "version": "1.0.0",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./index": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  }
+}

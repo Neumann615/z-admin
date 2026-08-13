@@ -16,7 +16,7 @@ import { createStyles } from 'antd-style'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useControlTab } from '../../hooks/useControlTab'
-import { useT } from '../../locales/index'
+import { useT } from '../../hooks/useT'
 import { usePageStore, useTopBarStore } from '../../store/index'
 import { MenuIcon } from '../MenuIcon/MenuIcon'
 

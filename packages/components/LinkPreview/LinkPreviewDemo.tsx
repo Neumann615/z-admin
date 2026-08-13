@@ -7,6 +7,7 @@ import {
 } from 'antd'
 import { createStyles } from 'antd-style'
 import { useState } from 'react'
+import { useT } from '../locale'
 import { LinkPreview } from './LinkPreview'
 
 const useStyles = createStyles(({ token }) => ({
@@ -54,12 +55,13 @@ const useStyles = createStyles(({ token }) => ({
 
 export function LinkPreviewDemo() {
   const { styles } = useStyles()
+  const t = useT()
   const [url, setUrl] = useState('https://cn.vitejs.dev/')
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h2>链接预览</h2>
+        <h2>{t('component.demo.linkPreview.title')}</h2>
         <p>ZaLinkPreview</p>
       </div>
 
@@ -69,11 +71,11 @@ export function LinkPreviewDemo() {
             {/* 左侧：表单配置 */}
             <Col span={12}>
               <Form layout="vertical">
-                <Form.Item label="链接地址">
+                <Form.Item label={t('component.demo.linkPreview.url')}>
                   <Input
                     value={url}
                     onChange={e => setUrl(e.target.value)}
-                    placeholder="请输入网址"
+                    placeholder={t('component.demo.linkPreview.urlPlaceholder')}
                   />
                 </Form.Item>
               </Form>
@@ -83,7 +85,7 @@ export function LinkPreviewDemo() {
             <Col span={12}>
               <div className={styles.demoArea}>
                 <LinkPreview url={url}>
-                  悬停查看预览:
+                  {t('component.demo.linkPreview.hoverPreview')}
                   {' '}
                   {url}
                 </LinkPreview>
@@ -92,7 +94,7 @@ export function LinkPreviewDemo() {
           </Row>
         </Card>
 
-        <Card title="更多示例">
+        <Card title={t('component.demo.linkPreview.moreExamples')}>
           <Row gutter={16}>
             <Col span={6}>
               <LinkPreview url="https:zzzpupu.xin">

@@ -3,7 +3,7 @@ import { Button, Form, Input, Modal } from 'antd'
 import { createStyles } from 'antd-style'
 import { useState } from 'react'
 import { loginAction, logoutAction } from '../../hooks/useAuth'
-import { useT } from '../../locales/index'
+import { useT } from '../../hooks/useT'
 import { useReLoginStore } from '../../store/reLogin'
 
 const useStyles = createStyles(({ token }) => ({

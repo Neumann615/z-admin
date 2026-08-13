@@ -16,6 +16,8 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
+        '@zealous-admin/locales',
+        /^@zealous-admin\/locales\//,
         'react',
         /^react\//,
         'react-dom',

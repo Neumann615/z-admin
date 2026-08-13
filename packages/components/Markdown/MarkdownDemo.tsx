@@ -1,6 +1,7 @@
 import { Card, Input } from 'antd'
 import { createStyles } from 'antd-style'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useT } from '../locale'
 import { Markdown } from './Markdown'
 
 const useStyles = createStyles(({ token }) => ({
@@ -72,59 +73,21 @@ const useStyles = createStyles(({ token }) => ({
   },
 }))
 
-const sampleMarkdown = `# 欢迎使用 Markdown 编辑器
-
-## 文本样式
-
-这是一段普通文本，其中包含 **加粗**、*斜体*、~~删除线~~、\`行内代码\` 和 [超链接](https://github.com)。
-
-## 代码块
-
-\`\`\`typescript
-interface User {
-  id: number
-  name: string
-  email: string
-}
-
-function greet(user: User): string {
-  return \`Hello, \${user.name}!\`
-}
-\`\`\`
-
-## 表格
-
-| 特性 | 支持情况 | 备注 |
-|------|---------|------|
-| GFM | ✅ | 完整支持 |
-| 代码高亮 | ✅ | Prism |
-| 任务列表 | ✅ | GFM 扩展 |
-
-## 引用
-
-> 这是引用块
-> 可以跨多行
-
-## 列表
-
-1. 有序列表项一
-2. 有序列表项二
-   - 嵌套无序列表
-   - 嵌套无序列表
-
-- [x] 完成任务
-- [ ] 未完成任务
-`
-
 export function MarkdownDemo() {
   const { styles } = useStyles()
-  const [markdownText, setMarkdownText] = useState(sampleMarkdown)
+  const t = useT()
+  const [markdownText, setMarkdownText] = useState(() => t('component.demo.markdown.sample'))
   const [viewMode] = useState<'edit' | 'preview' | 'both'>('both')
+
+  // 语言切换时重置示例文档
+  useEffect(() => {
+    setMarkdownText(t('component.demo.markdown.sample'))
+  }, [t])
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h2>Markdown</h2>
+        <h2>{t('component.demo.markdown.title')}</h2>
         <p>ZaMarkdown</p>
       </div>
       <div className={styles.content}>
@@ -138,14 +101,14 @@ export function MarkdownDemo() {
                 <span>
                   {markdownText.length}
                   {' '}
-                  字符
+                  {t('component.demo.markdown.chars')}
                 </span>
               </div>
               <div style={{ flex: 1, overflow: 'hidden' }}>
                 <Input.TextArea
                   value={markdownText}
                   onChange={e => setMarkdownText(e.target.value)}
-                  placeholder="在此输入 Markdown 内容..."
+                  placeholder={t('component.demo.markdown.placeholder')}
                   style={{ height: '100%', fontFamily: 'Inconsolata, Monaco, Consolas, "Courier New", monospace', fontSize: 14, resize: 'none' }}
                 />
               </div>
@@ -155,7 +118,7 @@ export function MarkdownDemo() {
               style={{ display: viewMode === 'edit' ? 'none' : '' }}
             >
               <div className={styles.panelHeader}>
-                <span>预览</span>
+                <span>{t('component.demo.markdown.preview')}</span>
               </div>
               <div className={styles.previewPanel}>
                 <Markdown text={markdownText} />

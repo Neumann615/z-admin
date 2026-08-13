@@ -2,36 +2,37 @@ import type { Delta, EmitterSource } from 'quill'
 import type { ToolbarConfig } from 'quill/modules/toolbar'
 import { createStyles } from 'antd-style'
 import Quill from 'quill'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
+import { useT } from '../locale'
 import { defaultToolbar } from './toolbar'
 import 'quill/dist/quill.snow.css'
 
-// 工具栏按钮/选择器的悬停提示文案（按 quill 控件类名映射）
-const TOOLTIP_LABELS: Record<string, string> = {
-  'ql-bold': '加粗',
-  'ql-italic': '斜体',
-  'ql-underline': '下划线',
-  'ql-strike': '删除线',
-  'ql-blockquote': '引用',
-  'ql-code-block': '代码块',
-  'ql-link': '插入链接',
-  'ql-image': '插入图片',
-  'ql-video': '插入视频',
-  'ql-clean': '清除格式',
-  'ql-header': '标题',
-  'ql-list': '列表',
-  'ql-align': '对齐方式',
-  'ql-color': '文字颜色',
-  'ql-background': '背景颜色',
-  'ql-direction': '文字方向',
-  'ql-indent': '缩进',
-  'ql-script': '上下标',
-  'ql-font': '字体',
-  'ql-size': '字号',
+// 工具栏按钮/选择器的悬停提示文案 key（按 quill 控件类名映射，文案由 useT 动态读取）
+const TOOLTIP_KEYS: Record<string, string> = {
+  'ql-bold': 'component.richTextEditor.toolbar.bold',
+  'ql-italic': 'component.richTextEditor.toolbar.italic',
+  'ql-underline': 'component.richTextEditor.toolbar.underline',
+  'ql-strike': 'component.richTextEditor.toolbar.strike',
+  'ql-blockquote': 'component.richTextEditor.toolbar.blockquote',
+  'ql-code-block': 'component.richTextEditor.toolbar.codeBlock',
+  'ql-link': 'component.richTextEditor.toolbar.link',
+  'ql-image': 'component.richTextEditor.toolbar.image',
+  'ql-video': 'component.richTextEditor.toolbar.video',
+  'ql-clean': 'component.richTextEditor.toolbar.clean',
+  'ql-header': 'component.richTextEditor.toolbar.header',
+  'ql-list': 'component.richTextEditor.toolbar.list',
+  'ql-align': 'component.richTextEditor.toolbar.align',
+  'ql-color': 'component.richTextEditor.toolbar.color',
+  'ql-background': 'component.richTextEditor.toolbar.background',
+  'ql-direction': 'component.richTextEditor.toolbar.direction',
+  'ql-indent': 'component.richTextEditor.toolbar.indent',
+  'ql-script': 'component.richTextEditor.toolbar.script',
+  'ql-font': 'component.richTextEditor.toolbar.font',
+  'ql-size': 'component.richTextEditor.toolbar.size',
 }
 
 // 为工具栏元素注入 data-tooltip，配合 CSS ::after 实现悬停提示
-function attachTooltips(toolbar: Element) {
+function attachTooltips(toolbar: Element, labels: Record<string, string>) {
   toolbar.querySelectorAll<HTMLElement>('button, .ql-picker-label').forEach((el) => {
     // 按钮直接取自身类名；下拉选择器取父级 .ql-picker 的类名
     const classes = el.classList.contains('ql-picker-label')
@@ -40,9 +41,9 @@ function attachTooltips(toolbar: Element) {
     if (!classes) {
       return
     }
-    const format = classes.toString().split(' ').find(name => TOOLTIP_LABELS[name])
+    const format = classes.toString().split(' ').find(name => labels[name])
     if (format) {
-      el.setAttribute('data-tooltip', TOOLTIP_LABELS[format])
+      el.setAttribute('data-tooltip', labels[format])
     }
   })
 }
@@ -286,11 +287,12 @@ export interface RichTextEditorProps {
 }
 
 export function RichTextEditor(props: RichTextEditorProps) {
+  const t = useT()
   const {
     value,
     defaultValue,
     onChange,
-    placeholder = '请输入内容...',
+    placeholder = t('component.richTextEditor.placeholder'),
     height = 300,
     readOnly = false,
     toolbar = defaultToolbar,
@@ -309,6 +311,15 @@ export function RichTextEditor(props: RichTextEditorProps) {
 
   const { styles, cx } = useStyles({ height, readOnly })
 
+  // 工具栏悬停提示文案（locale 变化时随 t 更新）
+  const tooltipLabels = useMemo(() => {
+    const labels: Record<string, string> = {}
+    for (const [format, key] of Object.entries(TOOLTIP_KEYS)) {
+      labels[format] = t(key)
+    }
+    return labels
+  }, [t])
+
   // 创建编辑器实例（挂载或工具栏变化时调用）
   const initEditor = () => {
     const editor = editorRef.current
@@ -326,7 +337,7 @@ export function RichTextEditor(props: RichTextEditorProps) {
     // 为工具栏注入悬停提示
     const toolbarEl = wrapperRef.current?.querySelector('.ql-toolbar')
     if (toolbarEl) {
-      attachTooltips(toolbarEl)
+      attachTooltips(toolbarEl, tooltipLabels)
     }
 
     // 写入内容（重建时保留编辑器已有内容，首次为初始内容）
@@ -375,6 +386,14 @@ export function RichTextEditor(props: RichTextEditorProps) {
     destroyEditor()
     initEditor()
   }, [toolbar])
+
+  // 语言变化时重新注入工具栏悬停提示（重复注入无害，覆盖旧文案）
+  useEffect(() => {
+    const toolbarEl = wrapperRef.current?.querySelector('.ql-toolbar')
+    if (toolbarEl) {
+      attachTooltips(toolbarEl, tooltipLabels)
+    }
+  }, [tooltipLabels])
 
   // 受控模式：外部 value 变化时同步编辑器内容
   useEffect(() => {

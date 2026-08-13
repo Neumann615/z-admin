@@ -1,6 +1,7 @@
 import { App } from 'antd'
 import { createStyles } from 'antd-style'
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { useT } from '../locale'
 
 export interface SignaturePadRef {
   /** 清空画布（重签） */
@@ -104,6 +105,7 @@ export const SignaturePad = forwardRef<SignaturePadRef, SignaturePadProps>((
   const hasSignatureRef = useRef(false)
   const [isEmpty, setIsEmpty] = useState(true)
   const { message } = App.useApp()
+  const t = useT()
 
   // 默认使用 colorTextBase（不透明基色，亮色 #000 / 暗色 #fff），比 colorText 更适合签名场景
   // 同时对外部传入的 penColor 做 alpha 去除，避免带透明度颜色在笔迹重叠处变深
@@ -253,7 +255,7 @@ export const SignaturePad = forwardRef<SignaturePadRef, SignaturePadProps>((
   const download = (fileName = 'signature.png', type = 'image/png', quality?: number) => {
     const dataURL = getDataURL(type, quality)
     if (!dataURL) {
-      message.warning('请先完成签名')
+      message.warning(t('component.signaturePad.signRequired'))
       return false
     }
     const link = document.createElement('a')
@@ -284,7 +286,7 @@ export const SignaturePad = forwardRef<SignaturePadRef, SignaturePadProps>((
           onPointerCancel={endDraw}
           onPointerLeave={endDraw}
         />
-        {isEmpty && <div className={styles.placeholder}>请在此处签名</div>}
+        {isEmpty && <div className={styles.placeholder}>{t('component.signaturePad.placeholder')}</div>}
       </div>
     </div>
   )

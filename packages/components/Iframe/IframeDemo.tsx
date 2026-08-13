@@ -1,14 +1,8 @@
 import { Card, Radio } from 'antd'
 import { createStyles } from 'antd-style'
 import { useState } from 'react'
+import { useT } from '../locale'
 import { Iframe } from './Iframe'
-
-const sites = [
-  { label: '个人主页', value: 'https://me.zzzpupu.xin/' },
-  { label: 'React', value: 'https://react.dev/' },
-  { label: 'Vite', value: 'https://vitejs.dev/' },
-  { label: 'Ant Design', value: 'https://ant.design/' },
-]
 
 const useStyles = createStyles(({ token }) => ({
   wrapper: {
@@ -53,12 +47,19 @@ const useStyles = createStyles(({ token }) => ({
 
 export function IframeDemo() {
   const { styles } = useStyles()
+  const t = useT()
+  const sites = [
+    { label: t('component.demo.iframe.site.home'), value: 'https://me.zzzpupu.xin/' },
+    { label: 'React', value: 'https://react.dev/' },
+    { label: 'Vite', value: 'https://vitejs.dev/' },
+    { label: 'Ant Design', value: 'https://ant.design/' },
+  ]
   const [url, setUrl] = useState(sites[0].value)
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h2>外链嵌入</h2>
+        <h2>{t('component.demo.iframe.title')}</h2>
         <p>ZaIframe</p>
       </div>
       <div className={styles.content}>

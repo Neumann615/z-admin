@@ -3,7 +3,7 @@ import { Input, Modal } from 'antd'
 import { createStyles } from 'antd-style'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useControlTab } from '../../hooks/useControlTab'
-import { useT } from '../../locales/index'
+import { useT } from '../../hooks/useT'
 import { useMenuStore } from '../../store/menu'
 
 // 扁平化菜单树，仅返回叶子节点（对应实际页面路由）

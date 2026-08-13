@@ -3,6 +3,7 @@ import { createStyles } from 'antd-style'
 import { createElement, useCallback, useEffect, useMemo, useState } from 'react'
 import { CiSquarePlus } from 'react-icons/ci'
 import { TiDelete } from 'react-icons/ti'
+import { useT } from '../locale'
 
 export type IconLibraryKey = 'ai' | 'bs' | 'fc' | 'pi' | 'rx' | 'sl' | 'bi' | 'ci' | 'cg' | 'di' | 'fa' | 'fa6' | 'md' | 'io' | 'io5' | 'fi' | 'lu' | 'go' | 'gi' | 'ri' | 'bi' | 'cg' | 'gr' | 'hi' | 'hi2' | 'im' | 'lia' | 'si' | 'tb' | 'tfi' | 'ti' | 'vsc' | 'wi'
 
@@ -243,12 +244,14 @@ const useStyles = createStyles(({ token }) => ({
 export function IconPicker({
   value,
   onChange,
-  placeholder = '请选择图标',
+  placeholder,
   children,
   library = allLibraryKeys,
   clearable = false,
 }: IconPickerProps) {
   const { styles } = useStyles()
+  const t = useT()
+  const resolvedPlaceholder = placeholder || t('component.iconPicker.placeholder')
   const [searchText, setSearchText] = useState('')
   const [open, setOpen] = useState(false)
   const [activeTab, setActiveTab] = useState(library[0] || 'ai')
@@ -364,7 +367,7 @@ export function IconPicker({
               <div className={styles.libraryItemCount}>
                 {count}
                 {' '}
-                icons
+                {t('component.iconPicker.icons')}
               </div>
             </div>
           )
@@ -373,7 +376,7 @@ export function IconPicker({
       <div className={styles.iconPanel}>
         <div className={styles.searchInput}>
           <Input
-            placeholder="搜索图标"
+            placeholder={t('component.iconPicker.searchPlaceholder')}
             value={searchText}
             onChange={e => setSearchText(e.target.value)}
           />
@@ -425,7 +428,7 @@ export function IconPicker({
       arrow={false}
     >
       {children || (
-        <div className={styles.trigger} title={displayValue || placeholder}>
+        <div className={styles.trigger} title={displayValue || resolvedPlaceholder}>
           {selectedIconElement || (
             <CiSquarePlus className={styles.placeholderIcon} />
           )}

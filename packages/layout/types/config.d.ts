@@ -76,13 +76,6 @@ export interface LayoutConfig {
     /* 快乐特效 */
     happyEffect: boolean
   }
-  /* 国际化配置 */
-  i18n: {
-    /* 默认语言 */
-    defaultLocale: string
-    /* 可选语言列表 */
-    locales: Array<{ locale: string, label: string }>
-  }
   /* 菜单配置 */
   menu: {
     /* 菜单布局类型 */
@@ -141,10 +134,17 @@ export interface LayoutConfig {
         /* 是否显示主导航 */
         isEnableMainNav: boolean
       }
+      /* 国际化配置 */
+      i18n: {
+        /* 启用国际化功能 */
+        isEnableI18n: boolean
+        /* 默认语言 */
+        defaultLocale: string
+        /* 可选语言列表 */
+        locales: Array<{ locale: string, label: string }>
+      }
       /* 启用搜索功能 */
       isEnableSearch: boolean
-      /* 启用国际化功能 */
-      isEnableI18n: boolean
       /* 启用页面重载功能 */
       isEnablePageReload: boolean
       /* 启用全屏功能 */

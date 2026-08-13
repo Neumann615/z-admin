@@ -18,6 +18,7 @@ import { useEffect, useRef, useState } from 'react'
 // @ts-ignore
 import { CSSTransition } from 'react-transition-group'
 import _defaultSetting from '../../defaultSetting'
+import { useT } from '../../hooks/useT'
 import {
   useAppStore,
   useMenuStore,
@@ -262,6 +263,7 @@ interface ConfigPanelProps {
 
 export function ConfigPanel({ open, onClose, isDev = true }: ConfigPanelProps) {
   const { message } = App.useApp()
+  const t = useT()
   const appStore = useAppStore()
   const menuStore = useMenuStore()
   const themeStore = useThemeStore()
@@ -286,7 +288,7 @@ const defaultSetting: LayoutConfig = ${JSON.stringify(defaultSetting, null, 2)}
 export default defaultSetting`
     try {
       await navigator.clipboard.writeText(configString)
-      message.success('配置已复制到剪贴板')
+      message.success(t('configPanel.copied'))
     }
     catch {
       const textArea = document.createElement('textarea')
@@ -295,7 +297,7 @@ export default defaultSetting`
       textArea.select()
       document.execCommand('copy')
       document.body.removeChild(textArea)
-      message.success('配置已复制到剪贴板')
+      message.success(t('configPanel.copied'))
     }
   }
 
@@ -508,11 +510,11 @@ export default defaultSetting`
   const isCustomTheme = defaultSetting.theme.themeType !== 'default'
 
   const renderThemeConfig = () => (
-    <Card key="theme" title="主题">
+    <Card key="theme" title={t('configPanel.theme')}>
       <div className={styles.cardContent}>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            主题类型
+            {t('configPanel.themeType')}
           </Col>
           <Col>
             <Select
@@ -524,7 +526,7 @@ export default defaultSetting`
                   theme: { ...defaultSetting.theme, themeType: v },
                 })
               }}
-              options={themeTypeList}
+              options={themeTypeList.map(item => ({ label: t(item.labelKey), value: item.value }))}
               style={{ width: 140 }}
             >
             </Select>
@@ -574,7 +576,7 @@ export default defaultSetting`
         </div>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            颜色方案
+            {t('configPanel.colorScheme')}
           </Col>
           <Col>
             <Segmented
@@ -601,7 +603,7 @@ export default defaultSetting`
 
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            色弱模式
+            {t('configPanel.colorWeak')}
           </Col>
           <Col>
             <Switch
@@ -622,7 +624,7 @@ export default defaultSetting`
   )
 
   const renderTransitionConfig = () => (
-    <Card key="transition" title="页面">
+    <Card key="transition" title={t('configPanel.page')}>
       <div className={styles.cardContent}>
         <div
           style={{
@@ -633,7 +635,7 @@ export default defaultSetting`
         >
           {transitionTypeList.map((transition: any, index: number) => {
             return (
-              <Tooltip title={transition.label} key={index}>
+              <Tooltip title={t(transition.labelKey)} key={index}>
                 <div
                   className={styles.transitionContainer}
                   onClick={() => {
@@ -671,7 +673,7 @@ export default defaultSetting`
         </div>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            载入进度条
+            {t('configPanel.page.loadProgress')}
           </Col>
           <Col>
             <Switch
@@ -695,7 +697,7 @@ export default defaultSetting`
   )
 
   const renderMenuTypeConfig = () => (
-    <Card key="menuType" title="导航菜单">
+    <Card key="menuType" title={t('configPanel.menu')}>
       <div className={styles.cardContent}>
         <div
           style={{
@@ -706,7 +708,7 @@ export default defaultSetting`
         >
           {menuTypeList.map((item: any, index: number) => {
             return (
-              <Tooltip title={item.label} key={index}>
+              <Tooltip title={t(item.labelKey)} key={index}>
                 <div
                   className={styles.layoutContainer}
                   onClick={() => {
@@ -731,7 +733,7 @@ export default defaultSetting`
         </div>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            次导航手风琴模式
+            {t('configPanel.menu.accordion')}
           </Col>
           <Col>
             <Switch
@@ -749,7 +751,7 @@ export default defaultSetting`
         </Row>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            启用次导航折叠按钮
+            {t('configPanel.menu.collapseBtn')}
           </Col>
           <Col>
             <Switch
@@ -767,7 +769,7 @@ export default defaultSetting`
         </Row>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            次导航折叠
+            {t('configPanel.menu.subCollapse')}
           </Col>
           <Col>
             <Switch
@@ -788,11 +790,11 @@ export default defaultSetting`
   )
 
   const renderTopBarConfig = () => (
-    <Card key="topBar" title="顶栏">
+    <Card key="topBar" title={t('configPanel.topBar')}>
       <div className={styles.cardContent}>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            标签栏
+            {t('configPanel.tabBar')}
           </Col>
           <Col>
             <Switch
@@ -813,7 +815,7 @@ export default defaultSetting`
         </Row>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            工具栏
+            {t('configPanel.toolbar')}
           </Col>
           <Col>
             <Switch
@@ -834,7 +836,7 @@ export default defaultSetting`
         </Row>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            展示切换
+            {t('configPanel.topBar.swap')}
           </Col>
           <Col>
             <Switch
@@ -855,7 +857,7 @@ export default defaultSetting`
         </Row>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            定位
+            {t('configPanel.topBar.position')}
           </Col>
           <Col>
             <Radio.Group
@@ -874,7 +876,7 @@ export default defaultSetting`
               {topBarPositionList.map((item) => {
                 return (
                   <Radio.Button key={item.value} value={item.value}>
-                    {item.label}
+                    {t(item.labelKey)}
                   </Radio.Button>
                 )
               })}
@@ -886,20 +888,20 @@ export default defaultSetting`
   )
 
   const toolbarFuncItems: { key: string, label: string, icon: React.ReactNode }[] = [
-    { key: 'isEnableSearch', label: '搜索', icon: <SearchOutlined /> },
-    { key: 'isEnableI18n', label: '国际化', icon: <TranslationOutlined /> },
-    { key: 'isEnablePageReload', label: '页面重载', icon: <ReloadOutlined /> },
-    { key: 'isEnableFullscreen', label: '全屏', icon: <FullscreenOutlined /> },
-    { key: 'isEnableTheme', label: '颜色主题', icon: <BgColorsOutlined /> },
+    { key: 'isEnableSearch', label: t('configPanel.common.search'), icon: <SearchOutlined /> },
+    { key: 'isEnableI18n', label: t('configPanel.toolbar.i18n'), icon: <TranslationOutlined /> },
+    { key: 'isEnablePageReload', label: t('configPanel.toolbar.reload'), icon: <ReloadOutlined /> },
+    { key: 'isEnableFullscreen', label: t('configPanel.toolbar.fullscreen'), icon: <FullscreenOutlined /> },
+    { key: 'isEnableTheme', label: t('configPanel.toolbar.theme'), icon: <BgColorsOutlined /> },
   ]
 
   const renderToolbarFuncConfig = () => {
     return (
-      <Card key="toolbarFunc" title="工具栏">
+      <Card key="toolbarFunc" title={t('configPanel.toolbar')}>
         <div className={styles.cardContent}>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              面包屑
+              {t('configPanel.toolbar.breadcrumb')}
             </Col>
             <Col>
               <Switch
@@ -926,7 +928,7 @@ export default defaultSetting`
           </Row>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              面包屑样式
+              {t('configPanel.toolbar.breadcrumbStyle')}
             </Col>
             <Col>
               <Radio.Group
@@ -951,7 +953,7 @@ export default defaultSetting`
                 {breadcrumbStyleList.map((item) => {
                   return (
                     <Radio.Button key={item.value} value={item.value}>
-                      {item.label}
+                      {t(item.labelKey)}
                     </Radio.Button>
                   )
                 })}
@@ -960,7 +962,7 @@ export default defaultSetting`
           </Row>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              显示首页
+              {t('configPanel.toolbar.showHome')}
             </Col>
             <Col>
               <Switch
@@ -996,18 +998,37 @@ export default defaultSetting`
               <Col>
                 <Switch
                   size="small"
-                  defaultChecked={defaultSetting.topBar.toolbar[item.key]}
+                  defaultChecked={item.key === 'isEnableI18n'
+                    ? defaultSetting.topBar.toolbar.i18n.isEnableI18n
+                    : defaultSetting.topBar.toolbar[item.key]}
                   onChange={(v: boolean) => {
-                    setDefaultSetting({
-                      ...defaultSetting,
-                      topBar: {
-                        ...defaultSetting.topBar,
-                        toolbar: {
-                          ...defaultSetting.topBar.toolbar,
-                          [item.key]: v,
+                    if (item.key === 'isEnableI18n') {
+                      setDefaultSetting({
+                        ...defaultSetting,
+                        topBar: {
+                          ...defaultSetting.topBar,
+                          toolbar: {
+                            ...defaultSetting.topBar.toolbar,
+                            i18n: {
+                              ...defaultSetting.topBar.toolbar.i18n,
+                              isEnableI18n: v,
+                            },
+                          },
                         },
-                      },
-                    })
+                      })
+                    }
+                    else {
+                      setDefaultSetting({
+                        ...defaultSetting,
+                        topBar: {
+                          ...defaultSetting.topBar,
+                          toolbar: {
+                            ...defaultSetting.topBar.toolbar,
+                            [item.key]: v,
+                          },
+                        },
+                      })
+                    }
                   }}
                 />
               </Col>
@@ -1019,11 +1040,11 @@ export default defaultSetting`
   }
 
   const renderTabBarConfig = () => (
-    <Card key="tabBar" title="标签栏">
+    <Card key="tabBar" title={t('configPanel.tabBar')}>
       <div className={styles.cardContent}>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            样式风格
+            {t('configPanel.tabBar.style')}
           </Col>
           <Col>
             <Radio.Group
@@ -1045,7 +1066,7 @@ export default defaultSetting`
               {tabBarStyleList.map((item) => {
                 return (
                   <Radio.Button key={item.value} value={item.value}>
-                    {item.label}
+                    {t(item.labelKey)}
                   </Radio.Button>
                 )
               })}
@@ -1054,7 +1075,7 @@ export default defaultSetting`
         </Row>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            显示图标
+            {t('configPanel.tabBar.showIcon')}
           </Col>
           <Col>
             <Switch
@@ -1078,7 +1099,7 @@ export default defaultSetting`
         </Row>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            双击标签页
+            {t('configPanel.tabBar.dblClick')}
           </Col>
           <Col>
             <Select
@@ -1097,14 +1118,14 @@ export default defaultSetting`
                 })
               }}
               style={{ width: 140 }}
-              options={tabBarDblClickEventTypeList}
+              options={tabBarDblClickEventTypeList.map(item => ({ label: t(item.labelKey), value: item.value }))}
             >
             </Select>
           </Col>
         </Row>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            标签页宽度
+            {t('configPanel.tabBar.widthType')}
           </Col>
           <Col>
             <Select
@@ -1123,7 +1144,7 @@ export default defaultSetting`
                 })
               }}
               style={{ width: 140 }}
-              options={tabBarWidthTypeList}
+              options={tabBarWidthTypeList.map(item => ({ label: t(item.labelKey), value: item.value }))}
             >
             </Select>
             {defaultSetting.topBar.tabBar.widthType !== 'auto' && (
@@ -1154,11 +1175,11 @@ export default defaultSetting`
   )
 
   const renderAppConfig = () => (
-    <Card key="app" title="应用">
+    <Card key="app" title={t('configPanel.app')}>
       <div className={styles.cardContent}>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            移动端访问
+            {t('configPanel.app.mobileAccess')}
           </Col>
           <Col>
             <Switch
@@ -1176,7 +1197,7 @@ export default defaultSetting`
         </Row>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            动态标题
+            {t('configPanel.app.dynamicTitle')}
           </Col>
           <Col>
             <Switch
@@ -1194,7 +1215,7 @@ export default defaultSetting`
         </Row>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            哀悼模式
+            {t('configPanel.app.mourning')}
           </Col>
           <Col>
             <Switch
@@ -1212,7 +1233,7 @@ export default defaultSetting`
         </Row>
         <Row align="middle" className={styles.configItem}>
           <Col flex={1} className={styles.moduleLable}>
-            水印
+            {t('configPanel.app.watermark')}
           </Col>
           <Col>
             <Switch
@@ -1229,10 +1250,10 @@ export default defaultSetting`
           </Col>
         </Row>
         <div className={styles.appModuleContainer}>
-          <div className={styles.appModuleTitle}>账号</div>
+          <div className={styles.appModuleTitle}>{t('configPanel.app.account')}</div>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              权限验证
+              {t('configPanel.app.permission')}
             </Col>
             <Col>
               <Switch
@@ -1256,7 +1277,7 @@ export default defaultSetting`
           </Row>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              过期模式
+              {t('configPanel.app.expireMode')}
             </Col>
             <Col>
               <Select
@@ -1271,14 +1292,14 @@ export default defaultSetting`
                     },
                   })
                 }}
-                options={expireModeList}
+                options={expireModeList.map(item => ({ label: t(item.labelKey), value: item.value }))}
               >
               </Select>
             </Col>
           </Row>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              多账号管理
+              {t('configPanel.app.multiAccount')}
             </Col>
             <Col>
               <Switch
@@ -1302,10 +1323,10 @@ export default defaultSetting`
           </Row>
         </div>
         <div className={styles.appModuleContainer}>
-          <div className={styles.appModuleTitle}>主页</div>
+          <div className={styles.appModuleTitle}>{t('configPanel.app.homePage')}</div>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              启用
+              {t('configPanel.common.enable')}
             </Col>
             <Col>
               <Switch
@@ -1329,7 +1350,7 @@ export default defaultSetting`
           </Row>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              标题
+              {t('configPanel.common.title')}
             </Col>
             <Col>
               <Input
@@ -1353,10 +1374,10 @@ export default defaultSetting`
           </Row>
         </div>
         <div className={styles.appModuleContainer}>
-          <div className={styles.appModuleTitle}>布局</div>
+          <div className={styles.appModuleTitle}>{t('configPanel.app.layout')}</div>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              居中显示
+              {t('configPanel.app.center')}
             </Col>
             <Col>
               <Switch
@@ -1380,7 +1401,7 @@ export default defaultSetting`
           </Row>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              作用范围
+              {t('configPanel.app.layoutScope')}
             </Col>
             <Col>
               <Radio.Group
@@ -1402,7 +1423,7 @@ export default defaultSetting`
                 {layoutScopeList.map((item) => {
                   return (
                     <Radio.Button key={item.value} value={item.value}>
-                      {item.label}
+                      {t(item.labelKey)}
                     </Radio.Button>
                   )
                 })}
@@ -1411,7 +1432,7 @@ export default defaultSetting`
           </Row>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              居中宽度
+              {t('configPanel.app.centerWidth')}
             </Col>
             <Col>
               <Slider
@@ -1437,10 +1458,10 @@ export default defaultSetting`
           </Row>
         </div>
         <div className={styles.appModuleContainer}>
-          <div className={styles.appModuleTitle}>版权</div>
+          <div className={styles.appModuleTitle}>{t('configPanel.app.copyright')}</div>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              启用
+              {t('configPanel.common.enable')}
             </Col>
             <Col>
               <Switch
@@ -1464,7 +1485,7 @@ export default defaultSetting`
           </Row>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              日期
+              {t('configPanel.app.date')}
             </Col>
             <Col>
               <Input
@@ -1488,7 +1509,7 @@ export default defaultSetting`
           </Row>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              公司
+              {t('configPanel.app.company')}
             </Col>
             <Col>
               <Input
@@ -1512,7 +1533,7 @@ export default defaultSetting`
           </Row>
           <Row align="middle" className={styles.configItem}>
             <Col flex={1} className={styles.moduleLable}>
-              网站
+              {t('configPanel.app.website')}
             </Col>
             <Col>
               <Input
@@ -1575,25 +1596,25 @@ export default defaultSetting`
       title={(
         <div className={styles.customHeader}>
           <div className={styles.customHeaderLeft}>
-            <h3>{isDev ? '应用配置' : '个人偏好'}</h3>
+            <h3>{t(isDev ? 'configPanel.title.dev' : 'configPanel.title.user')}</h3>
             {isDev && (
-              <p>在生产环境该模块会自动关闭，仅保留用户的偏好设置</p>
+              <p>{t('configPanel.tip.production')}</p>
             )}
           </div>
           <div className={styles.customHeaderActions}>
             {isDev
               ? (
                   <>
-                    <Tooltip title="调整配置仅临时生效，想真正应用于项目，请点击「复制配置」按钮，并粘贴到 packages/layout/defaultSettings.ts 文件中">
+                    <Tooltip title={t('configPanel.tip.copy')}>
                       <ExclamationCircleOutlined className={styles.customHeaderTip} />
                     </Tooltip>
                     <Button icon={<CopyOutlined />} type="primary" onClick={handleCopyConfig}>
-                      复制配置
+                      {t('configPanel.copy')}
                     </Button>
                   </>
                 )
               : (
-                  <Button type="primary">重置</Button>
+                  <Button type="primary">{t('configPanel.reset')}</Button>
                 )}
           </div>
         </div>

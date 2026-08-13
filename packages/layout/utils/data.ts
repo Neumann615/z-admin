@@ -35,138 +35,139 @@ export const themeColorList = [
   gold.primary,
 ]
 
-export const themeTypeList: Array<{ label: string, value: ThemeType }> = [
-  { label: '默认', value: 'default' },
-  { label: '插画', value: 'illustration' },
-  { label: '卡通', value: 'cartoon' },
-  { label: 'Shadcn', value: 'shadcn' },
-  { label: '黑客', value: 'hacker' },
-  { label: 'MUI', value: 'mui' },
-  { label: 'Bootstrap', value: 'bootstrap' },
-  { label: '玻璃', value: 'glass' },
+// 选项列表统一使用 labelKey（i18n 文案 key），由消费方（如 ConfigPanel）用 useT 动态翻译
+export const themeTypeList: Array<{ labelKey: string, value: ThemeType }> = [
+  { labelKey: 'configPanel.common.default', value: 'default' },
+  { labelKey: 'configPanel.themeType.illustration', value: 'illustration' },
+  { labelKey: 'configPanel.themeType.cartoon', value: 'cartoon' },
+  { labelKey: 'configPanel.themeType.shadcn', value: 'shadcn' },
+  { labelKey: 'configPanel.themeType.hacker', value: 'hacker' },
+  { labelKey: 'configPanel.themeType.mui', value: 'mui' },
+  { labelKey: 'configPanel.themeType.bootstrap', value: 'bootstrap' },
+  { labelKey: 'configPanel.themeType.glass', value: 'glass' },
 ]
 
 export const menuFillStyleList = ['none', 'radius']
 
 export const breadcrumbStyleList = [
   {
-    label: '默认',
+    labelKey: 'configPanel.common.default',
     value: 'default',
   },
   {
-    label: '时尚',
+    labelKey: 'configPanel.toolbar.breadcrumbStyle.modern',
     value: 'modern',
   },
 ]
 
 export const topBarPositionList = [
   {
-    label: '默认',
+    labelKey: 'configPanel.common.default',
     value: 'static',
   },
   {
-    label: '固定',
+    labelKey: 'configPanel.common.fixed',
     value: 'fixed',
   },
   {
-    label: '粘性',
+    labelKey: 'configPanel.common.sticky',
     value: 'sticky',
   },
 ]
 
 export const tabBarPositionList = [
   {
-    label: '默认',
+    labelKey: 'configPanel.common.default',
     value: 'static',
   },
   {
-    label: '固定',
+    labelKey: 'configPanel.common.fixed',
     value: 'fixed',
   },
   {
-    label: '粘性',
+    labelKey: 'configPanel.common.sticky',
     value: 'sticky',
   },
 ]
 
 export const tabBarStyleList = [
   {
-    label: '默认',
+    labelKey: 'configPanel.common.default',
     value: 'default',
   },
   {
-    label: '卡片',
+    labelKey: 'configPanel.tabBar.style.card',
     value: 'card',
   },
   {
-    label: '方块',
+    labelKey: 'configPanel.tabBar.style.block',
     value: 'block',
   },
 ]
 
 export const tabBarDblClickEventTypeList: Array<{
-  label: string
+  labelKey: string
   value: TabBarDblClickEventType
 }> = [
   {
-    label: '刷新',
+    labelKey: 'configPanel.tabBar.dblClick.refresh',
     value: 'refresh',
   },
   {
-    label: '关闭',
+    labelKey: 'configPanel.tabBar.dblClick.close',
     value: 'close',
   },
   {
-    label: '固定/取消固定',
+    labelKey: 'configPanel.tabBar.dblClick.fixed',
     value: 'fixed',
   },
   {
-    label: '最大化',
+    labelKey: 'configPanel.tabBar.dblClick.max',
     value: 'max',
   },
   {
-    label: '新窗口打开',
+    labelKey: 'configPanel.tabBar.dblClick.open',
     value: 'open',
   },
 ]
 
 export const tabBarWidthTypeList = [
   {
-    label: '固定',
+    labelKey: 'configPanel.common.fixed',
     value: 'fixed',
   },
   {
-    label: '自动',
+    labelKey: 'configPanel.tabBar.widthType.auto',
     value: 'auto',
   },
   {
-    label: '自适应（最小宽度）',
+    labelKey: 'configPanel.tabBar.widthType.autoMin',
     value: 'auto-min',
   },
   {
-    label: '自适应（最大宽度）',
+    labelKey: 'configPanel.tabBar.widthType.autoMax',
     value: 'auto-max',
   },
 ]
 
-export const expireModeList: Array<{ label: string, value: ExpireMode }> = [
+export const expireModeList: Array<{ labelKey: string, value: ExpireMode }> = [
   {
-    label: '重定向登录页',
+    labelKey: 'configPanel.app.expireMode.logout',
     value: 'logout',
   },
   {
-    label: '弹出登录窗口',
+    labelKey: 'configPanel.app.expireMode.prompt',
     value: 'prompt',
   },
 ]
 
-export const layoutScopeList: Array<{ label: string, value: LayoutScope }> = [
+export const layoutScopeList: Array<{ labelKey: string, value: LayoutScope }> = [
   {
-    label: '内部',
+    labelKey: 'configPanel.app.layoutScope.inside',
     value: 'inside',
   },
   {
-    label: '外部',
+    labelKey: 'configPanel.app.layoutScope.outside',
     value: 'outside',
   },
 ]
@@ -186,7 +187,7 @@ export const storageTypeList = [
 
 export const transitionTypeList = [
   {
-    label: '淡入淡出',
+    labelKey: 'configPanel.transition.fadeIn',
     value: 'fade-in',
     classNames: {
       appear: 'animate__animated',
@@ -198,7 +199,7 @@ export const transitionTypeList = [
     },
   },
   {
-    label: '向上淡入',
+    labelKey: 'configPanel.transition.fadeUp',
     value: 'fade-up',
     classNames: {
       appear: 'animate__animated',
@@ -210,7 +211,7 @@ export const transitionTypeList = [
     },
   },
   {
-    label: '向下淡入',
+    labelKey: 'configPanel.transition.fadeDown',
     value: 'fade-down',
     classNames: {
       appear: 'animate__animated',
@@ -222,7 +223,7 @@ export const transitionTypeList = [
     },
   },
   {
-    label: '向左淡入',
+    labelKey: 'configPanel.transition.fadeLeft',
     value: 'fade-left',
     classNames: {
       appear: 'animate__animated',
@@ -234,7 +235,7 @@ export const transitionTypeList = [
     },
   },
   {
-    label: '向右淡入',
+    labelKey: 'configPanel.transition.fadeRight',
     value: 'fade-right',
     classNames: {
       appear: 'animate__animated',
@@ -256,23 +257,23 @@ export { transitionTypeSet }
 
 export const menuTypeList = [
   {
-    label: '侧边栏模式',
+    labelKey: 'configPanel.menuType.side',
     value: 'side',
   },
   {
-    label: '侧边栏精简模式',
+    labelKey: 'configPanel.menuType.onlySide',
     value: 'only-side',
   },
   {
-    label: '顶部模式',
+    labelKey: 'configPanel.menuType.head',
     value: 'head',
   },
   {
-    label: '顶部精简模式',
+    labelKey: 'configPanel.menuType.onlyHead',
     value: 'only-head',
   },
   {
-    label: '精简模式（不包含主导航）',
+    labelKey: 'configPanel.menuType.simple',
     value: 'simple',
   },
 ]

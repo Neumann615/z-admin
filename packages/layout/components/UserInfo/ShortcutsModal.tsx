@@ -1,7 +1,7 @@
-import type { LayoutMessages } from '../../locales/zh-CN'
+import type { LayoutMessages } from '@zealous-admin/locales/index'
 import { Modal, Typography } from 'antd'
 import { createStyles } from 'antd-style'
-import { useT } from '../../locales/index'
+import { useT } from '../../hooks/useT'
 
 const { Text, Title } = Typography
 

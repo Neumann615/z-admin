@@ -1,11 +1,7 @@
+import type { I18nMessages } from '@zealous-admin/locales/index'
 import type { MenuData, MenuItem } from '../types/config'
 
-/**
- * 国际化文案映射结构
- * 外层 key 为语言（如 'zh-CN'），内层 key 为菜单路径（MenuItem.key），值为对应语言的菜单名称
- * 由用户应用侧维护并通过 LayoutProvider 的 messages prop 注入
- */
-export type I18nMessages = Record<string, Record<string, string>>
+export type { I18nMessages }
 
 /**
  * 根据当前语言解析菜单名称，返回深拷贝后的新菜单树（不修改原数据）

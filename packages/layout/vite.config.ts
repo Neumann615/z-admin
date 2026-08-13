@@ -35,6 +35,8 @@ export default defineConfig({
         /^zustand\//,
         '@zealous-admin/components',
         /^@zealous-admin\/components\//,
+        '@zealous-admin/locales',
+        /^@zealous-admin\/locales\//,
       ],
       input: {
         index: './packages/layout/index.ts',
