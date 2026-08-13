@@ -3,6 +3,7 @@ import { Input, Modal } from 'antd'
 import { createStyles } from 'antd-style'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useControlTab } from '../../hooks/useControlTab'
+import { useT } from '../../locales/index'
 import { useMenuStore } from '../../store/menu'
 
 // 扁平化菜单树，仅返回叶子节点（对应实际页面路由）
@@ -171,6 +172,7 @@ export function Search() {
   const { mainNavData } = useMenuStore()
   const { openTab } = useControlTab()
   const { styles } = useStyles()
+  const t = useT()
 
   // 扁平化菜单获取所有叶子页面
   const allItems = useMemo(() => {
@@ -253,7 +255,7 @@ export function Search() {
       {/* 触发器按钮 */}
       <div className={styles.trigger} onClick={() => setOpen(true)}>
         <SearchOutlined className={styles.triggerIcon} />
-        <span>搜索</span>
+        <span>{t('search.trigger')}</span>
       </div>
 
       {/* 搜索弹窗 */}
@@ -278,7 +280,7 @@ export function Search() {
           <div className={styles.searchArea}>
             <Input
               ref={inputRef}
-              placeholder="支持标题、URL模糊查询"
+              placeholder={t('search.placeholder')}
               prefix={<SearchOutlined />}
               value={query}
               onChange={e => setQuery(e.target.value)}
@@ -295,14 +297,14 @@ export function Search() {
               ? (
                   <div className={styles.empty}>
                     <SmileOutlined className={styles.emptyIcon} />
-                    <div>输入你要搜索的导航</div>
+                    <div>{t('search.empty')}</div>
                   </div>
                 )
               : results.length === 0
                 ? (
                     <div className={styles.empty}>
                       <FrownOutlined className={styles.emptyIcon} />
-                      <div>没有找到你想要的</div>
+                      <div>{t('search.noResult')}</div>
                     </div>
                   )
                 : (

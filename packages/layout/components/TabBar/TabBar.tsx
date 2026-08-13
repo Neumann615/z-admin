@@ -16,6 +16,7 @@ import { createStyles } from 'antd-style'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useControlTab } from '../../hooks/useControlTab'
+import { useT } from '../../locales/index'
 import { usePageStore, useTopBarStore } from '../../store/index'
 import { MenuIcon } from '../MenuIcon/MenuIcon'
 
@@ -251,6 +252,7 @@ const useStyles = createStyles(({ token, css }) => ({
 export function TabBar() {
   const { openTab, closeTab, swapTab, fixedTab, findIconByPath } = useControlTab()
   const { styles, theme } = useStyles()
+  const t = useT()
   const { changeIsMaximize, refreshPage } = usePageStore()
   const { tabs, nowTab, tabBar, order } = useTopBarStore()
 
@@ -323,7 +325,7 @@ export function TabBar() {
     }
     return [
       {
-        label: '重新加载',
+        label: t('tabBar.reload'),
         key: '1',
         icon: (
           <div className={styles.contextMenuIcon}>
@@ -336,7 +338,7 @@ export function TabBar() {
         disabled: nowOpenTab.tabId !== nowTab.tabId,
       },
       {
-        label: nowOpenTab.isFixed ? '取消固定' : '固定',
+        label: nowOpenTab.isFixed ? t('tabBar.unpin') : t('tabBar.pin'),
         key: '3',
         icon: (
           <div className={styles.contextMenuIcon}>
@@ -348,7 +350,7 @@ export function TabBar() {
         },
       },
       {
-        label: '最大化',
+        label: t('tabBar.maximize'),
         key: '4',
         icon: (
           <div className={styles.contextMenuIcon}>
@@ -364,7 +366,7 @@ export function TabBar() {
         },
       },
       {
-        label: '关闭标签页',
+        label: t('tabBar.closeTab'),
         key: '2',
         icon: (
           <div className={styles.contextMenuIcon}>
@@ -377,7 +379,7 @@ export function TabBar() {
         disabled: tabs?.length === 1,
       },
       {
-        label: '关闭其他标签页',
+        label: t('tabBar.closeOtherTabs'),
         key: '5',
         icon: (
           <div className={styles.contextMenuIcon}>
@@ -390,7 +392,7 @@ export function TabBar() {
         disabled: tabs?.length === 1,
       },
       {
-        label: '关闭左侧标签页',
+        label: t('tabBar.closeLeftTabs'),
         key: '6',
         icon: (
           <div className={styles.contextMenuIcon}>
@@ -403,7 +405,7 @@ export function TabBar() {
         disabled: !leftCount,
       },
       {
-        label: '关闭右侧标签页',
+        label: t('tabBar.closeRightTabs'),
         key: '7',
         icon: (
           <div className={styles.contextMenuIcon}>
@@ -416,7 +418,7 @@ export function TabBar() {
         disabled: !rightCount,
       },
     ]
-  }, [nowTab, nowOpenTab, isOpenTab, tabs])
+  }, [nowTab, nowOpenTab, isOpenTab, tabs, t])
 
   const popoverItems = useMemo(() => {
     let nowTabIndex = -1
@@ -439,19 +441,19 @@ export function TabBar() {
     }
     return [
       {
-        tooltip: '搜索',
+        tooltip: t('tabBar.search'),
         icon: <SearchOutlined />,
         onClick: () => { },
         disabled: false,
       },
       {
-        tooltip: '关闭其他标签页',
+        tooltip: t('tabBar.closeOtherTabs'),
         icon: <CloseOutlined />,
         onClick: () => { },
         disabled: tabs?.length === 1,
       },
       {
-        tooltip: '关闭左侧标签页',
+        tooltip: t('tabBar.closeLeftTabs'),
         icon: <LeftSquareOutlined />,
         onClick: () => {
           if (!leftCount)
@@ -461,7 +463,7 @@ export function TabBar() {
         disabled: !leftCount,
       },
       {
-        tooltip: '关闭右侧标签页',
+        tooltip: t('tabBar.closeRightTabs'),
         icon: <RightSquareOutlined />,
         onClick: () => {
           if (!rightCount)
@@ -471,7 +473,7 @@ export function TabBar() {
         disabled: !rightCount,
       },
     ]
-  }, [nowTab, tabs])
+  }, [nowTab, tabs, t])
 
   useEffect(() => {
     const dom = document.getElementById(`header-tab-${nowTab.tabId}`)

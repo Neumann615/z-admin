@@ -1,4 +1,5 @@
 export * from './app'
+export * from './i18n'
 export * from './menu'
 export * from './page'
 export * from './reLogin'

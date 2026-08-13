@@ -3,6 +3,7 @@ import { App, Avatar, Divider, Popover } from 'antd'
 import { createStyles } from 'antd-style'
 import { useState } from 'react'
 import { useLogout } from '../../hooks/useAuth'
+import { useT } from '../../locales/index'
 import { useMenuStore, useUserStore } from '../../store/index'
 import { ConfigPanel } from '../ConfigPanel/ConfigPanel'
 import { ProfileModal } from './ProfileModal'
@@ -107,6 +108,7 @@ const useStyles = createStyles(({ token }) => ({
 export function UserInfo() {
   const { message } = App.useApp()
   const { styles, theme } = useStyles()
+  const t = useT()
   const menuStore = useMenuStore()
   const { menuType, subMenuCollapse } = menuStore
   const [configPanelOpen, setConfigPanelOpen] = useState(false)
@@ -117,7 +119,7 @@ export function UserInfo() {
   const { logout } = useLogout()
 
   const userInfo = useUserStore(state => state.userInfo)
-  const displayName = userInfo?.nickName || userInfo?.username || '未登录'
+  const displayName = userInfo?.nickName || userInfo?.username || t('userInfo.notLoggedIn')
   const displayEmail = userInfo?.email || ''
   const avatarSrc = userInfo?.avatar
     ? userInfo.avatar
@@ -130,7 +132,7 @@ export function UserInfo() {
       await logout()
     }
     catch {
-      message.error('退出失败，请重试')
+      message.error(t('userInfo.logoutFailed'))
     }
     finally {
       setLoggingOut(false)
@@ -158,7 +160,7 @@ export function UserInfo() {
           }}
         >
           <span className={styles.menuItemIcon}><HomeFilled /></span>
-          <span>用户信息</span>
+          <span>{t('userInfo.profile')}</span>
         </div>
         <div
           className={styles.menuItem}
@@ -168,7 +170,7 @@ export function UserInfo() {
           }}
         >
           <span className={styles.menuItemIcon}><SettingFilled /></span>
-          <span>偏好设置</span>
+          <span>{t('userInfo.preferences')}</span>
         </div>
       </div>
       <Divider style={{ margin: 0 }} />
@@ -181,7 +183,7 @@ export function UserInfo() {
           }}
         >
           <span className={styles.menuItemIcon}><ToolFilled /></span>
-          <span>快捷键</span>
+          <span>{t('userInfo.shortcuts')}</span>
         </div>
         <div
           className={styles.menuItemDanger}
@@ -189,7 +191,7 @@ export function UserInfo() {
           style={{ opacity: loggingOut ? 0.5 : 1, pointerEvents: loggingOut ? 'none' : 'auto' }}
         >
           <span className={styles.menuItemIcon}><LogoutOutlined /></span>
-          <span>{loggingOut ? '退出中...' : '退出登录'}</span>
+          <span>{loggingOut ? t('userInfo.loggingOut') : t('userInfo.logout')}</span>
         </div>
       </div>
     </div>

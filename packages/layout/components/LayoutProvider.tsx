@@ -1,23 +1,33 @@
 import type { LayoutConfig, MenuData } from '../types/config'
+import type { I18nMessages } from '../utils/i18n'
 import { theme as antdTheme, App, ConfigProvider } from 'antd'
 import { StyleProvider } from 'antd-style'
 import zhCN from 'antd/locale/zh_CN'
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import {
   useAppStore,
+  useI18nStore,
   useMenuStore,
   usePageStore,
   useThemeStore,
   useTopBarStore,
 } from '../store/index'
 import { useThemeByType } from '../themeMap'
+import { findLabelByKey, resolveMenuLabels } from '../utils/i18n'
 import { AppMessageProvider } from './AppMessageProvider'
+
+// antd 语言包懒加载器（zh-CN 作为默认语言静态引入，其余按需加载）
+const antdLocaleLoaders: Record<string, () => Promise<{ default: typeof zhCN }>> = {
+  'en-US': () => import('antd/locale/en_US'),
+}
 
 interface AppLayoutProps {
   children: React.ReactNode
   menuData?: MenuData
   defaultSetting?: LayoutConfig
   cachedPages?: string[]
+  /** 国际化文案映射：{ [locale]: { [菜单key]: 名称 } }，菜单多语言由用户应用侧维护 */
+  messages?: I18nMessages
 }
 
 export function LayoutProvider({
@@ -25,15 +35,20 @@ export function LayoutProvider({
   menuData,
   defaultSetting,
   cachedPages,
+  messages,
 }: AppLayoutProps) {
   const themeStore = useThemeStore()
   const menuStore = useMenuStore()
   const appStore = useAppStore()
+  const locale = useI18nStore(state => state.locale)
 
   // 监听系统深色/浅色模式
   const [systemDarkMode, setSystemDarkMode] = useState(
     () => window.matchMedia('(prefers-color-scheme: dark)').matches,
   )
+
+  // antd 语言包（随 locale 懒加载切换）
+  const [antdLocale, setAntdLocale] = useState<typeof zhCN>(zhCN)
 
   // 计算全局主题算法（仅 default 主题生效）
   const globalAlgorithm = useMemo(() => {
@@ -86,18 +101,98 @@ export function LayoutProvider({
       usePageStore.setState({ ...defaultSetting.page })
       useTopBarStore.setState({ ...defaultSetting.topBar })
       useThemeStore.setState({ ...defaultSetting.theme })
+      if (defaultSetting.i18n) {
+        useI18nStore.setState({ ...defaultSetting.i18n })
+      }
     }
   }, [])
 
+  // 同步外部传入的国际化文案映射
+  useEffect(() => {
+    if (messages) {
+      useI18nStore.getState().setMessages(messages)
+    }
+  }, [messages])
+
+  // 按当前语言解析菜单名称（集中处理，下游 Menu/Search/Breadcrumb 自动同步）
+  const resolvedMenuData = useMemo(
+    () => resolveMenuLabels(menuData || [], messages, locale),
+    [menuData, messages, locale],
+  )
+
   // menuData 变化时更新菜单数据（登录后 menus 从空变为有值时触发）
   useEffect(() => {
-    console.log('za-menuData', menuData)
-    menuStore.setMainNavData(menuData || [])
-    if (!menuStore?.mainNavCurrentKeys?.length && menuData?.length) {
-      menuStore.setMainNavCurrentKeys([menuData[0].key])
-      menuStore.setMenuData(menuData[0].children || [])
+    console.log('za-menuData', resolvedMenuData)
+    menuStore.setMainNavData(resolvedMenuData)
+    if (!menuStore?.mainNavCurrentKeys?.length && resolvedMenuData?.length) {
+      menuStore.setMainNavCurrentKeys([resolvedMenuData[0].key])
+      menuStore.setMenuData(resolvedMenuData[0].children || [])
     }
-  }, [menuData])
+    else if (resolvedMenuData?.length) {
+      // 切换语言时按当前主导航重新解析次级菜单
+      const currentMainKey = useMenuStore.getState().mainNavCurrentKeys?.[0]
+      const currentMain = resolvedMenuData.find(item => item.key === currentMainKey)
+      if (currentMain) {
+        useMenuStore.getState().setMenuData(currentMain.children || [])
+      }
+    }
+  }, [resolvedMenuData])
+
+  // 语言/菜单变化时回填标签栏与面包屑的标题快照
+  useEffect(() => {
+    const topBarStore = useTopBarStore.getState()
+    const homeTitle = messages?.[locale]?.['/'] ?? appStore.homePage.title
+
+    const resolveTitle = (key: string): string => {
+      if (key === '/')
+        return homeTitle
+      return findLabelByKey(resolvedMenuData, key.split('?')[0])
+    }
+
+    if (topBarStore.tabs?.length) {
+      const tabs = topBarStore.tabs.map((tab: any) => {
+        const title = resolveTitle(tab.tabId)
+        if (!title || title === tab.title)
+          return tab
+        return {
+          ...tab,
+          title,
+          menuData: tab.menuData ? { ...tab.menuData, label: title } : tab.menuData,
+        }
+      })
+      topBarStore.setTabs(tabs)
+
+      const nowTitle = resolveTitle(topBarStore.nowTab?.tabId)
+      if (nowTitle && nowTitle !== topBarStore.nowTab?.title) {
+        topBarStore.setNowTab({ ...topBarStore.nowTab, title: nowTitle })
+      }
+    }
+
+    if (topBarStore.breadcrumbList?.length) {
+      const breadcrumbList = topBarStore.breadcrumbList.map((item: any) => {
+        const label = resolveTitle(item.key)
+        return label && label !== item.label ? { ...item, label } : item
+      })
+      topBarStore.setBreadcrumbList(breadcrumbList)
+    }
+  }, [resolvedMenuData, locale, messages, appStore.homePage.title])
+
+  // locale 变化时：同步 html lang 属性 + 懒加载 antd 语言包
+  useEffect(() => {
+    document.documentElement.lang = locale
+    if (locale === 'zh-CN') {
+      setAntdLocale(zhCN)
+      return
+    }
+    let cancelled = false
+    antdLocaleLoaders[locale]?.().then((mod) => {
+      if (!cancelled)
+        setAntdLocale(mod.default)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [locale])
 
   // 同步外部传入的 cachedPages
   useEffect(() => {
@@ -120,7 +215,7 @@ export function LayoutProvider({
   return (
     <StyleProvider>
       <ConfigProvider
-        locale={zhCN}
+        locale={antdLocale}
         {...themeConfig}
       >
         <App>

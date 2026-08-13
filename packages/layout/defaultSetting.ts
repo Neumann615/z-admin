@@ -34,6 +34,13 @@ const defaultSetting: LayoutConfig = {
       website: 'https://github.com/Neumann615/zealous-admin',
     },
   },
+  i18n: {
+    defaultLocale: 'zh-CN',
+    locales: [
+      { locale: 'zh-CN', label: '简体中文' },
+      { locale: 'en-US', label: 'English' },
+    ],
+  },
   theme: {
     themeType: 'default',
     themeColor: '#2f54eb',

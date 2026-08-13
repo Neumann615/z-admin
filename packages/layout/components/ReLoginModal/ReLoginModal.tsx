@@ -3,6 +3,7 @@ import { Button, Form, Input, Modal } from 'antd'
 import { createStyles } from 'antd-style'
 import { useState } from 'react'
 import { loginAction, logoutAction } from '../../hooks/useAuth'
+import { useT } from '../../locales/index'
 import { useReLoginStore } from '../../store/reLogin'
 
 const useStyles = createStyles(({ token }) => ({
@@ -15,6 +16,7 @@ const useStyles = createStyles(({ token }) => ({
 
 export function ReLoginModal() {
   const { styles } = useStyles()
+  const t = useT()
   const { visible, hide } = useReLoginStore()
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
@@ -43,23 +45,23 @@ export function ReLoginModal() {
   return (
     <Modal
       open={visible}
-      title="登录已过期"
-      okText="重新登录"
-      cancelText="退出"
+      title={t('reLogin.title')}
+      okText={t('reLogin.okText')}
+      cancelText={t('reLogin.cancelText')}
       onOk={handleOk}
       onCancel={handleCancel}
       confirmLoading={loading}
       closable={false}
       mask={{ closable: false }}
     >
-      <div className={styles.tip}>你的登录凭证已失效，请重新输入用户名和密码</div>
+      <div className={styles.tip}>{t('reLogin.tip')}</div>
       <Form form={form} autoComplete="off">
         <Form.Item
           name="userName"
-          rules={[{ required: true, message: '请输入用户名' }]}
+          rules={[{ required: true, message: t('reLogin.usernameRequired') }]}
         >
           <Input
-            placeholder="用户名"
+            placeholder={t('reLogin.username')}
             prefix={<UserOutlined />}
             allowClear
           />
@@ -67,12 +69,12 @@ export function ReLoginModal() {
         <Form.Item
           name="password"
           rules={[
-            { required: true, message: '请输入密码' },
-            { min: 3, message: '密码不能小于3位' },
+            { required: true, message: t('reLogin.passwordRequired') },
+            { min: 3, message: t('reLogin.passwordMin') },
           ]}
         >
           <Input.Password
-            placeholder="密码"
+            placeholder={t('reLogin.password')}
             prefix={<LockOutlined />}
           />
         </Form.Item>

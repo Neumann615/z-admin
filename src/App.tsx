@@ -3,6 +3,7 @@ import { groupBy, sortBy } from '@zealous-admin/utils/index'
 import { useEffect, useMemo } from 'react'
 import { Navigate, useRoutes } from 'react-router'
 import routes from '~react-pages'
+import messages from './locales/index'
 import './App.css'
 
 // 路由守卫
@@ -52,6 +53,7 @@ export default function App() {
     <LayoutProvider
       menuData={menuData}
       cachedPages={['/demo/keepalive']}
+      messages={messages}
     >
       {useRoutes(routes)}
     </LayoutProvider>

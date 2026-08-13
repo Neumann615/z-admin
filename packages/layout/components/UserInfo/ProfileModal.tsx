@@ -3,6 +3,7 @@ import { App, Avatar, Badge, Button, Card, Descriptions, Divider, Form, Input, M
 import { createStyles } from 'antd-style'
 import { useState } from 'react'
 import { logoutAction } from '../../hooks/useAuth'
+import { useT } from '../../locales/index'
 import { useUserStore } from '../../store/index'
 import http from '../../utils/http'
 
@@ -158,12 +159,13 @@ export interface ProfileModalProps {
 export function ProfileModal({ open, onClose }: ProfileModalProps) {
   const { styles, theme } = useStyles()
   const { message } = App.useApp()
+  const t = useT()
   const [form] = Form.useForm()
   const [submitting, setSubmitting] = useState(false)
 
   const userInfo = useUserStore(state => state.userInfo)
   const { username, nickName, email, avatar, roles, status, loginTime } = userInfo
-  const displayName = nickName || username || '未登录'
+  const displayName = nickName || username || t('userInfo.notLoggedIn')
   const avatarSrc = avatar || `https://api.dicebear.com/9.x/avataaars-neutral/svg?seed=${username}`
 
   const handleSubmit = async () => {
@@ -174,7 +176,7 @@ export function ProfileModal({ open, onClose }: ProfileModalProps) {
         oldPassword: values.oldPassword,
         newPassword: values.newPassword,
       })
-      message.success('密码修改成功，请重新登录')
+      message.success(t('profile.passwordChanged'))
       form.resetFields()
       setTimeout(logoutAction, 1500)
     }
@@ -222,15 +224,15 @@ export function ProfileModal({ open, onClose }: ProfileModalProps) {
               <div className={styles.bannerTags}>
                 {roles?.length
                   ? roles.map(role => <Tag key={role} className={styles.roleTag}>{role}</Tag>)
-                  : <Tag className={styles.roleTag}>普通用户</Tag>}
+                  : <Tag className={styles.roleTag}>{t('profile.defaultRole')}</Tag>}
               </div>
             </div>
             <div className={styles.bannerMeta}>
               <div className={styles.metaItem}>
-                <Badge status={Number(status) === 1 ? 'success' : 'error'} text={Number(status) === 1 ? '账号正常' : '已禁用'} />
+                <Badge status={Number(status) === 1 ? 'success' : 'error'} text={Number(status) === 1 ? t('profile.accountNormal') : t('profile.accountDisabled')} />
               </div>
               <div className={styles.metaItem}>
-                <span>最后登录</span>
+                <span>{t('profile.lastLogin')}</span>
                 <span>{loginTime || '-'}</span>
               </div>
             </div>
@@ -241,33 +243,33 @@ export function ProfileModal({ open, onClose }: ProfileModalProps) {
           <Card className={styles.card}>
             <div className={styles.cardTitle}>
               <SafetyCertificateOutlined style={{ color: theme.colorPrimary }} />
-              个人资料
+              {t('profile.title')}
             </div>
             <Divider style={{ margin: '12px 0 16px' }} />
             <Descriptions column={1} colon={false} size="middle">
-              <Descriptions.Item label={<span className={styles.descLabel}>用户名</span>}>
+              <Descriptions.Item label={<span className={styles.descLabel}>{t('profile.username')}</span>}>
                 <Space>
                   <UserOutlined style={{ fontSize: 12 }} />
                   {username || '-'}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label={<span className={styles.descLabel}>昵称</span>}>
+              <Descriptions.Item label={<span className={styles.descLabel}>{t('profile.nickname')}</span>}>
                 {nickName || '-'}
               </Descriptions.Item>
-              <Descriptions.Item label={<span className={styles.descLabel}>邮箱</span>}>
+              <Descriptions.Item label={<span className={styles.descLabel}>{t('profile.email')}</span>}>
                 {email || '-'}
               </Descriptions.Item>
-              <Descriptions.Item label={<span className={styles.descLabel}>账号状态</span>}>
-                <Badge status={Number(status) === 1 ? 'success' : 'error'} text={Number(status) === 1 ? '启用' : '禁用'} />
+              <Descriptions.Item label={<span className={styles.descLabel}>{t('profile.accountStatus')}</span>}>
+                <Badge status={Number(status) === 1 ? 'success' : 'error'} text={Number(status) === 1 ? t('profile.statusEnabled') : t('profile.statusDisabled')} />
               </Descriptions.Item>
-              <Descriptions.Item label={<span className={styles.descLabel}>角色</span>}>
+              <Descriptions.Item label={<span className={styles.descLabel}>{t('profile.role')}</span>}>
                 <Space wrap>
                   {roles?.length
                     ? roles.map(role => <Tag color="blue" key={role}>{role}</Tag>)
                     : <Text type="secondary">-</Text>}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label={<span className={styles.descLabel}>最后登录时间</span>}>
+              <Descriptions.Item label={<span className={styles.descLabel}>{t('profile.lastLoginTime')}</span>}>
                 {loginTime || '-'}
               </Descriptions.Item>
             </Descriptions>
@@ -275,59 +277,59 @@ export function ProfileModal({ open, onClose }: ProfileModalProps) {
           <Card className={styles.card}>
             <div className={styles.cardTitle}>
               <LockOutlined style={{ color: theme.colorPrimary }} />
-              修改密码
+              {t('profile.changePassword')}
             </div>
             <Divider style={{ margin: '12px 0 16px' }} />
             <Form form={form} layout="vertical" requiredMark={false} onFinish={handleSubmit}>
               <Form.Item
-                label="旧密码"
+                label={t('profile.oldPassword')}
                 name="oldPassword"
-                rules={[{ required: true, message: '请输入旧密码' }]}
+                rules={[{ required: true, message: t('profile.oldPasswordRequired') }]}
               >
-                <Input.Password prefix={<LockOutlined />} placeholder="请输入当前密码" />
+                <Input.Password prefix={<LockOutlined />} placeholder={t('profile.oldPasswordPlaceholder')} />
               </Form.Item>
               <Form.Item
-                label="新密码"
+                label={t('profile.newPassword')}
                 name="newPassword"
                 rules={[
-                  { required: true, message: '请输入新密码' },
-                  { min: 6, max: 20, message: '密码长度为 6-20 位' },
+                  { required: true, message: t('profile.newPasswordRequired') },
+                  { min: 6, max: 20, message: t('profile.passwordLength') },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (!value || value !== getFieldValue('oldPassword')) {
                         return Promise.resolve()
                       }
-                      return Promise.reject(new Error('新密码不能与旧密码相同'))
+                      return Promise.reject(new Error(t('profile.passwordSame')))
                     },
                   }),
                 ]}
               >
-                <Input.Password prefix={<SafetyCertificateOutlined />} placeholder="6-20 位新密码" />
+                <Input.Password prefix={<SafetyCertificateOutlined />} placeholder={t('profile.newPasswordPlaceholder')} />
               </Form.Item>
               <Form.Item
-                label="确认新密码"
+                label={t('profile.confirmPassword')}
                 name="confirmPassword"
                 dependencies={['newPassword']}
                 rules={[
-                  { required: true, message: '请再次输入新密码' },
+                  { required: true, message: t('profile.confirmPasswordRequired') },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (!value || getFieldValue('newPassword') === value) {
                         return Promise.resolve()
                       }
-                      return Promise.reject(new Error('两次输入的密码不一致'))
+                      return Promise.reject(new Error(t('profile.passwordMismatch')))
                     },
                   }),
                 ]}
               >
-                <Input.Password prefix={<UserOutlined />} placeholder="请再次输入新密码" />
+                <Input.Password prefix={<UserOutlined />} placeholder={t('profile.confirmPasswordPlaceholder')} />
               </Form.Item>
               <Form.Item style={{ marginBottom: 0 }}>
                 <Button type="primary" htmlType="submit" block loading={submitting}>
-                  确认修改
+                  {t('profile.submit')}
                 </Button>
               </Form.Item>
-              <div className={styles.formTip}>修改成功后需重新登录，请妥善保管新密码</div>
+              <div className={styles.formTip}>{t('profile.tip')}</div>
             </Form>
           </Card>
         </div>

@@ -9,6 +9,7 @@ import {
   MoonOutlined,
   SunOutlined,
   SyncOutlined,
+  TranslationOutlined,
 } from '@ant-design/icons'
 import { useFullscreen } from 'ahooks'
 import { Col, Dropdown, Row } from 'antd'
@@ -16,6 +17,8 @@ import { createStyles } from 'antd-style'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { useMobileDetect } from '../../hooks/useMobileDetect'
+import { useT } from '../../locales/index'
+import { useI18nStore } from '../../store/i18n'
 import { useMenuStore } from '../../store/menu'
 import { usePageStore } from '../../store/page'
 import { useThemeStore } from '../../store/theme'
@@ -74,6 +77,8 @@ export function Toolbar() {
   const themeStore = useThemeStore()
   const topBarStore = useTopBarStore()
   const { styles } = useStyles()
+  const t = useT()
+  const { locale, locales, setLocale } = useI18nStore()
   const darkBtnRef = useRef<any>(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [systemDarkMode, setSystemDarkMode] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -191,7 +196,7 @@ export function Toolbar() {
         icon: <SyncOutlined />,
         label: (
           <div className={styles.themeSetting}>
-            <div>跟随系统</div>
+            <div>{t('toolbar.followSystem')}</div>
             {themeStore.darkMode === 'auto' ? <div className={styles.themeSettingSpot}></div> : null}
           </div>
         ),
@@ -202,7 +207,7 @@ export function Toolbar() {
         icon: <SunOutlined />,
         label: (
           <div className={styles.themeSetting}>
-            <div>浅色主题</div>
+            <div>{t('toolbar.lightTheme')}</div>
             {themeStore.darkMode === '0' ? <div className={styles.themeSettingSpot}></div> : null}
           </div>
         ),
@@ -213,7 +218,7 @@ export function Toolbar() {
         icon: <MoonOutlined />,
         label: (
           <div className={styles.themeSetting}>
-            <div>暗黑主题</div>
+            <div>{t('toolbar.darkTheme')}</div>
             {themeStore.darkMode === '1' ? <div className={styles.themeSettingSpot}></div> : null}
           </div>
         ),
@@ -227,7 +232,7 @@ export function Toolbar() {
         icon: <EyeOutlined />,
         label: (
           <div className={styles.themeSetting}>
-            <div>色弱模式</div>
+            <div>{t('toolbar.colorWeak')}</div>
             {themeStore.colorWeak ? <div className={styles.themeSettingSpot}></div> : null}
           </div>
         ),
@@ -237,6 +242,21 @@ export function Toolbar() {
       },
     ]
   }, [themeStore])
+
+  // 语言切换菜单（选项来自 i18n.locales 配置）
+  const i18nMenu: any = useMemo(() => {
+    return locales.map((item: any) => ({
+      icon: <TranslationOutlined />,
+      label: (
+        <div className={styles.themeSetting}>
+          <div>{item.label}</div>
+          {locale === item.locale ? <div className={styles.themeSettingSpot}></div> : null}
+        </div>
+      ),
+      onClick: () => setLocale(item.locale),
+      key: item.locale,
+    }))
+  }, [locales, locale, styles])
 
   return topBarStore.toolbar.isEnableToolbar
     ? (
@@ -259,6 +279,15 @@ export function Toolbar() {
                     <div style={{ marginRight: 8 }}>
                       <Search />
                     </div>
+                  )
+                : null}
+              {topBarStore.toolbar.isEnableI18n
+                ? (
+                    <Dropdown menu={{ items: i18nMenu }}>
+                      <div className={styles.ToolbarItem}>
+                        <TranslationOutlined />
+                      </div>
+                    </Dropdown>
                   )
                 : null}
               {topBarStore.toolbar.isEnableFullscreen

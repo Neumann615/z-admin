@@ -76,6 +76,13 @@ export interface LayoutConfig {
     /* 快乐特效 */
     happyEffect: boolean
   }
+  /* 国际化配置 */
+  i18n: {
+    /* 默认语言 */
+    defaultLocale: string
+    /* 可选语言列表 */
+    locales: Array<{ locale: string, label: string }>
+  }
   /* 菜单配置 */
   menu: {
     /* 菜单布局类型 */

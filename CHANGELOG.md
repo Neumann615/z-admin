@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-13
+
+- ✨ **新增国际化功能**（`store/i18n.ts`、`locales/`、`LayoutProvider.tsx`、`Toolbar.tsx`）：`useI18nStore` 集中管理语言状态并持久化，antd locale 动态懒加载，菜单/标签页/面包屑按语言解析，工具栏语言切换器，layout 内置中英文案替换硬编码
+- ✨ **示例应用接入国际化**（`src/locales/`、`App.tsx`）：前端统一维护菜单多语言映射，通过 `messages` prop 注入 `LayoutProvider`
+
 ## 2026-08-12
 
 - ✨ **新增快捷键弹窗**（`ShortcutsModal.tsx`、`UserInfo.tsx`）：两列网格展示全局/主导航/标签栏/页面快捷键，样式对齐配置面板（`rootClassName` 全局样式 + 内层 `content` 包裹）

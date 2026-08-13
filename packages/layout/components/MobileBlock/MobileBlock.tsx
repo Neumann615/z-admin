@@ -3,6 +3,7 @@ import { StopOutlined } from '@ant-design/icons'
 import { ZaPatternBg } from '@zealous-admin/components/index'
 import { createStyles } from 'antd-style'
 import { useMobileDetect } from '../../hooks/useMobileDetect'
+import { useT } from '../../locales/index'
 import { useAppStore } from '../../store/index'
 
 const useStyles = createStyles(({ token, css }) => ({
@@ -37,6 +38,7 @@ interface MobileBlockProps {
  */
 export function MobileBlock({ children }: MobileBlockProps) {
   const { styles } = useStyles()
+  const t = useT()
   const isMobile = useMobileDetect()
   const isEnableMobileAccess = useAppStore(state => state.isEnableMobileAccess)
 
@@ -53,7 +55,7 @@ export function MobileBlock({ children }: MobileBlockProps) {
         <div className={styles.container}>
           <StopOutlined className={styles.icon} />
           <span className={styles.text}>
-            抱歉，本网站不支持移动设备访问，请切换到桌面设备
+            {t('mobile.block')}
           </span>
         </div>
       </ZaPatternBg>

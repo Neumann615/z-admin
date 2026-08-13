@@ -1,7 +1,7 @@
 import { deepClone, sortBy } from '@zealous-admin/utils/index'
 import { useNavigate } from 'react-router'
 import { useShallow } from 'zustand/react/shallow'
-import { useAppStore, useMenuStore, useTopBarStore } from '../store/index'
+import { useAppStore, useI18nStore, useMenuStore, useTopBarStore } from '../store/index'
 
 // 标记导航是否由 openTab 发起，避免浏览器 popstate 同步时重复处理
 let isProgrammaticNav = false
@@ -14,8 +14,17 @@ export function useControlTab() {
       homePageTitle: state.homePage.title,
     })),
   )
+  const { locale, messages } = useI18nStore(
+    useShallow((state: any) => ({
+      locale: state.locale,
+      messages: state.messages,
+    })),
+  )
   const { tabs, setTabs, setNowTab, nowTab, setBreadcrumbList } = useTopBarStore()
   const navigate = useNavigate()
+
+  // 主页标题：优先取当前语言的映射（'/' 为约定 key），兜底到配置的静态标题
+  const resolvedHomeTitle = messages?.[locale]?.['/'] || homePageTitle
 
   function getPathByKey(curKey: string, data: any) {
     let result: any = [] // 记录路径结果
@@ -62,7 +71,7 @@ export function useControlTab() {
         icon: 'Home',
         id: '/',
         key: '/',
-        label: homePageTitle,
+        label: resolvedHomeTitle,
       }]
     }
     else if (pathList?.length) {
@@ -72,7 +81,7 @@ export function useControlTab() {
           icon: 'Home',
           id: '/',
           key: '/',
-          label: homePageTitle,
+          label: resolvedHomeTitle,
         })
       }
     }
@@ -120,7 +129,7 @@ export function useControlTab() {
           icon: 'Home',
           id: '/',
           key: '/',
-          label: homePageTitle,
+          label: resolvedHomeTitle,
         })
       }
     }
@@ -283,7 +292,7 @@ export function useControlTab() {
           icon: 'Home',
           id: '/',
           key: '/',
-          label: homePageTitle,
+          label: resolvedHomeTitle,
         })
       }
       setBreadcrumbList(pathList)
@@ -293,7 +302,7 @@ export function useControlTab() {
         icon: 'Home',
         id: '/',
         key: '/',
-        label: homePageTitle,
+        label: resolvedHomeTitle,
       }])
     }
   }
