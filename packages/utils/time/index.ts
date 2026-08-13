@@ -38,12 +38,12 @@ export function formatDate(date: Date | number, format: string = 'YYYY-MM-DD HH:
 export function debounce<T extends (...args: any[]) => any>(
   fn: T,
   delay: number,
-  options: { leading?: boolean; trailing?: boolean } = {},
+  options: { leading?: boolean, trailing?: boolean } = {},
 ): (...args: Parameters<T>) => void {
   let timer: ReturnType<typeof setTimeout> | null = null
   let isLeadingCalled = false
 
-  const { leading = false, trailing = leading ? false : true } = options
+  const { leading = false, trailing = !leading } = options
 
   return function (this: any, ...args: Parameters<T>) {
     const context = this
@@ -77,7 +77,7 @@ export function debounce<T extends (...args: any[]) => any>(
 export function throttle<T extends (...args: any[]) => any>(
   fn: T,
   delay: number,
-  options: { leading?: boolean; trailing?: boolean } = {},
+  options: { leading?: boolean, trailing?: boolean } = {},
 ): (...args: Parameters<T>) => void {
   let timer: ReturnType<typeof setTimeout> | null = null
   let lastTime = 0
@@ -116,7 +116,7 @@ export function throttle<T extends (...args: any[]) => any>(
  * @param targetTime 目标时间（Date对象或时间戳）
  * @returns 包含天、时、分、秒的对象
  */
-export function getCountdown(targetTime: Date | number): { days: number; hours: number; minutes: number; seconds: number } {
+export function getCountdown(targetTime: Date | number): { days: number, hours: number, minutes: number, seconds: number } {
   const target = typeof targetTime === 'number' ? targetTime : targetTime.getTime()
   const now = Date.now()
   const diff = Math.max(0, target - now)

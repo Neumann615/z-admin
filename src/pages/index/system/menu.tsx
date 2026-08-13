@@ -137,10 +137,12 @@ export default function SystemMenu() {
 
   const findNodeLevel = (td: any[], targetId: number, currentLevel = 0): number => {
     for (const node of td) {
-      if (node.value === targetId) return currentLevel
+      if (node.value === targetId)
+        return currentLevel
       if (node.children?.length) {
         const found = findNodeLevel(node.children, targetId, currentLevel + 1)
-        if (found !== -1) return found
+        if (found !== -1)
+          return found
       }
     }
     return -1
@@ -188,7 +190,8 @@ export default function SystemMenu() {
       key: 'path',
       width: 200,
       render: (path: string, row: MenuNode) => {
-        if (row.children?.length) return '-'
+        if (row.children?.length)
+          return '-'
         return path || '-'
       },
     },

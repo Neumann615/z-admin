@@ -71,20 +71,20 @@ const token = useUserStore(state => state.userInfo.token)
 const username = useUserStore(state => state.userInfo.username)
 
 // 用户信息字段
-userStore.userInfo.token      // JWT token
-userStore.userInfo.username   // 用户名
-userStore.userInfo.nickName   // 昵称
-userStore.userInfo.avatar     // 头像
-userStore.userInfo.roles      // 角色列表
-userStore.userInfo.menus      // 菜单列表
-userStore.userInfo.email      // 邮箱
-userStore.userInfo.status     // 状态
+userStore.userInfo.token // JWT token
+userStore.userInfo.username // 用户名
+userStore.userInfo.nickName // 昵称
+userStore.userInfo.avatar // 头像
+userStore.userInfo.roles // 角色列表
+userStore.userInfo.menus // 菜单列表
+userStore.userInfo.email // 邮箱
+userStore.userInfo.status // 状态
 
 // 方法（已内置 API 调用）
 await userStore.userLogin({ username, password }) // 登录
-await userStore.getUserInfo()                     // 获取用户信息
-await userStore.userLogout()                      // 登出
-userStore.fedLogout()                             // 前端登出（清 token，不调接口）
+await userStore.getUserInfo() // 获取用户信息
+await userStore.userLogout() // 登出
+userStore.fedLogout() // 前端登出（清 token，不调接口）
 ```
 
 ## useReLoginStore
@@ -96,9 +96,9 @@ import { useReLoginStore } from '@zealous-admin/layout'
 
 const reLogin = useReLoginStore()
 
-reLogin.visible  // 弹窗是否可见
-reLogin.show()   // 显示弹窗
-reLogin.hide()   // 隐藏弹窗
+reLogin.visible // 弹窗是否可见
+reLogin.show() // 显示弹窗
+reLogin.hide() // 隐藏弹窗
 ```
 
 ## usePageStore

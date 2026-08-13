@@ -17,19 +17,33 @@
 ## 导出清单
 
 ```tsx
+// 类型（type-only export）
+import type {
+  Admin,
+  CommonPage,
+  CommonResult,
+  DictData,
+  DictType,
+  LayoutConfig,
+  LoginParam,
+  Menu,
+  Role,
+  UserInfo,
+} from '@zealous-admin/layout'
+
 // 组件
 import { Layout, LayoutProvider, Logo } from '@zealous-admin/layout'
 
 // Hooks
 import {
-  useAppMessage,    // antd message/modal 上下文
-  useControlTab,    // 标签页/导航控制
-  useFireworks,     // 彩带特效
+  useAppMessage, // antd message/modal 上下文
+  useControlTab, // 标签页/导航控制
+  useFireworks, // 彩带特效
   useLayoutSetting, // 布局配置读写
-  useMaximize,      // 页面全屏
-  useLogin,         // 登录 Hook（自动管理 loading）
-  useLogout,        // 登出 Hook（自动清持久化 + 跳转）
-  useThemeByType,   // 主题类型映射
+  useLogin, // 登录 Hook（自动管理 loading）
+  useLogout, // 登出 Hook（自动清持久化 + 跳转）
+  useMaximize, // 页面全屏
+  useThemeByType, // 主题类型映射
 } from '@zealous-admin/layout'
 
 // 命令式方法（非组件场景使用）
@@ -38,18 +52,12 @@ import { loginAction, logoutAction } from '@zealous-admin/layout'
 // 状态
 import {
   useAppStore,
-  useReLoginStore,  // 401 重新登录弹窗控制
-  useUserStore,     // 用户信息 + login/logout/getInfo
-  useThemeStore,
   useMenuStore,
   usePageStore,
+  useReLoginStore, // 401 重新登录弹窗控制
+  useThemeStore,
   useTopBarStore,
-} from '@zealous-admin/layout'
-
-// 类型（type-only export）
-import type {
-  Admin, CommonResult, CommonPage, LoginParam, UserInfo,
-  Menu, Role, DictType, DictData, LayoutConfig,
+  useUserStore, // 用户信息 + login/logout/getInfo
 } from '@zealous-admin/layout'
 
 // HTTP 实例

@@ -41,7 +41,7 @@ formatDate(1705312245000) // "2024-01-15 14:30:45"
 function debounce<T extends (...args: any[]) => any>(
   fn: T,
   delay: number,
-  options?: { leading?: boolean; trailing?: boolean }
+  options?: { leading?: boolean, trailing?: boolean }
 ): (...args: Parameters<T>) => void
 ```
 
@@ -83,7 +83,7 @@ const handleClick = debounce(() => {
 function throttle<T extends (...args: any[]) => any>(
   fn: T,
   delay: number,
-  options?: { leading?: boolean; trailing?: boolean }
+  options?: { leading?: boolean, trailing?: boolean }
 ): (...args: Parameters<T>) => void
 ```
 

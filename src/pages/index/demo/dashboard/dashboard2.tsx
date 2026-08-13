@@ -1,3 +1,4 @@
+import type { FeatureData } from './shared/mapUtils'
 import { useMaximize } from '@zealous-admin/layout/index'
 import { Button } from 'antd'
 import { createStyles, useTheme } from 'antd-style'
@@ -6,12 +7,12 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {
   buildLambertProjector,
+
+  fmtVal,
   heatColor,
   heatColorHex,
-  type FeatureData,
   PROVINCE_GDP,
   shortName,
-  fmtVal,
 } from './shared/mapUtils'
 
 // ============================================================

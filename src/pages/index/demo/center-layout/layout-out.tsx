@@ -1,7 +1,7 @@
 import type { LayoutConfig } from '@zealous-admin/layout/index'
 import { ColumnWidthOutlined } from '@ant-design/icons'
 import { useAppStore } from '@zealous-admin/layout/index'
-import { Alert, Descriptions, Tag, Typography } from 'antd'
+import { Descriptions, Typography } from 'antd'
 import { createStyles } from 'antd-style'
 import { useEffect, useRef } from 'react'
 

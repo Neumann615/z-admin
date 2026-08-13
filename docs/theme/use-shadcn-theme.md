@@ -53,13 +53,13 @@ shadcn/ui 极简风格主题，采用 zinc 灰白配色体系，干净克制，�
 
 ```tsx
 // 方式一：在 LayoutProvider 配置中指定
-const config = {
-  theme: { themeType: 'shadcn' },
-}
-
 // 方式二：手动在 ConfigProvider 中使用
 import { useShadcnTheme } from '@zealous-admin/theme'
 import { ConfigProvider } from 'antd'
+
+const config = {
+  theme: { themeType: 'shadcn' },
+}
 
 function App() {
   const themeConfig = useShadcnTheme()

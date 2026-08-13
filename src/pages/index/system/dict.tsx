@@ -61,7 +61,7 @@ const TYPE_FORM_RULES = {
   dictType: [
     { required: true, message: '请输入类型编码' },
     { max: 100, message: '类型编码不能超过 100 个字符' },
-    { pattern: /^[a-zA-Z0-9_]+$/, message: '类型编码只能包含字母、数字和下划线' },
+    { pattern: /^\w+$/, message: '类型编码只能包含字母、数字和下划线' },
   ],
 }
 

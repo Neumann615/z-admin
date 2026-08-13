@@ -9,7 +9,7 @@ import {
 import { ZaSparklesText } from '@zealous-admin/components/index'
 import { Logo, useAppStore } from '@zealous-admin/layout/index'
 import { BorderBeam, Button, Card, Col, Row, Space, Typography } from 'antd'
-import { createStyles, useTheme } from 'antd-style'
+import { createStyles } from 'antd-style'
 
 const { Title, Paragraph, Text } = Typography
 

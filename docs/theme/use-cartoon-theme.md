@@ -45,13 +45,13 @@
 
 ```tsx
 // 方式一：在 LayoutProvider 配置中指定
-const config = {
-  theme: { themeType: 'cartoon' },
-}
-
 // 方式二：手动在 ConfigProvider 中使用
 import { useCartoonTheme } from '@zealous-admin/theme'
 import { ConfigProvider } from 'antd'
+
+const config = {
+  theme: { themeType: 'cartoon' },
+}
 
 function App() {
   const themeConfig = useCartoonTheme()

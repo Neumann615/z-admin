@@ -192,8 +192,10 @@ function withClientIp(req: IncomingMessage, fn: () => Promise<void>): Promise<vo
   return clientIpStore.run(resolveIp(req), fn)
 }
 
-/** 确保 Accept 头包含 MCP StreamableHTTP 要求的 MIME 类型（nginx/代理可能剥离）。
- *  @hono/node-server 从 rawHeaders 读取，所以必须同时修改 rawHeaders 和 headers */
+/**
+ * 确保 Accept 头包含 MCP StreamableHTTP 要求的 MIME 类型（nginx/代理可能剥离）。
+ *  @hono/node-server 从 rawHeaders 读取，所以必须同时修改 rawHeaders 和 headers
+ */
 function fixMcpHeaders(req: IncomingMessage) {
   const required = req.method === 'GET'
     ? 'text/event-stream'

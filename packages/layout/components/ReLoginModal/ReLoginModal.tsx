@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Form, Input, Modal } from 'antd'
+import { Form, Input, Modal } from 'antd'
 import { createStyles } from 'antd-style'
 import { useState } from 'react'
 import { loginAction, logoutAction } from '../../hooks/useAuth'

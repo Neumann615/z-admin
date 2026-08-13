@@ -1,6 +1,6 @@
 import type { LayoutConfig, MenuData } from '../types/config'
-import { messages } from '@zealous-admin/locales/index'
 import { ZaConfigProvider } from '@zealous-admin/components/index'
+import { messages } from '@zealous-admin/locales/index'
 import { theme as antdTheme, App, ConfigProvider } from 'antd'
 import { StyleProvider } from 'antd-style'
 import zhCN from 'antd/locale/zh_CN'

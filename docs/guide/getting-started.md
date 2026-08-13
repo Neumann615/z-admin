@@ -97,7 +97,7 @@ import { ZaMarquee, ZaShinyText, ZaSparklesText } from '@zealous-admin/component
 ### 工具函数
 
 ```tsx
-import { deepClone, sortBy, groupBy, debounce, formatDate } from '@zealous-admin/utils'
+import { debounce, deepClone, formatDate, groupBy, sortBy } from '@zealous-admin/utils'
 
 const copy = deepClone(original)
 const sorted = sortBy(list, 'createdAt', 'desc')

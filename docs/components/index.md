@@ -26,7 +26,7 @@ pnpm add @zealous-admin/components
 ```
 
 ```tsx
-import { ZaMarquee, ZaShinyText, ZaIframe } from '@zealous-admin/components'
+import { ZaIframe, ZaMarquee, ZaShinyText } from '@zealous-admin/components'
 ```
 
 所有组件都依赖 `react`、`react-dom`、`antd`、`antd-style` 作为 peer dependencies。

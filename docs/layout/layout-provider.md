@@ -71,9 +71,9 @@ const config: LayoutConfig = {
     },
   },
   theme: {
-    themeType: 'default',  // 主题类型
+    themeType: 'default', // 主题类型
     themeColor: '#1677ff', // 仅 default 生效
-    darkMode: 'auto',      // 仅 default 生效
+    darkMode: 'auto', // 仅 default 生效
     compactMode: false,
     colorWeak: false,
   },
@@ -93,7 +93,7 @@ function App() {
     <LayoutProvider
       menuData={menuData}
       defaultSetting={config}
-      cachedPages={['/dashboard']}  // KeepAlive 缓存页面
+      cachedPages={['/dashboard']} // KeepAlive 缓存页面
     >
       <Layout />
     </LayoutProvider>

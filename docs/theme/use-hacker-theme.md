@@ -56,13 +56,13 @@ box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
 
 ```tsx
 // 方式一：在 LayoutProvider 配置中指定
-const config = {
-  theme: { themeType: 'hacker' },
-}
-
 // 方式二：手动在 ConfigProvider 中使用
 import { useHackerTheme } from '@zealous-admin/theme'
 import { ConfigProvider } from 'antd'
+
+const config = {
+  theme: { themeType: 'hacker' },
+}
 
 function App() {
   const themeConfig = useHackerTheme()

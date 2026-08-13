@@ -1,6 +1,6 @@
+import type { LayoutMessages } from './zh-CN'
 import enUS from './en-US'
 import zhCN from './zh-CN'
-import type { LayoutMessages } from './zh-CN'
 
 /**
  * 国际化文案映射结构

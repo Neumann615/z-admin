@@ -9,7 +9,7 @@ pnpm add @zealous-admin/utils
 ```
 
 ```tsx
-import { deepClone, debounce, formatDate } from '@zealous-admin/utils'
+import { debounce, deepClone, formatDate } from '@zealous-admin/utils'
 ```
 
 ## 模块总览
@@ -27,7 +27,7 @@ import { deepClone, debounce, formatDate } from '@zealous-admin/utils'
 ### data 模块
 
 ```tsx
-import { deepClone, groupBy, sortBy, merge, unique } from '@zealous-admin/utils'
+import { deepClone, groupBy, merge, sortBy, unique } from '@zealous-admin/utils'
 
 const copy = deepClone(original)
 const grouped = groupBy(users, 'role')
@@ -39,7 +39,7 @@ const uniqueList = unique(array, 'id')
 ### env 模块
 
 ```tsx
-import { isMobile, isDevelopment, getDeviceType } from '@zealous-admin/utils'
+import { getDeviceType, isDevelopment, isMobile } from '@zealous-admin/utils'
 
 if (isMobile()) {
   // 移动端逻辑
@@ -55,7 +55,7 @@ const device = getDeviceType() // 'mobile' | 'tablet' | 'desktop'
 ### file 模块
 
 ```tsx
-import { formatFileSize, fileToBase64, isImage } from '@zealous-admin/utils'
+import { fileToBase64, formatFileSize, isImage } from '@zealous-admin/utils'
 
 formatFileSize(1048576) // "1 MB"
 const base64 = await fileToBase64(file)
@@ -81,7 +81,7 @@ if (result) {
 ### time 模块
 
 ```tsx
-import { formatDate, debounce, throttle, addDays } from '@zealous-admin/utils'
+import { addDays, debounce, formatDate, throttle } from '@zealous-admin/utils'
 
 formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss')
 

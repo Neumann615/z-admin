@@ -5,6 +5,8 @@
 - ✨ **新增 locales 包统一国际化文案**（`packages/locales/`）：整合 layout 与示例应用两处文案，全量中英文案统一从 `@zealous-admin/locales` 读取，`App.tsx` 移除外部 messages 注入，补齐 13 个遗漏菜单路径
 - ✨ **components 包接入国际化**（`locale/`、4 个组件、11 个 demo）：新增 `ZaConfigProvider` Context 统一注入，主组件与演示页文案全部 `useT` 动态翻译
 - 🔧 **配置面板国际化与 i18n 配置迁移**（`ConfigPanel.tsx`、`data.ts`、`config.d.ts`）：选项列表改用 `labelKey` 动态翻译，i18n 配置收拢至 `topBar.toolbar.i18n`
+- 🔧 **import 排序与代码格式统一**（`docs/`、`layout`、`components`、`src` 页面）：import/类型分隔符/注释对齐，移除未使用导入，`public/geo` 行尾符统一
+- 🔧 **依赖目录与工具微调**（`pnpm-workspace.yaml`、`utils/time`、`dict.tsx`）：catalog 按字母序重排，debounce trailing 简化为 `!leading`，类型编码正则简化为 `\w+`
 
 ## 2026-08-13
 

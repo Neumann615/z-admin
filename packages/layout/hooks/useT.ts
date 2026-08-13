@@ -1,4 +1,5 @@
-import { messages, type LayoutMessages } from '@zealous-admin/locales/index'
+import type { LayoutMessages } from '@zealous-admin/locales/index'
+import { messages } from '@zealous-admin/locales/index'
 import { useI18nStore } from '../store/i18n'
 
 /**

@@ -21,20 +21,20 @@ function validateAndExtractIdCard(idCard: string): IdCardInfo | false
 ```ts
 interface IdCardInfo {
   isValid: true
-  rawId: string           // 原始输入的身份证号
-  id18: string            // 18位身份证号
-  id15: string | null     // 15位身份证号（如果输入是15位）
-  regionCode: string      // 地区代码（前6位）
-  birthDate: string       // 出生日期 YYYY-MM-DD
-  year: number            // 出生年份
-  month: number           // 出生月份
-  day: number             // 出生日期
-  age: number             // 年龄
-  zodiac: string          // 星座
-  chineseZodiac: string   // 生肖
-  gender: 'M' | 'F'       // 性别（M: 男, F: 女）
-  sequence: number        // 顺序码（第15-17位）
-  checksum: string        // 18位校验码
+  rawId: string // 原始输入的身份证号
+  id18: string // 18位身份证号
+  id15: string | null // 15位身份证号（如果输入是15位）
+  regionCode: string // 地区代码（前6位）
+  birthDate: string // 出生日期 YYYY-MM-DD
+  year: number // 出生年份
+  month: number // 出生月份
+  day: number // 出生日期
+  age: number // 年龄
+  zodiac: string // 星座
+  chineseZodiac: string // 生肖
+  gender: 'M' | 'F' // 性别（M: 男, F: 女）
+  sequence: number // 顺序码（第15-17位）
+  checksum: string // 18位校验码
   rawChecksum: string | null // 原始输入的校验码
 }
 ```
@@ -46,12 +46,12 @@ import { validateAndExtractIdCard } from '@zealous-admin/utils'
 const result = validateAndExtractIdCard('110101199001011234')
 
 if (result) {
-  console.log(result.birthDate)    // "1990-01-01"
-  console.log(result.age)          // 34
-  console.log(result.gender)       // "M"
-  console.log(result.zodiac)       // "摩羯座"
+  console.log(result.birthDate) // "1990-01-01"
+  console.log(result.age) // 34
+  console.log(result.gender) // "M"
+  console.log(result.zodiac) // "摩羯座"
   console.log(result.chineseZodiac) // "马"
-  console.log(result.regionCode)   // "110101"
+  console.log(result.regionCode) // "110101"
 }
 ```
 
