@@ -3,8 +3,8 @@ import { ZaConfigProvider } from '@zealous-admin/components/index'
 import { messages } from '@zealous-admin/locales/index'
 import { theme as antdTheme, App, ConfigProvider } from 'antd'
 import { StyleProvider } from 'antd-style'
-import zhCN from 'antd/locale/zh_CN'
 import { Suspense, useEffect, useMemo, useState } from 'react'
+import { useAntdLocale } from '../hooks/useAntdLocale'
 import {
   useAppStore,
   useI18nStore,
@@ -16,11 +16,6 @@ import {
 import { useThemeByType } from '../themeMap'
 import { findLabelByKey, resolveMenuLabels } from '../utils/i18n'
 import { AppMessageProvider } from './AppMessageProvider'
-
-// antd 语言包懒加载器（zh-CN 作为默认语言静态引入，其余按需加载）
-const antdLocaleLoaders: Record<string, () => Promise<{ default: typeof zhCN }>> = {
-  'en-US': () => import('antd/locale/en_US'),
-}
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -39,14 +34,13 @@ export function LayoutProvider({
   const menuStore = useMenuStore()
   const appStore = useAppStore()
   const locale = useI18nStore(state => state.locale)
+  // antd 语言包（随 locale 懒加载切换）
+  const antdLocale = useAntdLocale()
 
   // 监听系统深色/浅色模式
   const [systemDarkMode, setSystemDarkMode] = useState(
     () => window.matchMedia('(prefers-color-scheme: dark)').matches,
   )
-
-  // antd 语言包（随 locale 懒加载切换）
-  const [antdLocale, setAntdLocale] = useState<typeof zhCN>(zhCN)
 
   // 计算全局主题算法（仅 default 主题生效）
   const globalAlgorithm = useMemo(() => {
@@ -122,10 +116,10 @@ export function LayoutProvider({
     else if (resolvedMenuData?.length) {
       // 切换语言时按当前主导航重新解析次级菜单
       const currentMainKey = useMenuStore.getState().mainNavCurrentKeys?.[0]
+      // 找不到当前主菜单时（如持久化的旧 key）兜底用首个主导航，确保次级菜单始终刷新
       const currentMain = resolvedMenuData.find(item => item.key === currentMainKey)
-      if (currentMain) {
-        useMenuStore.getState().setMenuData(currentMain.children || [])
-      }
+        || resolvedMenuData[0]
+      useMenuStore.getState().setMenuData(currentMain.children || [])
     }
   }, [resolvedMenuData])
 
@@ -168,21 +162,9 @@ export function LayoutProvider({
     }
   }, [resolvedMenuData, locale, appStore.homePage.title])
 
-  // locale 变化时：同步 html lang 属性 + 懒加载 antd 语言包
+  // locale 变化时同步 html lang 属性（antd 语言包由 useAntdLocale 处理）
   useEffect(() => {
     document.documentElement.lang = locale
-    if (locale === 'zh-CN') {
-      setAntdLocale(zhCN)
-      return
-    }
-    let cancelled = false
-    antdLocaleLoaders[locale]?.().then((mod) => {
-      if (!cancelled)
-        setAntdLocale(mod.default)
-    })
-    return () => {
-      cancelled = true
-    }
   }, [locale])
 
   // 同步外部传入的 cachedPages

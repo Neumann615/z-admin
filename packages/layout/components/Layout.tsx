@@ -2,6 +2,7 @@ import { ConfigProvider, Drawer, Watermark } from 'antd'
 import { createStyles } from 'antd-style'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useAntdLocale } from '../hooks/useAntdLocale'
 import { useControlTab } from '../hooks/useControlTab'
 import { useMobileDetect } from '../hooks/useMobileDetect'
 import { useAppStore, useMenuStore, usePageStore, useTopBarStore, useWatermarkStore } from '../store/index'
@@ -128,6 +129,8 @@ const useStyles = createStyles(({ token }) => ({
 
 export function Layout() {
   const { theme, styles } = useStyles()
+  // 与 LayoutProvider 保持一致的 antd locale，避免嵌套 ConfigProvider 重置为英文
+  const antdLocale = useAntdLocale()
   const { menuType, menuCurrentKeys, openKeys, mainNavCurrentKeys, mobileDrawerOpen, setMobileDrawerOpen } = useMenuStore()
   const isMobile = useMobileDetect()
   const globalProgressLoading = usePageStore(state => state.globalProgressLoading)
@@ -267,6 +270,7 @@ export function Layout() {
 
   return (
     <ConfigProvider
+      locale={antdLocale}
       theme={{
         components: {
           Menu: {

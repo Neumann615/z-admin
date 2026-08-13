@@ -4,7 +4,7 @@ import { Menu } from 'antd'
 import { createStyles } from 'antd-style'
 import { useShallow } from 'zustand/react/shallow'
 import { useControlTab } from '../../hooks/useControlTab'
-import { useAppStore, useMenuStore } from '../../store/index'
+import { useAppStore, useI18nStore, useMenuStore } from '../../store/index'
 import { Logo } from '../Logo/Logo'
 import { MenuIcon } from '../MenuIcon/MenuIcon'
 import { UserInfo } from '../UserInfo/UserInfo'
@@ -162,6 +162,8 @@ export function MainNav() {
       name: state.name,
     })),
   )
+  // 语言变化时强制重建菜单，避免 antd Menu 内部缓存导致 label 不刷新
+  const locale = useI18nStore(state => state.locale)
   const { openTab } = useControlTab()
 
   function renderMenuActiveDom() {
@@ -268,6 +270,7 @@ export function MainNav() {
                 <Logo />
               </div>
               <Menu
+                key={locale}
                 styles={{
                   root: {
                     flex: 1,
@@ -305,6 +308,7 @@ export function MainNav() {
                 <Logo />
               </div>
               <Menu
+                key={locale}
                 styles={{
                   root: {
                     flex: 1,
@@ -345,6 +349,7 @@ export function MainNav() {
                 <ZaShinyText text={name} />
               </div>
               <Menu
+                key={locale}
                 styles={{
                   root: {
                     flex: 1,
@@ -388,6 +393,7 @@ export function MainNav() {
                 <ZaShinyText text={name} />
               </div>
               <Menu
+                key={locale}
                 styles={{
                   root: {
                     flex: 1,

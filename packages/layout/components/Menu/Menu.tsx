@@ -6,7 +6,7 @@ import { createStyles } from 'antd-style'
 import { useMemo } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { useControlTab } from '../../hooks/useControlTab'
-import { useAppStore, useMenuStore } from '../../store/index'
+import { useAppStore, useI18nStore, useMenuStore } from '../../store/index'
 import { Logo } from '../Logo/Logo'
 import { MenuIcon } from '../MenuIcon/MenuIcon'
 import { UserInfo } from '../UserInfo/UserInfo'
@@ -113,6 +113,8 @@ export function Menu() {
     })),
   )
   const { openTab } = useControlTab()
+  // 语言变化时强制重建菜单，避免 antd Menu 内部缓存导致 label 不刷新
+  const locale = useI18nStore(state => state.locale)
 
   // 移动端：菜单项点击后关闭抽屉
   function handleMenuClick(v: any) {
@@ -220,6 +222,7 @@ export function Menu() {
         : null}
       <div className={styles.asideMenuContent}>
         <AntdMenu
+          key={locale}
           openKeys={openKeys}
           selectedKeys={menuCurrentKeys}
           inlineCollapsed={subMenuCollapse}

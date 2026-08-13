@@ -28,7 +28,7 @@ catalog:
   '@types/three': ^0.185.1
   ahooks: ^3.9.7
   animate.css: ^4.1.1
-  antd: ^6.5.3
+  antd: ^6.6.0
   antd-style: ^3.6.3
   axios: ^1.6.8
   bcryptjs: ^2.4.3

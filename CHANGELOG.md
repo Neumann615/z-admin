@@ -7,6 +7,9 @@
 - 🔧 **配置面板国际化与 i18n 配置迁移**（`ConfigPanel.tsx`、`data.ts`、`config.d.ts`）：选项列表改用 `labelKey` 动态翻译，i18n 配置收拢至 `topBar.toolbar.i18n`
 - 🔧 **import 排序与代码格式统一**（`docs/`、`layout`、`components`、`src` 页面）：import/类型分隔符/注释对齐，移除未使用导入，`public/geo` 行尾符统一
 - 🔧 **依赖目录与工具微调**（`pnpm-workspace.yaml`、`utils/time`、`dict.tsx`）：catalog 按字母序重排，debounce trailing 简化为 `!leading`，类型编码正则简化为 `\w+`
+- 🐛 **修复 antd 组件语言不生效**（`useAntdLocale.ts`、`Layout.tsx`）：嵌套 `ConfigProvider` 未传 locale 重置为英文，新增 hook 统一注入 antd 语言包
+- 🐛 **修复切换语言菜单不刷新**（`MainNav.tsx`、`Menu.tsx`、`LayoutProvider.tsx`）：antd Menu 加 `key` 强制重建，子菜单数据兜底刷新
+- 🔧 **升级 antd 至 6.6.0**（`pnpm-workspace.yaml`）
 
 ## 2026-08-13
 
