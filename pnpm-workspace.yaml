@@ -58,6 +58,7 @@ catalog:
   vite-plugin-svgr: ^5.2.0
   zod: ^3.23.0
   zustand: ^5.0.14
+  modern-screenshot: ^4.7.0
 allowBuilds:
   '@swc/core': true
   esbuild: true

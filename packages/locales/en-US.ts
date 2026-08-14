@@ -32,6 +32,7 @@ const layoutMessages: LayoutMessages = {
   'userInfo.profile': 'Profile',
   'userInfo.preferences': 'Preferences',
   'userInfo.shortcuts': 'Shortcuts',
+  'userInfo.feedback': 'Feedback',
   'userInfo.loggingOut': 'Logging out...',
   'userInfo.logout': 'Log Out',
   'userInfo.logoutFailed': 'Logout failed, please retry',
@@ -85,6 +86,17 @@ const layoutMessages: LayoutMessages = {
   'shortcuts.page': 'Page',
   'shortcuts.maximize': 'Maximize',
   'shortcuts.exitMaximize': 'Exit maximize',
+
+  // Feedback modal
+  'feedback.title': 'Feedback',
+  'feedback.captureTip': 'Screenshots help us understand the issue better. Click the button below to capture your current screen.',
+  'feedback.captureButton': 'Capture Screen',
+  'feedback.capturing': 'Capturing...',
+  'feedback.captureFailed': 'Capture failed, please retry',
+  'feedback.delete': 'Delete Screenshot',
+  'feedback.descriptionRequired': 'Please fill in the description',
+  'feedback.submit': 'Submit',
+  'feedback.submitSuccess': 'Feedback submitted (simulated)',
 
   // Re-login modal
   'reLogin.title': 'Session Expired',

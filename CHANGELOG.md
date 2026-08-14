@@ -10,6 +10,7 @@
 - 🐛 **修复 antd 组件语言不生效**（`useAntdLocale.ts`、`Layout.tsx`）：嵌套 `ConfigProvider` 未传 locale 重置为英文，新增 hook 统一注入 antd 语言包
 - 🐛 **修复切换语言菜单不刷新**（`MainNav.tsx`、`Menu.tsx`、`LayoutProvider.tsx`）：antd Menu 加 `key` 强制重建，子菜单数据兜底刷新
 - 🔧 **升级 antd 至 6.6.0**（`pnpm-workspace.yaml`）
+- ✨ **新增反馈弹窗**（`FeedbackModal.tsx`、`UserInfo.tsx`、`locales/`）：modern-screenshot 全屏截图预览 + 富文本描述编辑 + 模拟提交，头像菜单新增反馈入口
 
 ## 2026-08-13
 

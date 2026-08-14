@@ -1,4 +1,4 @@
-import { HomeFilled, LogoutOutlined, RightOutlined, SettingFilled, ToolFilled } from '@ant-design/icons'
+import { HomeFilled, LogoutOutlined, MessageFilled, RightOutlined, SettingFilled, ToolFilled } from '@ant-design/icons'
 import { App, Avatar, Divider, Popover } from 'antd'
 import { createStyles } from 'antd-style'
 import { useState } from 'react'
@@ -6,6 +6,7 @@ import { useLogout } from '../../hooks/useAuth'
 import { useT } from '../../hooks/useT'
 import { useMenuStore, useUserStore } from '../../store/index'
 import { ConfigPanel } from '../ConfigPanel/ConfigPanel'
+import { FeedbackModal } from './FeedbackModal'
 import { ProfileModal } from './ProfileModal'
 import { ShortcutsModal } from './ShortcutsModal'
 
@@ -114,6 +115,7 @@ export function UserInfo() {
   const [configPanelOpen, setConfigPanelOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
+  const [feedbackOpen, setFeedbackOpen] = useState(false)
   const [popoverOpen, setPopoverOpen] = useState(false)
   const [loggingOut, setLoggingOut] = useState(false)
   const { logout } = useLogout()
@@ -171,6 +173,16 @@ export function UserInfo() {
         >
           <span className={styles.menuItemIcon}><SettingFilled /></span>
           <span>{t('userInfo.preferences')}</span>
+        </div>
+        <div
+          className={styles.menuItem}
+          onClick={() => {
+            setPopoverOpen(false)
+            setFeedbackOpen(true)
+          }}
+        >
+          <span className={styles.menuItemIcon}><MessageFilled /></span>
+          <span>{t('userInfo.feedback')}</span>
         </div>
       </div>
       <Divider style={{ margin: 0 }} />
@@ -232,6 +244,10 @@ export function UserInfo() {
       <ProfileModal
         open={profileOpen}
         onClose={() => setProfileOpen(false)}
+      />
+      <FeedbackModal
+        open={feedbackOpen}
+        onClose={() => setFeedbackOpen(false)}
       />
       <ShortcutsModal
         open={shortcutsOpen}

@@ -30,6 +30,7 @@ const layoutMessages = {
   'userInfo.profile': '用户信息',
   'userInfo.preferences': '偏好设置',
   'userInfo.shortcuts': '快捷键',
+  'userInfo.feedback': '反馈',
   'userInfo.loggingOut': '退出中...',
   'userInfo.logout': '退出登录',
   'userInfo.logoutFailed': '退出失败，请重试',
@@ -83,6 +84,17 @@ const layoutMessages = {
   'shortcuts.page': '页面',
   'shortcuts.maximize': '最大化',
   'shortcuts.exitMaximize': '退出最大化',
+
+  // 反馈弹窗
+  'feedback.title': '反馈',
+  'feedback.captureTip': '使用屏幕截图可以帮助我们更好地了解问题，点击下方按钮截取当前屏幕内容',
+  'feedback.captureButton': '截图当前页面',
+  'feedback.capturing': '正在生成截图...',
+  'feedback.captureFailed': '截图失败，请重试',
+  'feedback.delete': '删除截图',
+  'feedback.descriptionRequired': '请填写问题描述',
+  'feedback.submit': '提交',
+  'feedback.submitSuccess': '反馈提交成功（模拟）',
 
   // 重新登录弹窗
   'reLogin.title': '登录已过期',
