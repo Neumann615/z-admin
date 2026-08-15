@@ -44,10 +44,10 @@ features:
     title: 12 个业务组件
     details: 图标选择器 · 富文本编辑器 · 签名板 · Iframe 外链 · 链接预览 · Markdown · 跑马灯 · 滑块验证码
     link: /components/
-  - icon: 🧠
-    title: 页面 KeepAlive
-    details: 双层渲染架构，缓存页保持状态不丢失，非缓存页保留过渡动画。
-    link: /layout/
+  - icon: 🌐
+    title: 中英文国际化
+    details: 文案统一从 locales 包读取，antd 语言包懒加载，菜单/标签/面包屑/组件库随语言联动。
+    link: /layout/toolbar
   - icon: 🗄️
     title: 内置后端服务
     details: Express + SQLite，用户/角色/菜单/字典完整 CRUD，JWT 认证。

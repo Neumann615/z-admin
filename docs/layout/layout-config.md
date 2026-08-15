@@ -46,7 +46,7 @@ LayoutConfig
 |------|------|------|--------|
 | isCenter | 是否启用居中显示 | `boolean` | `false` |
 | layoutScope | 居中作用范围 — `'outside'` 全局（含侧边栏）居中，`'inside'` 仅内容区居中 | `'outside' \| 'inside'` | `'outside'` |
-| width | 居中最大宽度，范围 1200–1600 | `number` | `1200` |
+| width | 居中最大宽度，范围 1200–1600 | `number` | `1400` |
 
 ### app.homePage — 首页设置
 
@@ -71,8 +71,8 @@ LayoutConfig
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
 | themeType | 主题类型 | `'default' \| 'mui' \| 'bootstrap' \| 'glass' \| 'illustration' \| 'cartoon' \| 'shadcn' \| 'hacker'` | `'default'` |
-| themeColor | 主题色（HEX，仅 default 主题生效） | `string` | `'#1677ff'` |
-| darkMode | 暗色模式（仅 default 主题生效） | `'1'` (开) \| `'0'` (关) \| `'auto'` (跟随系统) | `'0'` |
+| themeColor | 主题色（HEX，仅 default 主题生效） | `string` | `'#2f54eb'` |
+| darkMode | 暗色模式（仅 default 主题生效） | `'1'` (开) \| `'0'` (关) \| `'auto'` (跟随系统) | `'auto'` |
 | compactMode | 紧凑模式（减小间距） | `boolean` | `false` |
 | colorWeak | 色弱模式 | `boolean` | `false` |
 | happyEffect | 快乐效果（@ant-design/happy-work-theme） | `boolean` | `false` |
@@ -107,17 +107,17 @@ LayoutConfig
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
 | order | 顶栏元素排序 | `['TabBar', 'Toolbar'] \| ['Toolbar', 'TabBar']` | `['TabBar', 'Toolbar']` |
-| position | 顶栏定位方式 | `'static' \| 'fixed' \| 'sticky'` | `'static'` |
+| position | 顶栏定位方式 | `'static' \| 'fixed' \| 'sticky'` | `'fixed'` |
 
 ### topBar.tabBar — 标签栏
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| isEnableTabBar | 是否启用标签栏 | `boolean` | `false` |
+| isEnableTabBar | 是否启用标签栏 | `boolean` | `true` |
 | style | 标签栏样式 | `'default' \| 'card' \| 'block'` | `'default'` |
-| widthType | 标签宽度模式 | `'auto' \| 'fixed' \| 'auto-min' \| 'auto-max'` | `'auto'` |
-| width | 标签固定宽度（px） | `number` | - |
-| showIcon | 是否显示标签图标 | `boolean` | `false` |
+| widthType | 标签宽度模式 | `'auto' \| 'fixed' \| 'auto-min' \| 'auto-max'` | `'fixed'` |
+| width | 标签固定宽度（px） | `number` | `150` |
+| showIcon | 是否显示标签图标 | `boolean` | `true` |
 | dblClickEvent | 双击标签行为 | `'refresh' \| 'close' \| 'fixed' \| 'max' \| 'open'` | `'refresh'` |
 
 ### topBar.toolbar — 工具栏
@@ -127,10 +127,19 @@ LayoutConfig
 | isEnableToolbar | 是否启用工具栏 | `boolean` | `false` |
 | toolbarOrder | 工具项排序 | `string[]` | `['Breadcrumb', 'Search', 'I18n', 'PageReload', 'Fullscreen', 'Theme']` |
 | isEnableSearch | 是否启用全局搜索 | `boolean` | `false` |
-| isEnableI18n | 是否启用国际化切换 | `boolean` | `false` |
 | isEnablePageReload | 是否启用页面刷新 | `boolean` | `false` |
 | isEnableFullscreen | 是否启用全屏切换 | `boolean` | `false` |
 | isEnableTheme | 是否启用主题切换 | `boolean` | `false` |
+
+### topBar.toolbar.i18n — 国际化
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| isEnableI18n | 是否启用语言切换 | `boolean` | `true` |
+| defaultLocale | 默认语言 | `string` | `'zh-CN'` |
+| locales | 支持的语言列表（`locale` + 显示名称 `label`） | `{ locale: string; label: string }[]` | `[{ locale: 'zh-CN', label: '简体中文' }, { locale: 'en-US', label: 'English' }]` |
+
+当前语言由 `useI18nStore` 统一管理，初始值按浏览器语言自动推断并持久化，切换语言时自动联动 antd 语言包、菜单/标签/面包屑与 components 组件库。
 
 ### topBar.toolbar.breadcrumb — 面包屑
 

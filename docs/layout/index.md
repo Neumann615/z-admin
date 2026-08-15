@@ -43,6 +43,7 @@ import {
   useLogin, // 登录 Hook（自动管理 loading）
   useLogout, // 登出 Hook（自动清持久化 + 跳转）
   useMaximize, // 页面全屏
+  useT, // 文案翻译（从 @zealous-admin/locales 读取）
   useThemeByType, // 主题类型映射
 } from '@zealous-admin/layout'
 
@@ -52,12 +53,14 @@ import { loginAction, logoutAction } from '@zealous-admin/layout'
 // 状态
 import {
   useAppStore,
+  useI18nStore, // 国际化语言状态
   useMenuStore,
   usePageStore,
   useReLoginStore, // 401 重新登录弹窗控制
   useThemeStore,
   useTopBarStore,
   useUserStore, // 用户信息 + login/logout/getInfo
+  useWatermarkStore, // 水印配置
 } from '@zealous-admin/layout'
 
 // HTTP 实例
@@ -71,7 +74,8 @@ import { http } from '@zealous-admin/layout'
 - **菜单系统** — 多级嵌套、图标映射、激活图标（activeIcon）选中切换 + 父节点链路级联、4 种激活指示风格
 - **多标签页** — default / card / block 三种样式，拖拽排序，图标激活态切换
 - **面包屑** — default / modern 两种样式
-- **工具栏** — 可配置工具项、拖拽排序、全局路由搜索
+- **工具栏** — 可配置工具项、拖拽排序、全局路由搜索、语言切换
+- **国际化** — 中英文案统一从 `@zealous-admin/locales` 读取，antd locale 懒加载，菜单/标签/面包屑/组件库随语言联动
 - **布局居中显示** — outside（全局）/ inside（内容区）两种作用范围，自定义宽度
 - **Logo 组件** — 内置 ZA 图标 SVG，支持点击跳转首页
 - **设置面板** — 50+ 配置项可视化配置，主题类型切换，复制配置导出

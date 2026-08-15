@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-15
+
+- 📝 **文档站同步更新**（`docs/`）：CHANGELOG 补全 07-30~08-14 记录，同步国际化、水印 store、i18n 配置、顶栏定位等新特性文档
+
 ## 2026-08-14
 
 - ✨ **新增 locales 包统一国际化文案**（`packages/locales/`）：整合 layout 与示例应用两处文案，全量中英文案统一从 `@zealous-admin/locales` 读取，`App.tsx` 移除外部 messages 注入，补齐 13 个遗漏菜单路径

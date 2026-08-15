@@ -1,6 +1,6 @@
 # Zustand 状态管理
 
-`@zealous-admin/layout` 使用 [Zustand](https://github.com/pmndrs/zustand) 进行状态管理，共 8 个 Store，均支持 `persist` 中间件持久化。
+`@zealous-admin/layout` 使用 [Zustand](https://github.com/pmndrs/zustand) 进行状态管理，共 9 个 Store，均支持 `persist` 中间件持久化。
 
 ## Store 概览
 
@@ -13,6 +13,8 @@
 | `useTopBarStore` | `store/topBar.ts` | ✅ | 顶栏状态（标签、面包屑、工具项等） |
 | `useUserStore` | `store/user.ts` | ✅ | 用户信息与认证（login/logout/getInfo） |
 | `useReLoginStore` | `store/reLogin.ts` | ❌ | 401 重新登录弹窗控制 |
+| `useI18nStore` | `store/i18n.ts` | ✅ | 国际化（当前语言与语言配置） |
+| `useWatermarkStore` | `store/watermark.ts` | ✅ | 水印配置（文案、字号、间距等） |
 
 ## useAppStore
 
@@ -99,6 +101,42 @@ const reLogin = useReLoginStore()
 reLogin.visible // 弹窗是否可见
 reLogin.show() // 显示弹窗
 reLogin.hide() // 隐藏弹窗
+```
+
+## useI18nStore
+
+管理国际化语言状态。初始语言根据浏览器语言自动推断（优先精确匹配，其次语言前缀匹配），并持久化存储。
+
+```tsx
+import { useI18nStore } from '@zealous-admin/layout'
+
+const i18n = useI18nStore()
+
+i18n.isEnableI18n // 是否启用国际化
+i18n.defaultLocale // 默认语言，如 'zh-CN'
+i18n.locales // 支持的语言列表 [{ locale, label }]
+i18n.locale // 当前语言（持久化）
+i18n.setLocale('en-US') // 切换语言
+```
+
+切换语言后布局系统会自动完成：antd 组件语言包懒加载切换、菜单/标签页/面包屑按语言重新解析、`html lang` 属性同步，并通过 `ZaConfigProvider` 注入到 components 组件库。
+
+## useWatermarkStore
+
+管理水印配置，持久化存储，登录后自动将当前用户名追加到水印文案。
+
+```tsx
+import { useWatermarkStore } from '@zealous-admin/layout'
+
+const watermark = useWatermarkStore()
+
+watermark.content // 水印文案数组（如 ['Zealous-admin', 'admin']）
+watermark.fontSize // 字号
+watermark.width // 单个水印宽度
+watermark.height // 单个水印高度
+watermark.rotate // 旋转角度
+watermark.gap // 间距 [水平, 垂直]
+watermark.zIndex // 层级
 ```
 
 ## usePageStore

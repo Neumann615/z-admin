@@ -34,13 +34,33 @@ isEnableSearch: true
 
 提供全局搜索功能入口，可用于搜索菜单、页面或数据。
 
-### 3. I18n（国际化切换）
+### 3. I18n（语言切换）
 
 ```tsx
-isEnableI18n: true
+const config: LayoutConfig = {
+  topBar: {
+    toolbar: {
+      i18n: {
+        isEnableI18n: true, // 启用语言切换
+        defaultLocale: 'zh-CN', // 默认语言
+        locales: [
+          { locale: 'zh-CN', label: '简体中文' },
+          { locale: 'en-US', label: 'English' },
+        ],
+      },
+    },
+  },
+}
 ```
 
-提供多语言切换按钮，方便用户在不同语言之间切换。
+提供语言切换按钮，切换后自动联动：
+
+- **antd 组件语言包** — 通过 `useAntdLocale` 懒加载切换（zh-CN 同步、其余异步）
+- **菜单/标签页/面包屑** — 按当前语言重新解析菜单名称
+- **components 组件库** — 通过 `ZaConfigProvider` 注入语言，组件内部文案同步翻译
+- **`html lang` 属性** — 同步更新
+
+当前语言由 `useI18nStore` 统一管理，初始值按浏览器语言自动推断并持久化，也可通过 `useI18nStore.getState().setLocale('en-US')` 命令式切换。
 
 ### 4. PageReload（页面刷新）
 

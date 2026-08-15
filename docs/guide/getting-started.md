@@ -94,6 +94,29 @@ import { ZaMarquee, ZaShinyText, ZaSparklesText } from '@zealous-admin/component
 <ZaSparklesText text="欢迎回来" shapes={['star', 'four-point-star']} />
 ```
 
+### 国际化
+
+layout 内置完整国际化能力：`useI18nStore` 管理语言状态，文案统一从 `@zealous-admin/locales` 读取，antd 语言包与组件库随语言自动联动。
+
+```tsx
+import { useI18nStore, useT } from '@zealous-admin/layout'
+
+function Component() {
+  const t = useT()
+  const locale = useI18nStore(state => state.locale)
+  const setLocale = useI18nStore(state => state.setLocale)
+
+  return (
+    <div>
+      <span>{t('tabBar.closeTab')}</span>
+      <button onClick={() => setLocale('en-US')}>English</button>
+    </div>
+  )
+}
+```
+
+默认支持 `zh-CN` / `en-US` 两种语言，可通过 `topBar.toolbar.i18n.locales` 扩展；业务文案通过 `@zealous-admin/locales` 包的 `messages` 统一维护。
+
 ### 工具函数
 
 ```tsx

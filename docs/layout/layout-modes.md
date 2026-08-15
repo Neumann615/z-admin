@@ -1,4 +1,4 @@
-﻿# 布局模式
+# 布局模式
 
 zealous-admin 提供了 5 种布局模式，通过 `menu.menuType` 配置切换。每种模式在导航结构、空间利用率和适用场景上各有不同。
 
@@ -108,6 +108,24 @@ const config: LayoutConfig = {
 - 无 MainNav，直接显示 Menu
 - 最简洁的布局
 - 适合功能单一的后台应用
+
+## 顶栏定位模式
+
+通过 `topBar.position` 配置顶栏（标签栏 + 工具栏）的定位方式，适用于所有布局模式：
+
+| 模式 | 值 | 效果 |
+|------|-----|------|
+| 静态 | `'static'` | 顶栏随内容一起滚动 |
+| 固定 | `'fixed'` | 顶栏固定在视口顶部，内容区独立滚动 |
+| 吸顶 | `'sticky'` | 向下滚动时顶栏收起，向上滚动时展开 |
+
+```tsx
+const config: LayoutConfig = {
+  topBar: {
+    position: 'fixed', // 'static' | 'fixed' | 'sticky'
+  },
+}
+```
 
 ## 移动端响应式模式
 

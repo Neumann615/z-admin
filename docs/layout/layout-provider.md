@@ -28,7 +28,7 @@
 
 ### 2. 状态初始化
 
-从 `defaultSetting` 中解析配置，初始化 7 个 Zustand Store：
+从 `defaultSetting` 中解析配置，初始化 8 个 Zustand Store：
 
 | Store | 说明 |
 |-------|------|
@@ -39,21 +39,31 @@
 | `useTopBarStore` | 顶栏状态（标签栏、工具栏、面包屑） |
 | `useUserStore` | 用户状态（userInfo、login、logout、getUserInfo） |
 | `useReLoginStore` | 401 重新登录弹窗控制 |
+| `useI18nStore` | 国际化（语言状态与 `topBar.toolbar.i18n` 配置） |
 
 ### 3. 特殊模式
 
 - **哀悼模式** (`isEnableMourningMode`): 整个页面 `filter: grayscale(1)`
 - **色弱模式** (`colorWeak`): 整个页面 `filter: invert(80%) hue-rotate(180deg)`
 
-### 4. Provider 层级
+### 4. 国际化
+
+- **语言状态**：由 `useI18nStore` 管理，初始语言按浏览器语言自动推断，持久化到 `localStorage` / `sessionStorage`
+- **antd 语言包**：`useAntdLocale` hook 随当前语言懒加载切换 antd locale（zh-CN 静态引入，其余按需加载），并注入 ConfigProvider，确保嵌套 ConfigProvider 不重置为英文
+- **菜单/标签/面包屑**：菜单名称按当前语言从 `@zealous-admin/locales` 统一解析，切换语言后 Menu / TabBar / Breadcrumb 自动同步
+- **components 组件库**：通过 `ZaConfigProvider locale={locale}` 注入当前语言，组件库内部文案随语言切换
+- **html lang**：切换语言时同步更新 `document.documentElement.lang`
+
+### 5. Provider 层级
 
 ```
 StyleProvider (antd-style)
-  └─ ConfigProvider (antd) — 根据 themeType 路由到 default/custom 主题配置
+  └─ ConfigProvider (antd) — 根据 themeType 路由到 default/custom 主题配置，注入 antd locale
        └─ App (antd) — 提供 message/modal 全局上下文
             └─ AppMessageProvider — useAppMessage Hook
-                 └─ ReLoginModal — 401 过期重新登录弹窗
-                      └─ children (你的应用)
+                 └─ ZaConfigProvider — 向 components 组件库注入当前语言
+                      └─ ReLoginModal — 401 过期重新登录弹窗
+                           └─ children (你的应用)
 ```
 
 ## 基础示例
