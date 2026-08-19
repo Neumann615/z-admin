@@ -90,4 +90,4 @@ function MyComponent() {
 
 ## 拖拽排序
 
-标签栏使用 `@hello-pangea/dnd` 实现拖拽重排，用户可以通过拖拽调整标签的顺序。
+标签栏使用 `@dnd-kit/react` 实现拖拽重排，用户可以通过拖拽调整标签的顺序。

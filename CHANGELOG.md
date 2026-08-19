@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-19
+
+- 🔧 **标签栏拖拽库迁移**（`TabBar.tsx`、`useControlTab.ts`、`vite.config.ts`）：`@hello-pangea/dnd` 替换为 `@dnd-kit/react`，改用 `DragDropProvider` + `useSortable`，排序改为插入语义 `moveTab`
+- 🔧 **依赖变更**（`package.json`、`pnpm-workspace.yaml`）：移除 `@hello-pangea/dnd`，新增 `@dnd-kit/react`，antd 升级至 ^6.6.1
+- 📝 **文档同步更新**（`docs/`、`TechMarquee.vue`）：拖拽排序相关描述改用 `@dnd-kit/react`
+
 ## 2026-08-15
 
 - 📝 **文档站同步更新**（`docs/`）：CHANGELOG 补全 07-30~08-14 记录，同步国际化、水印 store、i18n 配置、顶栏定位等新特性文档

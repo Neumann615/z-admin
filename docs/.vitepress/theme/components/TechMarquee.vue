@@ -18,7 +18,7 @@ const techItems = [
   '📦 pnpm',
   '🎨 antd-style',
   '🪝 ahooks',
-  '🎯 @hello-pangea/dnd',
+  '🎯 @dnd-kit/react',
   '📝 react-markdown',
   '✨ Animate.css',
   '🔄 React Transition Group',

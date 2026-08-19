@@ -250,6 +250,16 @@ export function useControlTab() {
     setTabs(arr)
   }
 
+  // 拖动排序：按插入语义移动标签，与拖拽动画展示的排序结果一致
+  function moveTab(fromIndex: number, toIndex: number) {
+    if (fromIndex === toIndex)
+      return
+    const arr = deepClone(tabs)
+    const [moved] = arr.splice(fromIndex, 1)
+    arr.splice(toIndex, 0, moved)
+    setTabs(arr)
+  }
+
   // 固定tab页面
   function fixedTab(tabId: string) {
     const _tabs = deepClone(tabs)
@@ -348,6 +358,7 @@ export function useControlTab() {
     openTab,
     closeTab,
     swapTab,
+    moveTab,
     fixedTab,
     syncTabFromUrl,
     findIconByPath,

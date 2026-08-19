@@ -1,4 +1,6 @@
+import type { DragEndEvent } from '@dnd-kit/react'
 import type { MenuProps } from 'antd'
+import type { CSSProperties, ReactNode } from 'react'
 import {
   CaretDownOutlined,
   CloseOutlined,
@@ -9,7 +11,8 @@ import {
   SearchOutlined,
   SyncOutlined,
 } from '@ant-design/icons'
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
+import { DragDropProvider } from '@dnd-kit/react'
+import { isSortable, useSortable } from '@dnd-kit/react/sortable'
 import { useMount } from 'ahooks'
 import { Dropdown, Popover, Tooltip } from 'antd'
 import { createStyles } from 'antd-style'
@@ -249,8 +252,128 @@ const useStyles = createStyles(({ token, css }) => ({
   },
 }))
 
+interface TabItemProps {
+  tabItem: any
+  index: number
+  nowTab: any
+  tabsLength: number
+  isTabBarOnTop: boolean
+  styles: any
+  theme: any
+  tabBar: any
+  tabItems: MenuProps['items']
+  getTabItemClass: (isActive: boolean) => string
+  getTabWidthStyle: () => CSSProperties
+  renderTabIcon: (tabId: string, size?: number) => ReactNode
+  onOpen: (menuData: any) => void
+  onDblClick: (tabItem: any) => void
+  onCloseClick: (tabItem: any) => void
+  onContextMenuOpen: (open: boolean, tabItem: any) => void
+}
+
+// 单个标签项：通过 useSortable 注册拖拽排序能力
+function TabItem(props: TabItemProps) {
+  const {
+    tabItem,
+    index,
+    nowTab,
+    tabsLength,
+    isTabBarOnTop,
+    styles,
+    theme,
+    tabBar,
+    tabItems,
+    getTabItemClass,
+    getTabWidthStyle,
+    renderTabIcon,
+    onOpen,
+    onDblClick,
+    onCloseClick,
+    onContextMenuOpen,
+  } = props
+
+  const { ref, isDragging } = useSortable({
+    id: tabItem.tabId,
+    index,
+    group: 'tab-bar',
+  })
+
+  return (
+    <div
+      id={`header-tab-${tabItem.tabId}`}
+      ref={ref}
+      style={{
+        opacity: isDragging ? 0.7 : 1,
+        height: tabBar.style === 'default' ? 'auto' : '100%',
+      }}
+    >
+      <Dropdown
+        placement={isTabBarOnTop ? 'bottomLeft' : 'topLeft'}
+        trigger={['contextMenu']}
+        onOpenChange={(v) => {
+          onContextMenuOpen(v, tabItem)
+        }}
+        menu={{ items: tabItems }}
+      >
+        <div
+          onClick={() => {
+            onOpen(tabItem.menuData)
+          }}
+          onDoubleClick={(e) => {
+            e.stopPropagation()
+            onDblClick(tabItem)
+          }}
+          className={getTabItemClass(nowTab.tabId === tabItem.tabId)}
+          style={{
+            ...getTabWidthStyle(),
+            borderRadius: tabBar.style === 'card'
+              ? `${theme.borderRadiusLG}px`
+              : tabBar.style === 'block'
+                ? '0px'
+                : isTabBarOnTop
+                  ? `${theme.borderRadiusLG}px ${theme.borderRadiusLG}px 0 0`
+                  : `0 0 ${theme.borderRadiusLG}px ${theme.borderRadiusLG}px`,
+          }}
+        >
+          <div
+            className="flex-sb"
+            style={{ width: '100%', height: '100%' }}
+          >
+            <div className="flex-start" style={{ flex: 1 }}>
+              {renderTabIcon(tabItem.tabId, 15)}
+              <div className={styles.tabTitle}>
+                {tabItem.title}
+              </div>
+            </div>
+            {tabsLength > 1
+              ? (
+                  <div
+                    className={styles.tabClose}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      e.preventDefault()
+                      onCloseClick(tabItem)
+                    }}
+                  >
+                    {tabItem.isFixed
+                      ? (
+                          <PushpinOutlined style={{ fontSize: '10px' }} />
+                        )
+                      : (
+                          <CloseOutlined style={{ fontSize: '10px' }} />
+                        )}
+                  </div>
+                )
+              : null}
+          </div>
+        </div>
+      </Dropdown>
+    </div>
+  )
+}
+
 export function TabBar() {
-  const { openTab, closeTab, swapTab, fixedTab, findIconByPath } = useControlTab()
+  const { openTab, closeTab, moveTab, fixedTab, findIconByPath } = useControlTab()
   const { styles, theme } = useStyles()
   const t = useT()
   const { changeIsMaximize, refreshPage } = usePageStore()
@@ -520,127 +643,62 @@ export function TabBar() {
     ? (
         <div className={styles.headerTabs}>
           <div className={styles.headerTabsLeft} ref={headerTabsRef}>
-            <DragDropContext
-              onDragEnd={(result: any) => {
-                if (!result.destination)
+            <DragDropProvider
+              onDragEnd={(event: DragEndEvent) => {
+                if (event.canceled)
                   return
-                swapTab(result.source.index, result.destination.index)
+                const { source } = event.operation
+                if (!isSortable(source))
+                  return
+                const { index, initialIndex } = source
+                if (index !== initialIndex) {
+                  moveTab(initialIndex, index)
+                }
               }}
             >
-              <Droppable
-                droppableId="droppable"
-                direction="horizontal"
-                isDropDisabled={false}
-                isCombineEnabled={true}
-                ignoreContainerClipping={false}
+              <div
+                className={styles.headerTabsContent}
+                style={{
+                  alignItems: isTabBarOnTop ? 'flex-end' : 'flex-start',
+                }}
               >
-                {(droppableProvided: any) => (
-                  <div
-                    className={styles.headerTabsContent}
-                    ref={droppableProvided.innerRef}
-                    style={{
-                      alignItems: isTabBarOnTop ? 'flex-end' : 'flex-start',
-                    }}
-                  >
-                    {tabs.map((tabItem: any, index: number) => {
-                      return (
-                        <Draggable
-                          key={tabItem.tabId}
-                          draggableId={tabItem.tabId}
-                          index={index}
-                        >
-                          {(provided: any, snapshot: any) => (
-                            <div
-                              id={`header-tab-${tabItem.tabId}`}
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                                opacity: snapshot.isDragging ? 0.7 : 1,
-                                height: tabBar.style === 'default' ? 'auto' : '100%',
-                              }}
-                            >
-                              <Dropdown
-                                key={tabItem.tabId}
-                                placement={isTabBarOnTop ? 'bottomLeft' : 'topLeft'}
-                                trigger={['contextMenu']}
-                                onOpenChange={(v) => {
-                                  setIsOpenTab(v)
-                                  if (v) {
-                                    setNowOpenTab(tabItem)
-                                  }
-                                }}
-                                menu={{ items: tabItems }}
-                              >
-                                <div
-                                  onClick={() => {
-                                    openTab(tabItem.menuData)
-                                  }}
-                                  onDoubleClick={(e) => {
-                                    e.stopPropagation()
-                                    handleTabDblClick(tabItem)
-                                  }}
-                                  className={getTabItemClass(nowTab.tabId === tabItem.tabId)}
-                                  key={tabItem.tabId}
-                                  style={{
-                                    ...getTabWidthStyle(),
-                                    borderRadius: tabBar.style === 'card'
-                                      ? `${theme.borderRadiusLG}px`
-                                      : tabBar.style === 'block'
-                                        ? '0px'
-                                        : isTabBarOnTop
-                                          ? `${theme.borderRadiusLG}px ${theme.borderRadiusLG}px 0 0`
-                                          : `0 0 ${theme.borderRadiusLG}px ${theme.borderRadiusLG}px`,
-                                  }}
-                                >
-                                  <div
-                                    className="flex-sb"
-                                    style={{ width: '100%', height: '100%' }}
-                                  >
-                                    <div className="flex-start" style={{ flex: 1 }}>
-                                      {renderTabIcon(tabItem.tabId, 15)}
-                                      <div className={styles.tabTitle}>
-                                        {tabItem.title}
-                                      </div>
-                                    </div>
-                                    {tabs?.length > 1
-                                      ? (
-                                          <div
-                                            className={styles.tabClose}
-                                            onClick={(e) => {
-                                              e.stopPropagation()
-                                              e.preventDefault()
-                                              if (tabItem.isFixed) {
-                                                fixedTab(tabItem.tabId)
-                                              }
-                                              else {
-                                                closeTab(tabItem.tabId)
-                                              }
-                                            }}
-                                          >
-                                            {tabItem.isFixed
-                                              ? (
-                                                  <PushpinOutlined style={{ fontSize: '10px' }} />
-                                                )
-                                              : (
-                                                  <CloseOutlined style={{ fontSize: '10px' }} />
-                                                )}
-                                          </div>
-                                        )
-                                      : null}
-                                  </div>
-                                </div>
-                              </Dropdown>
-                            </div>
-                          )}
-                        </Draggable>
-                      )
-                    })}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+                {tabs.map((tabItem: any, index: number) => {
+                  return (
+                    <TabItem
+                      key={tabItem.tabId}
+                      tabItem={tabItem}
+                      index={index}
+                      nowTab={nowTab}
+                      tabsLength={tabs.length}
+                      isTabBarOnTop={isTabBarOnTop}
+                      styles={styles}
+                      theme={theme}
+                      tabBar={tabBar}
+                      tabItems={tabItems}
+                      getTabItemClass={getTabItemClass}
+                      getTabWidthStyle={getTabWidthStyle}
+                      renderTabIcon={renderTabIcon}
+                      onOpen={openTab}
+                      onDblClick={handleTabDblClick}
+                      onCloseClick={(item: any) => {
+                        if (item.isFixed) {
+                          fixedTab(item.tabId)
+                        }
+                        else {
+                          closeTab(item.tabId)
+                        }
+                      }}
+                      onContextMenuOpen={(v, item) => {
+                        setIsOpenTab(v)
+                        if (v) {
+                          setNowOpenTab(item)
+                        }
+                      }}
+                    />
+                  )
+                })}
+              </div>
+            </DragDropProvider>
           </div>
           {tabs?.length > 1
             ? (

@@ -17,7 +17,7 @@ catalog:
   '@ant-design/happy-work-theme': ^1.0.0
   '@ant-design/icons': ^6.2.5
   '@codemirror/lang-javascript': ^6.2.1
-  '@hello-pangea/dnd': ^18.0.1
+  '@dnd-kit/react': ^0.5.0
   '@icon-park/react': ^1.4.2
   '@modelcontextprotocol/sdk': ^1.29.0
   '@tanem/react-nprogress': ^5.0.51
@@ -28,7 +28,7 @@ catalog:
   '@types/three': ^0.185.1
   ahooks: ^3.9.7
   animate.css: ^4.1.1
-  antd: ^6.6.0
+  antd: ^6.6.1
   antd-style: ^3.6.3
   axios: ^1.6.8
   bcryptjs: ^2.4.3
