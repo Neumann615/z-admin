@@ -5,6 +5,8 @@
 - ✨ **全局快捷键落地**（`useGlobalShortcuts.ts`、`Layout.tsx`、`index.ts`）：Ctrl+K 唤起搜索、Ctrl+I 查看系统信息、Alt 组合键切换/关闭标签页与最大化，复用 `useControlTab` 方法
 - ✨ **新增系统信息弹窗**（`SystemInfoModal.tsx`、`topBar.ts`、`locales/`）：展示浏览器/系统/分辨率/视口等信息，搜索弹窗状态收拢至 store 支持全局唤起
 - 🔧 **快捷键弹窗布局调整**（`ShortcutsModal.tsx`）：两列展示（左列全局+页面、右列标签栏），移除主导航切换条目
+- ✨ **配置面板工具栏拖拽排序**（`ConfigPanel.tsx`）：工具栏卡片底部新增真实样式预览，复用 `@dnd-kit/react` 拖拽调整 `toolbarOrder` 渲染顺序
+- 🔧 **工具栏按配置排序渲染**（`Toolbar.tsx`）：右侧功能项按 `toolbarOrder` 顺序渲染，替代原硬编码顺序
 
 ## 2026-08-19
 

@@ -1,4 +1,4 @@
-import type { DarkMode } from '../../types/config'
+import type { DarkMode, ToolbarOrderItem } from '../../types/config'
 import {
   BgColorsOutlined,
   EyeOutlined,
@@ -258,7 +258,64 @@ export function Toolbar() {
     }))
   }, [locales, locale, styles])
 
-  return topBarStore.toolbar.isEnableToolbar
+  const toolbar = topBarStore.toolbar
+
+  // 按 toolbarOrder 顺序渲染右侧功能项
+  const toolbarItemMap: Record<Exclude<ToolbarOrderItem, 'Breadcrumb'>, React.ReactNode> = {
+    Search: toolbar.isEnableSearch
+      ? (
+          <div key="Search" style={{ marginRight: 8 }}>
+            <Search />
+          </div>
+        )
+      : null,
+    I18n: toolbar.i18n.isEnableI18n
+      ? (
+          <Dropdown key="I18n" menu={{ items: i18nMenu }}>
+            <div className={styles.ToolbarItem}>
+              <TranslationOutlined />
+            </div>
+          </Dropdown>
+        )
+      : null,
+    PageReload: toolbar.isEnablePageReload
+      ? (
+          <div key="PageReload" className={styles.ToolbarItem} onClick={() => usePageStore.getState().refreshPage()}>
+            <SyncOutlined />
+          </div>
+        )
+      : null,
+    Fullscreen: toolbar.isEnableFullscreen
+      ? (
+          <div key="Fullscreen" className={styles.ToolbarItem} onClick={toggleFullscreen}>
+            {isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+          </div>
+        )
+      : null,
+    Theme: toolbar.isEnableTheme
+      ? (
+          <Dropdown
+            key="Theme"
+            menu={{ items: themeMenu }}
+            open={dropdownOpen}
+            trigger={[]}
+          >
+            <div
+              className={styles.ToolbarItem}
+              ref={darkBtnRef}
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              <BgColorsOutlined />
+            </div>
+          </Dropdown>
+        )
+      : null,
+  }
+
+  const toolbarOrder: ToolbarOrderItem[] = toolbar.toolbarOrder
+    || ['Breadcrumb', 'Search', 'I18n', 'PageReload', 'Fullscreen', 'Theme']
+
+  return toolbar.isEnableToolbar
     ? (
         <Row align="middle" className={styles.headerModule}>
           <Col span={16}>
@@ -274,53 +331,9 @@ export function Toolbar() {
           </Col>
           <Col span={8}>
             <div className={styles.Toolbar}>
-              {topBarStore.toolbar.isEnableSearch
-                ? (
-                    <div style={{ marginRight: 8 }}>
-                      <Search />
-                    </div>
-                  )
-                : null}
-              {topBarStore.toolbar.i18n.isEnableI18n
-                ? (
-                    <Dropdown menu={{ items: i18nMenu }}>
-                      <div className={styles.ToolbarItem}>
-                        <TranslationOutlined />
-                      </div>
-                    </Dropdown>
-                  )
-                : null}
-              {topBarStore.toolbar.isEnableFullscreen
-                ? (
-                    <div className={styles.ToolbarItem} onClick={toggleFullscreen}>
-                      {isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
-                    </div>
-                  )
-                : null}
-              {topBarStore.toolbar.isEnableTheme
-                ? (
-                    <Dropdown
-                      menu={{ items: themeMenu }}
-                      open={dropdownOpen}
-                      trigger={[]}
-                    >
-                      <div
-                        className={styles.ToolbarItem}
-                        ref={darkBtnRef}
-                        onClick={() => setDropdownOpen(!dropdownOpen)}
-                      >
-                        <BgColorsOutlined />
-                      </div>
-                    </Dropdown>
-                  )
-                : null}
-              {topBarStore.toolbar.isEnablePageReload
-                ? (
-                    <div className={styles.ToolbarItem} onClick={() => usePageStore.getState().refreshPage()}>
-                      <SyncOutlined />
-                    </div>
-                  )
-                : null}
+              {toolbarOrder
+                .filter(item => item !== 'Breadcrumb')
+                .map(item => toolbarItemMap[item as Exclude<ToolbarOrderItem, 'Breadcrumb'>])}
             </div>
           </Col>
         </Row>

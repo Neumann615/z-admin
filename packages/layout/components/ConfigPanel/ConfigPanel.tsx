@@ -1,4 +1,5 @@
-import type { ExpireMode, MenuType, ThemeType } from '../../types/config'
+import type { ExpireMode, MenuType, ThemeType, ToolbarOrderItem } from '../../types/config'
+import type { DragEndEvent } from '@dnd-kit/react'
 import {
   BgColorsOutlined,
   CopyOutlined,
@@ -11,6 +12,8 @@ import {
   SyncOutlined,
   TranslationOutlined,
 } from '@ant-design/icons'
+import { DragDropProvider } from '@dnd-kit/react'
+import { isSortable, useSortable } from '@dnd-kit/react/sortable'
 import { useInterval, useUnmount } from 'ahooks'
 import { App, Button, Card, Col, Input, Modal, Radio, Row, Segmented, Select, Slider, Switch, Tooltip } from 'antd'
 import { createStyles } from 'antd-style'
@@ -252,6 +255,57 @@ const useStyles = createStyles(({ token, css }) => {
       align-items: center;
       gap: 8px;
     `,
+    toolbarPreview: css`
+      margin-top: 8px;
+      padding: 0 ${token.paddingSM}px;
+      border: 1px solid ${token.colorBorderSecondary};
+      border-radius: ${token.borderRadius}px;
+      background-color: ${token.colorBgBase};
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 54px;
+      box-sizing: border-box;
+    `,
+    toolbarPreviewLeft: css`
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+    `,
+    toolbarPreviewRight: css`
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      user-select: none;
+    `,
+    toolbarPreviewItem: css`
+      cursor: grab;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: all 0.3s;
+      color: ${token.colorText};
+      font-size: 18px;
+
+      :hover {
+        transition: all 0.3s;
+        background-color: ${token.colorFillContentHover};
+      }
+    `,
+    toolbarPreviewBreadcrumb: css`
+      font-size: 14px;
+      color: ${token.colorTextSecondary};
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    `,
+    toolbarPreviewDisabled: css`
+      opacity: 0.35;
+    `,
   }
 })
 
@@ -259,6 +313,33 @@ interface ConfigPanelProps {
   isDev?: boolean
   open: boolean
   onClose: () => void
+}
+
+interface ToolbarPreviewItemProps {
+  id: string
+  index: number
+  icon: React.ReactNode
+  disabled: boolean
+  styles: any
+}
+
+// 工具栏预览单项：通过 useSortable 注册拖拽排序能力（与 TabBar 同一套 @dnd-kit/react）
+function ToolbarPreviewItem({ id, index, icon, disabled, styles }: ToolbarPreviewItemProps) {
+  const { ref, isDragging } = useSortable({
+    id,
+    index,
+    group: 'toolbar-preview',
+  })
+
+  return (
+    <div
+      ref={ref}
+      className={`${styles.toolbarPreviewItem} ${disabled ? styles.toolbarPreviewDisabled : ''}`}
+      style={{ opacity: isDragging ? 0.7 : undefined }}
+    >
+      {icon}
+    </div>
+  )
 }
 
 export function ConfigPanel({ open, onClose, isDev = true }: ConfigPanelProps) {
@@ -895,6 +976,98 @@ export default defaultSetting`
     { key: 'isEnableTheme', label: t('configPanel.toolbar.theme'), icon: <BgColorsOutlined /> },
   ]
 
+  // 预览项元数据：与 toolbarOrder 中的项一一对应
+  const toolbarPreviewMeta: Record<ToolbarOrderItem, { icon: React.ReactNode, enabled: boolean }> = {
+    Breadcrumb: {
+      icon: <SearchOutlined />,
+      enabled: defaultSetting.topBar.toolbar.breadcrumb.isEnableBreadcrumb,
+    },
+    Search: {
+      icon: <SearchOutlined />,
+      enabled: defaultSetting.topBar.toolbar.isEnableSearch,
+    },
+    I18n: {
+      icon: <TranslationOutlined />,
+      enabled: defaultSetting.topBar.toolbar.i18n.isEnableI18n,
+    },
+    PageReload: {
+      icon: <ReloadOutlined />,
+      enabled: defaultSetting.topBar.toolbar.isEnablePageReload,
+    },
+    Fullscreen: {
+      icon: <FullscreenOutlined />,
+      enabled: defaultSetting.topBar.toolbar.isEnableFullscreen,
+    },
+    Theme: {
+      icon: <BgColorsOutlined />,
+      enabled: defaultSetting.topBar.toolbar.isEnableTheme,
+    },
+  }
+
+  const toolbarOrder: ToolbarOrderItem[] = defaultSetting.topBar.toolbar.toolbarOrder
+    || _defaultSetting.topBar.toolbar.toolbarOrder
+
+  const moveToolbarOrder = (fromIndex: number, toIndex: number) => {
+    if (fromIndex === toIndex)
+      return
+    const arr = [...toolbarOrder]
+    const [moved] = arr.splice(fromIndex, 1)
+    arr.splice(toIndex, 0, moved)
+    setDefaultSetting({
+      ...defaultSetting,
+      topBar: {
+        ...defaultSetting.topBar,
+        toolbar: {
+          ...defaultSetting.topBar.toolbar,
+          toolbarOrder: arr,
+        },
+      },
+    })
+  }
+
+  const renderToolbarPreview = () => {
+    const breadcrumbEnabled = toolbarPreviewMeta.Breadcrumb.enabled
+    const rightItems = toolbarOrder.filter(item => item !== 'Breadcrumb')
+
+    return (
+      <DragDropProvider
+        onDragEnd={(event: DragEndEvent) => {
+          if (event.canceled)
+            return
+          const { source } = event.operation
+          if (!isSortable(source))
+            return
+          const { index, initialIndex } = source
+          if (index !== initialIndex) {
+            moveToolbarOrder(initialIndex, index)
+          }
+        }}
+      >
+        <div className={styles.toolbarPreview}>
+          <div className={styles.toolbarPreviewLeft}>
+            {breadcrumbEnabled && (
+              <div className={styles.toolbarPreviewBreadcrumb}>
+                {t('configPanel.toolbar.breadcrumb')}
+              </div>
+            )}
+          </div>
+          <div className={styles.toolbarPreviewRight}>
+            {rightItems.map((item, index) => (
+              <ToolbarPreviewItem
+                key={item}
+                id={item}
+                index={index}
+                icon={toolbarPreviewMeta[item].icon}
+                disabled={!toolbarPreviewMeta[item].enabled}
+                styles={styles}
+              />
+            ))}
+          </div>
+        </div>
+      </DragDropProvider>
+    )
+  }
+
   const renderToolbarFuncConfig = () => {
     return (
       <Card key="toolbarFunc" title={t('configPanel.toolbar')}>
@@ -1034,6 +1207,7 @@ export default defaultSetting`
               </Col>
             </Row>
           ))}
+          {renderToolbarPreview()}
         </div>
       </Card>
     )
