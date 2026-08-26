@@ -72,9 +72,6 @@ const layoutMessages = {
   'shortcuts.global': '全局',
   'shortcuts.viewSystemInfo': '查看系统信息',
   'shortcuts.openSearch': '唤起导航搜索',
-  'shortcuts.mainNav': '主导航',
-  'shortcuts.prevMainNav': '激活上一个主导航',
-  'shortcuts.nextMainNav': '激活下一个主导航',
   'shortcuts.tabBar': '标签栏',
   'shortcuts.prevTab': '切换到上一个标签页',
   'shortcuts.nextTab': '切换到下一个标签页',
@@ -84,6 +81,15 @@ const layoutMessages = {
   'shortcuts.page': '页面',
   'shortcuts.maximize': '最大化',
   'shortcuts.exitMaximize': '退出最大化',
+
+  // 系统信息弹窗
+  'systemInfo.browser': '浏览器',
+  'systemInfo.os': '操作系统',
+  'systemInfo.language': '语言',
+  'systemInfo.resolution': '屏幕分辨率',
+  'systemInfo.viewport': '视口大小',
+  'systemInfo.url': '当前地址',
+  'systemInfo.unknown': '未知',
 
   // 反馈弹窗
   'feedback.title': '反馈',

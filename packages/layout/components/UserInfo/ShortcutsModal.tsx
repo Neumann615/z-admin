@@ -88,13 +88,6 @@ const shortcuts: ShortcutSection[] = [
     ],
   },
   {
-    titleKey: 'shortcuts.mainNav',
-    items: [
-      { keys: ['Alt', '←'], descKey: 'shortcuts.prevMainNav' },
-      { keys: ['Alt', '→'], descKey: 'shortcuts.nextMainNav' },
-    ],
-  },
-  {
     titleKey: 'shortcuts.tabBar',
     items: [
       { keys: ['Alt', '←'], descKey: 'shortcuts.prevTab' },
@@ -128,21 +121,40 @@ export function ShortcutsModal({ open, onClose }: ShortcutsModalProps) {
     >
       <div className={styles.content}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-          {shortcuts.map(section => (
-            <div key={section.titleKey} className={styles.section}>
-              <Title level={5} className={styles.sectionTitle}>{t(section.titleKey)}</Title>
-              {section.items.map(item => (
-                <div key={item.descKey} className={styles.shortcutRow}>
-                  <div className={styles.keys}>
-                    {item.keys.map(key => (
-                      <span key={key} className={styles.key}>{key}</span>
-                    ))}
+          <div>
+            {[shortcuts[0], shortcuts[2]].map(section => (
+              <div key={section.titleKey} className={styles.section}>
+                <Title level={5} className={styles.sectionTitle}>{t(section.titleKey)}</Title>
+                {section.items.map(item => (
+                  <div key={item.descKey} className={styles.shortcutRow}>
+                    <div className={styles.keys}>
+                      {item.keys.map(key => (
+                        <span key={key} className={styles.key}>{key}</span>
+                      ))}
+                    </div>
+                    <Text className={styles.desc}>{t(item.descKey)}</Text>
                   </div>
-                  <Text className={styles.desc}>{t(item.descKey)}</Text>
-                </div>
-              ))}
-            </div>
-          ))}
+                ))}
+              </div>
+            ))}
+          </div>
+          <div>
+            {[shortcuts[1]].map(section => (
+              <div key={section.titleKey} className={styles.section}>
+                <Title level={5} className={styles.sectionTitle}>{t(section.titleKey)}</Title>
+                {section.items.map(item => (
+                  <div key={item.descKey} className={styles.shortcutRow}>
+                    <div className={styles.keys}>
+                      {item.keys.map(key => (
+                        <span key={key} className={styles.key}>{key}</span>
+                      ))}
+                    </div>
+                    <Text className={styles.desc}>{t(item.descKey)}</Text>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </Modal>

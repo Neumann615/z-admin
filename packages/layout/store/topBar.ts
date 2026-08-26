@@ -51,6 +51,10 @@ export const useTopBarStore = create(
         set((state: any) => ({ tabs: setFixedTabHandler(state.tabs, tabId) })),
       settingsModalOpen: false,
       setSettingsModalOpen: (v: boolean) => set(() => ({ settingsModalOpen: v })),
+      searchModalOpen: false,
+      setSearchModalOpen: (v: boolean) => set(() => ({ searchModalOpen: v })),
+      systemInfoModalOpen: false,
+      setSystemInfoModalOpen: (v: boolean) => set(() => ({ systemInfoModalOpen: v })),
     }),
     {
       name: `${defaultSetting.app.storagePrefix}topBar`,

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useControlTab } from '../../hooks/useControlTab'
 import { useT } from '../../hooks/useT'
 import { useMenuStore } from '../../store/menu'
+import { useTopBarStore } from '../../store/topBar'
 
 // 扁平化菜单树，仅返回叶子节点（对应实际页面路由）
 function flattenMenu(items: any[]): any[] {
@@ -164,7 +165,8 @@ const useStyles = createStyles(({ token, css }) => ({
 }))
 
 export function Search() {
-  const [open, setOpen] = useState(false)
+  const open = useTopBarStore((state: any) => state.searchModalOpen)
+  const setOpen = useTopBarStore((state: any) => state.setSearchModalOpen)
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<any>(null)

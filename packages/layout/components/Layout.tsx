@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAntdLocale } from '../hooks/useAntdLocale'
 import { useControlTab } from '../hooks/useControlTab'
+import { useGlobalShortcuts } from '../hooks/useGlobalShortcuts'
 import { useMobileDetect } from '../hooks/useMobileDetect'
 import { useAppStore, useMenuStore, usePageStore, useTopBarStore, useWatermarkStore } from '../store/index'
 import { Content } from './Content/Content'
@@ -14,6 +15,7 @@ import { Menu } from './Menu/Menu'
 import { MobileBlock } from './MobileBlock/MobileBlock'
 import { ReLoginModal } from './ReLoginModal/ReLoginModal'
 import { Setting } from './Setting/Setting'
+import { SystemInfoModal } from './UserInfo/SystemInfoModal'
 import 'animate.css'
 import './reset.css'
 
@@ -141,6 +143,7 @@ export function Layout() {
   const { nowTab } = useTopBarStore()
   const { syncTabFromUrl } = useControlTab()
   const location = useLocation()
+  useGlobalShortcuts()
 
   // 浏览器后退/前进时同步 tab 与面包屑
   useEffect(() => {
@@ -316,6 +319,7 @@ export function Layout() {
         </div>
         <Setting></Setting>
         <ReLoginModal />
+        <SystemInfoModal />
         <GlobalProgress
           isAnimating={globalProgressLoading}
           key={location.key}

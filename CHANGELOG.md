@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-26
+
+- ✨ **全局快捷键落地**（`useGlobalShortcuts.ts`、`Layout.tsx`、`index.ts`）：Ctrl+K 唤起搜索、Ctrl+I 查看系统信息、Alt 组合键切换/关闭标签页与最大化，复用 `useControlTab` 方法
+- ✨ **新增系统信息弹窗**（`SystemInfoModal.tsx`、`topBar.ts`、`locales/`）：展示浏览器/系统/分辨率/视口等信息，搜索弹窗状态收拢至 store 支持全局唤起
+- 🔧 **快捷键弹窗布局调整**（`ShortcutsModal.tsx`）：两列展示（左列全局+页面、右列标签栏），移除主导航切换条目
+
 ## 2026-08-19
 
 - 🔧 **标签栏拖拽库迁移**（`TabBar.tsx`、`useControlTab.ts`、`vite.config.ts`）：`@hello-pangea/dnd` 替换为 `@dnd-kit/react`，改用 `DragDropProvider` + `useSortable`，排序改为插入语义 `moveTab`

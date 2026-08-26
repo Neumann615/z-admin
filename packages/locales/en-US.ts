@@ -74,9 +74,6 @@ const layoutMessages: LayoutMessages = {
   'shortcuts.global': 'Global',
   'shortcuts.viewSystemInfo': 'View system info',
   'shortcuts.openSearch': 'Open navigation search',
-  'shortcuts.mainNav': 'Main Navigation',
-  'shortcuts.prevMainNav': 'Activate previous main nav',
-  'shortcuts.nextMainNav': 'Activate next main nav',
   'shortcuts.tabBar': 'Tab Bar',
   'shortcuts.prevTab': 'Switch to previous tab',
   'shortcuts.nextTab': 'Switch to next tab',
@@ -86,6 +83,15 @@ const layoutMessages: LayoutMessages = {
   'shortcuts.page': 'Page',
   'shortcuts.maximize': 'Maximize',
   'shortcuts.exitMaximize': 'Exit maximize',
+
+  // System info modal
+  'systemInfo.browser': 'Browser',
+  'systemInfo.os': 'Operating System',
+  'systemInfo.language': 'Language',
+  'systemInfo.resolution': 'Screen Resolution',
+  'systemInfo.viewport': 'Viewport Size',
+  'systemInfo.url': 'Current URL',
+  'systemInfo.unknown': 'Unknown',
 
   // Feedback modal
   'feedback.title': 'Feedback',
